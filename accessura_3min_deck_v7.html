@@ -1,0 +1,2490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accessura — The market protocol for agent-native information</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap">
+<style>
+/* ==========================================================
+   THEME TOKENS
+   ========================================================== */
+:root {
+  --bg:                #0b1220;
+  --bg-deeper:         #070e1c;
+  --bg-surface:        #0c1321;
+  --bg-elev:           #151b2a;
+  --bg-elev-high:      #19202e;
+  --bg-elev-higher:    #232a39;
+  --text:              #dce2f6;
+  --text-variant:      #bbc9cb;
+  --text-muted:        #869395;
+  --primary:           #63ebfb;
+  --primary-bright:    #8af2ff;
+  --primary-soft:      rgba(99, 235, 251, 0.16);
+  --primary-glow:      rgba(99, 235, 251, 0.45);
+  --tertiary:          #ffd0a6;
+  --tertiary-bright:   #ffab51;
+  --tertiary-glow:     rgba(255, 208, 166, 0.32);
+  --error:             #ffb4ab;
+  --font-display:      'Space Grotesk', sans-serif;
+  --font-mono:         'IBM Plex Mono', monospace;
+  --radius-md:         1.25rem;
+  --radius-sm:         0.6rem;
+  --ease:              cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================
+   VIEWPORT BASE
+   ========================================================== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; overflow-x: hidden; }
+html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+.slide {
+  width: 100vw; height: 100vh; height: 100dvh;
+  overflow: hidden; scroll-snap-align: start;
+  display: flex; flex-direction: column; position: relative;
+  padding: clamp(1.4rem, 4vw, 3.5rem);
+  z-index: 2;
+}
+img { max-width: 100%; max-height: min(50vh, 400px); object-fit: contain; }
+@media (max-height: 700px) { .slide { padding: clamp(1rem, 3vw, 2rem); } }
+@media (max-height: 600px) {
+  .slide { padding: clamp(0.75rem, 2.5vw, 1.5rem); }
+  .nav-dots, .keyboard-hint { display: none; }
+}
+@media (max-height: 500px) { .slide { padding: clamp(0.5rem, 2vw, 1rem); } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.2s !important; }
+  html { scroll-behavior: auto; }
+}
+
+/* ==========================================================
+   BODY ATMOSPHERE
+   ========================================================== */
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-display);
+  letter-spacing: -0.005em;
+  position: relative;
+}
+body::before {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 78% 22%, rgba(99, 235, 251, 0.14) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 18% 82%, rgba(255, 208, 166, 0.05) 0%, transparent 60%);
+}
+body::after {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image: radial-gradient(circle, rgba(99, 235, 251, 0.08) 1px, transparent 1px);
+  background-size: 32px 32px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 0%, transparent 75%);
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 0%, transparent 75%);
+}
+.grain {
+  position: fixed; inset: 0; pointer-events: none; z-index: 1;
+  opacity: 0.03; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ==========================================================
+   TYPOGRAPHY
+   ========================================================== */
+.t-display-xl { font-weight: 600; font-size: clamp(3rem, 9.5vw, 8.4rem); line-height: 0.92; letter-spacing: -0.045em; }
+.t-display-lg { font-weight: 600; font-size: clamp(2.4rem, 6.4vw, 5rem); line-height: 0.98; letter-spacing: -0.035em; }
+.t-display-md { font-weight: 600; font-size: clamp(1.8rem, 4vw, 3.2rem); line-height: 1.08; letter-spacing: -0.025em; }
+.t-headline    { font-weight: 600; font-size: clamp(1.4rem, 2.6vw, 2.2rem); line-height: 1.18; letter-spacing: -0.018em; }
+.t-title       { font-weight: 500; font-size: clamp(1.05rem, 1.5vw, 1.4rem); line-height: 1.3; }
+.t-body-lg     { font-weight: 400; font-size: clamp(1rem, 1.4vw, 1.25rem); line-height: 1.5; }
+.t-body        { font-weight: 400; font-size: clamp(0.88rem, 1.1vw, 1.04rem); line-height: 1.55; }
+.t-mono        { font-family: var(--font-mono); font-size: clamp(0.7rem, 0.85vw, 0.82rem); letter-spacing: 0.06em; }
+.t-mono-xs     { font-family: var(--font-mono); font-size: clamp(0.6rem, 0.72vw, 0.7rem); letter-spacing: 0.18em; text-transform: uppercase; }
+
+.dim { color: var(--text-variant); font-weight: 400; }
+
+/* ==========================================================
+   SHARED COMPONENTS
+   ========================================================== */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: clamp(0.65rem, 0.82vw, 0.78rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--primary);
+  display: inline-flex; align-items: center; gap: 0.6rem;
+}
+.eyebrow.with-line::before {
+  content: ''; width: clamp(20px, 3vw, 38px); height: 1px;
+  background: linear-gradient(90deg, transparent, var(--primary));
+}
+.footer-note {
+  font-family: var(--font-mono);
+  font-size: clamp(0.6rem, 0.78vw, 0.74rem);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.slide-footer { margin-top: auto; padding-top: clamp(0.6rem, 1.2vh, 1rem); }
+
+.pulse-dot::before {
+  content: ''; display: inline-block;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--primary); margin-right: 0.5rem;
+  box-shadow: 0 0 0 0 var(--primary-glow);
+  animation: pip-pulse 2s ease-in-out infinite;
+  vertical-align: middle;
+}
+@keyframes pip-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 var(--primary-glow); }
+  50%      { box-shadow: 0 0 0 7px rgba(99, 235, 251, 0); }
+}
+
+/* reveal animation */
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
+.slide.visible .reveal { opacity: 1; transform: translateY(0); }
+.slide.visible .reveal:nth-of-type(1) { transition-delay: 0.05s; }
+.slide.visible .reveal:nth-of-type(2) { transition-delay: 0.16s; }
+.slide.visible .reveal:nth-of-type(3) { transition-delay: 0.28s; }
+.slide.visible .reveal:nth-of-type(4) { transition-delay: 0.40s; }
+.slide.visible .reveal:nth-of-type(5) { transition-delay: 0.50s; }
+.slide.visible .reveal:nth-of-type(6) { transition-delay: 0.60s; }
+
+/* ==========================================================
+   PROGRESS / NAV
+   ========================================================== */
+.progress-bar {
+  position: fixed; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--primary), var(--primary-bright));
+  transform-origin: left; transform: scaleX(0);
+  transition: transform 0.4s var(--ease);
+  z-index: 100; box-shadow: 0 0 12px var(--primary-glow);
+}
+.nav-dots {
+  position: fixed; right: clamp(0.5rem, 1.5vw, 1.5rem); top: 50%;
+  transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 0.5rem; z-index: 90;
+}
+.nav-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  border: 1px solid var(--text-muted); background: transparent;
+  cursor: pointer; padding: 0; transition: all 0.2s ease;
+}
+.nav-dot:hover { border-color: var(--primary); }
+.nav-dot.active {
+  background: var(--primary); border-color: var(--primary);
+  box-shadow: 0 0 8px var(--primary-glow);
+}
+.keyboard-hint {
+  position: fixed; bottom: clamp(0.8rem, 1.5vw, 1.5rem);
+  right: clamp(0.8rem, 1.5vw, 1.5rem);
+  font-family: var(--font-mono);
+  font-size: clamp(0.55rem, 0.7vw, 0.66rem);
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--text-muted);
+  opacity: 0.6; transition: opacity 0.3s ease;
+  z-index: 80; pointer-events: none;
+}
+.keyboard-hint.fade { opacity: 0; }
+
+/* ==========================================================
+   P1 — COVER
+   ========================================================== */
+.slide.cover { justify-content: space-between; }
+.cover-top {
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--font-mono);
+  font-size: clamp(0.65rem, 0.82vw, 0.78rem);
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--text-muted);
+}
+.cover-top .brand-stamp {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+}
+.cover-top .brand-stamp::before {
+  content: ''; width: 9px; height: 9px;
+  background: var(--primary);
+  box-shadow: 0 0 14px var(--primary-glow);
+  border-radius: 2px; transform: rotate(45deg);
+}
+.cover-hero {
+  display: flex; flex-direction: column;
+  gap: clamp(0.8rem, 2vh, 1.5rem);
+  flex: 1; justify-content: center;
+  padding: clamp(1rem, 3vh, 3rem) 0;
+  max-width: min(96vw, 1500px);
+}
+.cover-headline {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2.2rem, 4.4vw, 4rem);
+  line-height: 1.15;
+  letter-spacing: -0.028em;
+  color: var(--text);
+  max-width: 52ch;
+}
+.cover-headline .em {
+  background: linear-gradient(180deg, var(--text) 0%, var(--primary-bright) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 28px var(--primary-glow));
+  font-weight: 600;
+}
+.cover-subline {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1rem, 1.6vw, 1.4rem);
+  line-height: 1.45;
+  letter-spacing: -0.012em;
+  color: var(--text-variant);
+  max-width: 36ch;
+  margin-top: clamp(0.3rem, 0.6vh, 0.5rem);
+}
+.cover-subline-meta {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(0.82rem, 1.1vw, 1rem);
+  line-height: 1.5;
+  letter-spacing: -0.005em;
+  color: var(--text-muted);
+  max-width: 42ch;
+  margin-top: clamp(0.5rem, 0.8vh, 0.7rem);
+}
+.cover-axera {
+  font-family: var(--font-mono);
+  font-size: clamp(0.78rem, 0.95vw, 0.92rem);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+/* orderbook background grid */
+.cover::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: -1;
+  opacity: 0.35;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(99,235,251,0.05) 0 1px, transparent 1px 28px),
+    repeating-linear-gradient(90deg, rgba(99,235,251,0.04) 0 1px, transparent 1px 28px);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, black 30%, black 80%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, black 30%, black 80%, transparent 100%);
+}
+
+/* ==========================================================
+   GENERIC slide-top + headline pattern
+   ========================================================== */
+.slide-top {
+  display: flex; flex-direction: column;
+  gap: clamp(0.5rem, 1.2vh, 1rem);
+}
+.slide-headline { max-width: 28ch; }
+
+/* ==========================================================
+   P2 — SURVIVAL → PM EARNING
+   ========================================================== */
+.slide.p2 { justify-content: center; gap: clamp(1rem, 3vh, 2rem); }
+.p2-content {
+  display: flex; flex-direction: column;
+  gap: clamp(1.4rem, 3.6vh, 2.8rem);
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+}
+.p2-hero {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  color: var(--text);
+  max-width: 28ch;
+}
+.p2-hero .em {
+  color: var(--primary-bright);
+  font-weight: 600;
+}
+.p2-arena {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.05rem, 1.6vw, 1.4rem);
+  color: var(--text-variant);
+  line-height: 1.45;
+  max-width: 56ch;
+}
+.p2-flow {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto minmax(0,1fr);
+  align-items: stretch;
+  gap: clamp(0.6rem, 1.2vw, 1.1rem);
+  margin-top: clamp(0.6rem, 1.4vh, 1.1rem);
+  max-width: 820px;
+}
+.p2-node {
+  padding: clamp(0.7rem, 1.2vh, 1rem) clamp(0.85rem, 1.4vw, 1.2rem);
+  background: var(--bg-elev-high);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(99,235,251,0.12);
+  box-shadow: 0 0 0 1px rgba(99,235,251,0.04) inset, 0 14px 28px rgba(0,0,0,0.25);
+  display: flex; flex-direction: column;
+  gap: clamp(0.35rem, 0.7vh, 0.55rem);
+  position: relative;
+}
+.p2-node-label {
+  font-family: var(--font-mono);
+  font-size: clamp(0.7rem, 0.92vw, 0.84rem);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text);
+  font-weight: 600;
+}
+.p2-node-sub {
+  font-family: var(--font-mono);
+  font-size: clamp(0.6rem, 0.74vw, 0.7rem);
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+.p2-node.active {
+  border-color: var(--primary);
+  background: linear-gradient(180deg, rgba(99,235,251,0.07), var(--bg-elev-high) 90%);
+  box-shadow: 0 0 0 1px var(--primary-soft) inset, 0 0 28px var(--primary-soft);
+}
+.p2-node.active .p2-node-label { color: var(--primary-bright); }
+.p2-arrow {
+  display: flex; align-items: center; justify-content: center;
+  color: var(--primary);
+  font-family: var(--font-mono);
+  font-size: clamp(1rem, 1.4vw, 1.3rem);
+  opacity: 0.55;
+}
+/* (legacy P2 proof callout styles removed — superseded by .p2-proofs panel below) */
+.p2-source-footer {
+  position: absolute;
+  bottom: clamp(1rem, 2.5vh, 2rem);
+  right: clamp(1.4rem, 4vw, 3.5rem);
+  font-family: var(--font-mono);
+  font-size: clamp(0.5rem, 0.6vw, 0.58rem);
+  color: var(--text-muted);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  max-width: 56ch;
+  text-align: right;
+  opacity: 0.6;
+  line-height: 1.5;
+}
+
+/* ---- P2 layout: claim on top, live-proof panel (two facets) below ---- */
+.p2-head {
+  display: flex; flex-direction: column;
+  gap: clamp(0.8rem, 2vh, 1.4rem);
+}
+
+.p2-proofs {
+  position: relative;
+  width: 100%;
+  max-width: min(94vw, 1200px);
+  margin: 0 auto;
+  border: 1px solid rgba(99,235,251,0.18);
+  border-left: 2px solid var(--primary);
+  border-radius: var(--radius-sm);
+  background: rgba(99,235,251,0.045);
+  padding: clamp(1rem, 2.4vh, 1.55rem) clamp(1.1rem, 2.2vw, 1.8rem) clamp(1.1rem, 2.6vh, 1.7rem);
+  display: flex; flex-direction: column;
+  gap: clamp(0.9rem, 2vh, 1.35rem);
+}
+.p2-proofs-tag {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: clamp(0.56rem, 0.68vw, 0.64rem);
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--primary-bright);
+}
+.p2-proofs-tag::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 0 0 var(--primary-glow);
+  animation: pip-pulse 2s ease-in-out infinite;
+}
+.p2-proofs-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  gap: clamp(1.4rem, 3.4vw, 3rem);
+  align-items: stretch;
+}
+.p2-proofs-grid > .p2-proof-col + .p2-proof-col {
+  border-left: 1px solid rgba(99,235,251,0.12);
+  padding-left: clamp(1.4rem, 3.4vw, 3rem);
+}
+.p2-proof-col {
+  margin: 0; min-width: 0;
+  display: flex; flex-direction: column; justify-content: space-between;
+  gap: clamp(0.7rem, 1.6vh, 1.05rem);
+}
+.p2-proof-col--viz { align-items: center; text-align: center; }
+.p2-proof-col--text { align-items: center; text-align: center; }
+.p2-proof-col--text .p2-cap-list { text-align: left; }
+.p2-proof-col-label {
+  font-family: var(--font-mono);
+  font-size: clamp(0.58rem, 0.7vw, 0.66rem);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+.p2-proof-col-cap {
+  font-family: var(--font-mono);
+  font-size: clamp(0.84rem, 1.04vw, 1rem);
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  color: var(--text-variant);
+  max-width: 30ch;
+}
+.p2-proof-col--viz .p2-proof-col-cap { max-width: 24ch; }
+.p2-proof-col-cap .em { color: var(--primary-bright); font-weight: 600; }
+
+/* Proof 1 — automation-share donut */
+.p2-donut-wrap {
+  position: relative;
+  width: clamp(140px, 15vw, 176px);
+}
+.p2-donut { width: 100%; height: auto; display: block; }
+.p2-donut-track { fill: none; stroke: rgba(99,235,251,0.10); stroke-width: 16; }
+.p2-donut-arc {
+  fill: none;
+  stroke: url(#p2_donut_grad);
+  stroke-width: 16;
+  stroke-linecap: round;
+  /* r=96 → circumference ≈ 603.2; 3/5 = 60% ≈ 361.9 */
+  stroke-dasharray: 361.9 603.2;
+  transform: rotate(-90deg);
+  transform-origin: 120px 120px;
+  filter: drop-shadow(0 0 10px rgba(99,235,251,0.35));
+}
+.p2-viz-center {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  pointer-events: none;
+}
+.p2-viz-frac {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.7rem, 2.9vw, 2.4rem);
+  line-height: 1;
+  color: var(--primary-bright);
+  letter-spacing: -0.02em;
+}
+.p2-viz-frac-sep { color: var(--text-muted); margin: 0 0.05em; font-weight: 400; }
+.p2-viz-frac-cap {
+  font-family: var(--font-mono);
+  font-size: clamp(0.54rem, 0.68vw, 0.62rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: clamp(0.12rem, 0.3vh, 0.25rem);
+}
+
+/* Proof 2 — capability checklist */
+.p2-cap-list {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column;
+  gap: clamp(0.5rem, 1.2vh, 0.85rem);
+}
+.p2-cap-list li {
+  position: relative;
+  padding-left: clamp(1.5rem, 2vw, 1.85rem);
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 1.3vw, 1.2rem);
+  line-height: 1.25;
+  letter-spacing: -0.005em;
+  color: var(--text);
+}
+.p2-cap-list li::before {
+  content: '✓';
+  position: absolute; left: 0; top: 0.04em;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.92em;
+  color: var(--primary-bright);
+}
+
+@media (max-width: 820px) {
+  .p2-proofs-grid { grid-template-columns: 1fr; gap: clamp(1rem, 3vh, 1.5rem); }
+  .p2-proofs-grid > .p2-proof-col + .p2-proof-col {
+    border-left: none; padding-left: 0;
+    border-top: 1px solid rgba(99,235,251,0.12);
+    padding-top: clamp(1rem, 3vh, 1.5rem);
+  }
+  .p2-proof-col--viz { align-items: flex-start; text-align: left; }
+}
+
+/* ==========================================================
+   P3 — INFORMATION BOTTLENECK
+   ========================================================== */
+.slide.p3 {
+  gap: clamp(0.9rem, 2.2vh, 1.5rem);
+  justify-content: space-between;
+}
+.p3-headline { max-width: 32ch; }
+.p3-headline .em { color: var(--primary-bright); }
+
+/* --- Block 1: price-response timeline --- */
+.p3-timeline {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(0.6rem, 1.4vh, 1rem);
+  width: 100%;
+  max-width: min(96vw, 1400px);
+}
+.p3-timeline-svg {
+  width: 100%;
+  height: clamp(260px, 48vh, 420px);
+  overflow: visible;
+}
+.p3-edge-window {
+  fill: rgba(99, 235, 251, 0.07);
+  stroke: rgba(99, 235, 251, 0.45);
+  stroke-width: 1;
+  stroke-dasharray: 5 5;
+}
+.p3-tl-window-label {
+  fill: var(--primary);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.22em;
+  font-weight: 500;
+}
+.p3-tl-axis {
+  stroke: rgba(134, 147, 149, 0.4);
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+}
+.p3-tl-axis-label {
+  fill: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+}
+.p3-tl-line {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.p3-tl-line-pre,
+.p3-tl-line-lag { opacity: 0.55; }
+.p3-tl-event-halo { fill: rgba(255, 208, 166, 0.22); }
+.p3-tl-event-dot { fill: var(--tertiary); }
+.p3-tl-event-label {
+  fill: var(--tertiary);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+}
+.p3-tl-priced-halo { fill: rgba(99, 235, 251, 0.22); }
+.p3-tl-priced-dot { fill: var(--primary-bright); }
+.p3-tl-priced-label {
+  fill: var(--primary-bright);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+}
+.p3-tl-caption {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(0.95rem, 1.2vw, 1.15rem);
+  color: var(--primary);
+  text-align: center;
+  letter-spacing: -0.005em;
+}
+
+/* --- Block 2: agent edge chip row --- */
+.p3-edge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(0.55rem, 1.3vh, 0.9rem);
+  margin-top: clamp(0.3rem, 1vh, 0.8rem);
+}
+.p3-edge-label {
+  font-family: var(--font-mono);
+  font-size: clamp(0.66rem, 0.78vw, 0.74rem);
+  letter-spacing: 0.24em;
+  color: var(--primary);
+  text-transform: uppercase;
+}
+.p3-edge-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(0.7rem, 1.4vw, 1.1rem);
+  align-items: baseline;
+}
+.p3-edge-chip {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1rem, 1.32vw, 1.18rem);
+  color: var(--text);
+  letter-spacing: -0.005em;
+}
+.p3-edge-dot {
+  color: var(--text-muted);
+  font-size: clamp(1rem, 1.32vw, 1.18rem);
+  opacity: 0.55;
+}
+.p3-edge-line {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.1rem, 1.45vw, 1.35rem);
+  color: var(--text);
+  text-align: center;
+  letter-spacing: -0.008em;
+  max-width: 52ch;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* ==========================================================
+   P4 — PROTOCOL REVEAL
+   ========================================================== */
+.slide.p4 { gap: clamp(1.4rem, 3.5vh, 2.6rem); justify-content: flex-start; }
+.p4-headline { max-width: 48ch; }
+.p4-headline .em {
+  background: linear-gradient(180deg, var(--text) 0%, var(--primary-bright) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+/* ----- V6 P4 body: two-column mirror — same information, two packagings ----- */
+.p4-mirror {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  width: 100%;
+  max-width: min(96vw, 1280px);
+  margin: 0 auto;
+}
+.p4-pole {
+  flex: 1 1 0;
+  min-width: 0;
+  position: relative;
+  display: flex; flex-direction: column;
+  gap: clamp(0.85rem, 2vh, 1.4rem);
+  padding: clamp(1.6rem, 3.4vh, 2.5rem) clamp(1.5rem, 2.4vw, 2.2rem);
+  min-height: clamp(16rem, 38vh, 23rem);
+  background: var(--bg-elev-high);
+  border-radius: var(--radius-md);
+  box-shadow: 0 0 0 1px rgba(99,235,251,0.10) inset, 0 24px 60px rgba(0,0,0,0.4);
+  overflow: hidden;
+}
+.p4-pole::before {
+  content: ''; position: absolute; top: 0;
+  height: 2px; width: clamp(48px, 7vw, 86px);
+}
+.p4-pole--source::before { left: clamp(1.5rem, 2.4vw, 2.2rem); background: linear-gradient(90deg, var(--text-muted), transparent); }
+.p4-pole--agent { text-align: right; align-items: flex-end; }
+.p4-pole--agent::before { right: clamp(1.5rem, 2.4vw, 2.2rem); background: linear-gradient(270deg, var(--primary-bright), transparent); }
+.p4-pole-side {
+  font-family: var(--font-mono);
+  font-size: clamp(0.62rem, 0.78vw, 0.72rem);
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.p4-pole-word {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.3rem, 3.8vw, 3.4rem);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+  color: var(--text-variant);
+}
+.p4-pole--agent .p4-pole-word {
+  color: var(--primary-bright);
+  text-shadow: 0 0 26px var(--primary-glow);
+}
+.p4-pole--agent .p4-pole-side { color: var(--primary); }
+.p4-pole--agent .p4-pole-tag { color: var(--text-variant); }
+.p4-pole-tag {
+  font-family: var(--font-mono);
+  font-size: clamp(0.82rem, 1.05vw, 1.0rem);
+  font-style: italic;
+  letter-spacing: 0.01em;
+  color: var(--text-muted);
+}
+.p4-axes {
+  list-style: none; margin: auto 0 0; padding: 0;
+  display: flex; flex-direction: column;
+  gap: clamp(0.7rem, 1.7vh, 1.15rem);
+}
+.p4-axes li {
+  font-family: var(--font-mono);
+  font-size: clamp(0.82rem, 1.02vw, 1rem);
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+  color: var(--text-variant);
+}
+.p4-pole--agent .p4-axes li { color: var(--text); }
+/* center seam — the wrong packaging between the two */
+.p4-seam {
+  flex: 0 0 auto;
+  align-self: stretch;
+  position: relative;
+  width: clamp(92px, 10vw, 150px);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: clamp(0.7rem, 1.6vh, 1.1rem);
+}
+.p4-seam::before {
+  content: ''; position: absolute; top: 50%; left: 8%; right: 8%;
+  border-top: 1px dashed color-mix(in srgb, var(--tertiary-bright) 32%, transparent);
+}
+.p4-seam-bar {
+  position: relative; z-index: 1;
+  width: clamp(15px, 1.7vw, 21px);
+  height: clamp(96px, 19vh, 158px);
+  border: 1px solid color-mix(in srgb, var(--tertiary-bright) 55%, transparent);
+  background: repeating-linear-gradient(45deg, var(--tertiary-bright) 0 1.5px, transparent 1.5px 7px);
+  border-radius: 2px;
+}
+.p4-seam-label {
+  position: relative; z-index: 1;
+  font-family: var(--font-mono);
+  font-size: clamp(0.6rem, 0.76vw, 0.7rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.4;
+  color: var(--tertiary-bright);
+}
+
+@media (max-width: 880px) {
+  .p4-mirror { flex-direction: column; align-items: stretch; gap: clamp(0.8rem, 2vh, 1.3rem); max-width: 96vw; }
+  .p4-pole { min-height: 0; }
+  .p4-pole--agent { text-align: left; align-items: flex-start; }
+  .p4-pole--agent::before { left: clamp(1.5rem, 2.4vw, 2.2rem); right: auto; background: linear-gradient(90deg, var(--primary-bright), transparent); }
+  .p4-axes { margin: clamp(0.5rem, 1.2vh, 0.85rem) 0 0; }
+  .p4-seam { flex-direction: row; width: auto; align-self: center; gap: 0.9rem; padding: 0.3rem 0; }
+  .p4-seam::before { top: 50%; left: 6%; right: 6%; }
+  .p4-seam-bar { width: clamp(90px, 42vw, 180px); height: clamp(15px, 4vw, 20px); background: repeating-linear-gradient(135deg, var(--tertiary-bright) 0 1.5px, transparent 1.5px 7px); }
+}
+
+/* ==========================================================
+   P5 — TRANSACTION ANIMATION (ported from p5_pack_call_autoplay mock)
+   Mint/amber/blue accents scoped to this slide only.
+   ========================================================== */
+.slide.p5 {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.slide.p5 .slide-top {
+  padding: clamp(1.4rem, 4vw, 3.5rem) clamp(1.4rem, 4vw, 3.5rem) 0;
+}
+.p5-iframe {
+  flex: 1;
+  width: 100%;
+  border: 0;
+  display: block;
+  min-height: 0;
+}
+/* V5 P5 stepper CSS (.p5-header, .p5-stage, .p5-buyer, .p5-theater, .p5-scene, .p5-caption, .p5-timeline, etc.) removed — V6 P7 uses iframe-based motion story; V6 P5 uses .p5-net* below. */
+
+/* ==========================================================
+   V6 P5 — BILATERAL ACTOR NET (force-2 design)
+   data-slide="5" only; coexists with .slide.p5 iframe styles used by P7.
+   ========================================================== */
+.slide.p5[data-slide="5"] {
+  padding: clamp(1.4rem, 4vw, 3.5rem);
+  display: flex; flex-direction: column;
+  gap: clamp(0.9rem, 2vh, 1.6rem);
+  justify-content: flex-start;
+}
+.slide.p5[data-slide="5"] .slide-top { padding: 0; }
+.p5-net {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(3.5rem, 6vw, 6rem) minmax(0, 1.25fr) clamp(3.5rem, 6vw, 6rem) minmax(0, 1fr);
+  align-items: stretch;
+  gap: clamp(0.4rem, 1vw, 0.8rem);
+  width: 100%;
+  max-width: min(96vw, 1320px);
+  margin: 0 auto;
+  position: relative;
+  align-content: center;
+}
+.p5-net-node {
+  position: relative;
+  background: var(--bg-elev-high);
+  border-radius: var(--radius-md);
+  padding: clamp(1.1rem, 2.2vh, 1.6rem) clamp(1.1rem, 1.9vw, 1.6rem);
+  display: flex; flex-direction: column;
+  gap: clamp(0.45rem, 0.9vh, 0.75rem);
+  box-shadow: 0 0 0 1px rgba(99,235,251,0.12) inset, 0 28px 70px rgba(0,0,0,0.45);
+  overflow: hidden;
+  min-height: clamp(13rem, 30vh, 19rem);
+  justify-content: center;
+}
+.p5-net-node::before {
+  content: '';
+  position: absolute; top: 0; height: 2px;
+  width: clamp(48px, 7vw, 84px);
+}
+.p5-net-seller::before { left: clamp(1.1rem, 1.9vw, 1.6rem); background: linear-gradient(90deg, var(--primary), transparent); }
+.p5-net-buyer::before { right: clamp(1.1rem, 1.9vw, 1.6rem); background: linear-gradient(270deg, var(--primary), transparent); }
+.p5-net-buyer { text-align: right; }
+.p5-net-protocol {
+  background: linear-gradient(180deg, rgba(99,235,251,0.08) 0%, var(--bg-elev-high) 60%);
+  align-items: center; justify-content: center; text-align: center;
+  border-radius: var(--radius-md);
+}
+.p5-net-protocol::before {
+  left: 50%; transform: translateX(-50%);
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+  width: clamp(80px, 12vw, 140px);
+}
+.p5-net-eyebrow {
+  font-family: var(--font-mono);
+  font-size: clamp(0.62rem, 0.78vw, 0.72rem);
+  letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--primary-bright);
+}
+.p5-net-name {
+  font-family: var(--font-display); font-weight: 600;
+  font-size: clamp(1.4rem, 2.1vw, 1.85rem);
+  color: var(--text); letter-spacing: -0.02em; line-height: 1.05;
+}
+.p5-net-state {
+  font-family: var(--font-mono);
+  font-size: clamp(1rem, 1.25vw, 1.18rem);
+  letter-spacing: 0.04em; color: var(--text-variant); font-style: italic;
+}
+.p5-net-chips {
+  display: flex; flex-wrap: wrap;
+  gap: clamp(0.35rem, 0.7vw, 0.55rem);
+  margin-top: clamp(0.45rem, 0.9vh, 0.7rem);
+}
+.p5-net-buyer .p5-net-chips { justify-content: flex-end; }
+.p5-net-chip {
+  display: inline-flex; align-items: center;
+  padding: clamp(0.28rem, 0.55vh, 0.4rem) clamp(0.55rem, 0.95vw, 0.78rem);
+  border: 1px solid rgba(99,235,251,0.22);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: clamp(0.58rem, 0.72vw, 0.68rem);
+  letter-spacing: 0.08em; text-transform: lowercase;
+  color: var(--text-variant);
+  background: rgba(99,235,251,0.04);
+  white-space: nowrap;
+}
+.p5-net-protocol-mark {
+  font-family: var(--font-mono);
+  font-size: clamp(1.35rem, 1.95vw, 1.75rem);
+  letter-spacing: 0.3em;
+  color: var(--primary-bright);
+  display: inline-flex; align-items: center;
+  gap: clamp(0.45rem, 0.8vw, 0.65rem);
+  font-weight: 600;
+}
+.p5-net-protocol-tag {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 1.4vw, 1.3rem);
+  color: var(--text); line-height: 1.35;
+  letter-spacing: -0.008em;
+  max-width: 22ch;
+  margin: clamp(0.4rem, 0.9vh, 0.7rem) auto 0;
+}
+/* Arrow rails between nodes — two stacked rows */
+.p5-net-flow {
+  position: relative;
+  display: flex; flex-direction: column; align-items: stretch; justify-content: center;
+  gap: clamp(0.6rem, 1.4vh, 1rem);
+  padding: clamp(0.2rem, 0.6vh, 0.4rem) 0;
+}
+.p5-net-flow-row {
+  display: flex; align-items: center; gap: 4px;
+  height: 1px;
+}
+.p5-net-flow-line {
+  flex: 1; height: 1px;
+  background-image: linear-gradient(90deg, rgba(99,235,251,0.5) 0 6px, transparent 6px 14px);
+  background-size: 14px 1px;
+  background-repeat: repeat-x;
+}
+.p5-net-flow-arrow {
+  font-family: var(--font-mono);
+  font-size: clamp(0.7rem, 0.92vw, 0.86rem);
+  color: var(--primary);
+  line-height: 1;
+}
+.p5-net-flow-pay .p5-net-flow-line {
+  background-image: linear-gradient(90deg, rgba(255,208,166,0.45) 0 6px, transparent 6px 14px);
+}
+.p5-net-flow-pay .p5-net-flow-arrow { color: var(--tertiary); }
+.p5-net-flow-labels {
+  position: absolute;
+  left: 0; right: 0; top: 50%;
+  transform: translateY(-50%);
+  display: flex; flex-direction: column;
+  gap: clamp(0.7rem, 1.6vh, 1.1rem);
+  align-items: center;
+  pointer-events: none;
+}
+.p5-net-flow-label {
+  font-family: var(--font-mono);
+  font-size: clamp(0.58rem, 0.72vw, 0.66rem);
+  letter-spacing: 0.18em;
+  text-transform: lowercase;
+  white-space: nowrap;
+  background: var(--bg);
+  padding: 0 clamp(0.4rem, 0.8vw, 0.6rem);
+}
+.p5-net-flow-label-signal { color: var(--primary-bright); }
+.p5-net-flow-label-pay    { color: var(--tertiary-bright); }
+@media (max-width: 880px) {
+  .p5-net {
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+  }
+  .p5-net-flow { transform: rotate(90deg); height: clamp(3rem, 8vh, 5rem); }
+  .p5-net-flow-labels { display: none; }
+  .p5-net-buyer { text-align: left; }
+  .p5-net-buyer .p5-net-chips { justify-content: flex-start; }
+}
+
+/* ==========================================================
+   P6 — MARKET STRUCTURE (LATENT → REORGANIZED)
+   Three horizontal stages with arrows: latent two-sided, today's
+   human-native scatter, reorganized Stream + Snapshot Pack markets.
+   ========================================================== */
+.slide.p6 { gap: clamp(1rem, 2vh, 1.6rem); justify-content: space-between; }
+.p6-headline .em { color: var(--primary-bright); }
+
+.p6-bridge {
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.4rem, 1.75vw, 1.7rem);
+  color: var(--text-variant);
+  padding-top: clamp(3.2rem, 8.5vh, 6.5rem);
+  padding-bottom: clamp(0.6rem, 1.4vh, 1.1rem);
+  letter-spacing: -0.005em;
+}
+.p6-bridge .em { color: var(--primary-bright); font-weight: 500; }
+
+/* ----- V6 P6 body — three rails (mechanism cards) ----- */
+.p6-headline { max-width: 48ch; }
+.p6-rails {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.6rem, 1.4vw, 1.2rem);
+  width: 100%;
+  max-width: min(96vw, 1320px);
+  margin: 0 auto;
+  align-content: center;
+}
+.p6-rail {
+  position: relative;
+  background: var(--bg-elev-high);
+  border-radius: var(--radius-md);
+  padding: clamp(1.4rem, 3vh, 2.2rem) clamp(1.3rem, 2.2vw, 1.9rem);
+  display: flex; flex-direction: column;
+  gap: clamp(0.8rem, 1.6vh, 1.2rem);
+  box-shadow: 0 0 0 1px rgba(99,235,251,0.12) inset, 0 28px 70px rgba(0,0,0,0.45);
+  overflow: hidden;
+  min-height: clamp(12rem, 26vh, 17rem);
+}
+.p6-rail::before {
+  content: '';
+  position: absolute; top: 0; left: clamp(1.3rem, 2.2vw, 1.9rem);
+  height: 2px; width: clamp(48px, 7vw, 84px);
+  background: linear-gradient(90deg, var(--primary), transparent);
+}
+.p6-rail-label {
+  font-family: var(--font-mono);
+  font-size: clamp(0.66rem, 0.82vw, 0.76rem);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--primary-bright);
+  line-height: 1.3;
+}
+.p6-rail-claim {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.1rem, 1.55vw, 1.4rem);
+  color: var(--text);
+  letter-spacing: -0.014em;
+  line-height: 1.25;
+  flex: 1;
+}
+.p6-rail-impl {
+  font-family: var(--font-mono);
+  font-size: clamp(0.66rem, 0.82vw, 0.78rem);
+  letter-spacing: 0.08em;
+  color: var(--text-variant);
+  line-height: 1.4;
+  padding-top: clamp(0.5rem, 0.9vh, 0.7rem);
+  border-top: 1px solid rgba(99,235,251,0.18);
+}
+@media (max-width: 880px) {
+  .p6-rails {
+    grid-template-columns: 1fr;
+  }
+  .p6-rail { min-height: 0; }
+}
+
+/* ==========================================================
+   P_pilot — FIRST WEDGE (V5 P8)
+   Wedge definition (single panel, 3 cells) + three proofs grid + status chips.
+   ========================================================== */
+.slide.p_pilot { gap: clamp(1.2rem, 2.6vh, 2rem); justify-content: center; }
+.p_pilot-headline { max-width: 30ch; }
+.p_pilot-headline .em { color: var(--primary-bright); }
+
+/* ==========================================================
+   P_MARKET — V6 P8 market / TAM / customer / competition
+   Two-column layout: hero (chart + big TAM) | three chip rows.
+   ========================================================== */
+.p_market-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: clamp(1.4rem, 3vw, 3rem);
+  flex: 1;
+  align-content: center;
+  padding-top: clamp(0.6rem, 1.2vw, 1.2rem);
+  min-height: 0;
+}
+.p_market-hero {
+  display: flex; flex-direction: column;
+  justify-content: center;
+  gap: clamp(1rem, 1.8vw, 1.5rem);
+  min-height: 0;
+}
+.p_market-chart {
+  position: relative;
+  background: linear-gradient(180deg, rgba(99,235,251,0.05), rgba(99,235,251,0));
+  border: 1px solid rgba(99,235,251,0.2);
+  border-radius: var(--radius-md);
+  padding: clamp(0.9rem, 1.5vw, 1.3rem);
+}
+.p_market-chart {
+  flex: 1;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.p_market-chart svg {
+  width: 100%;
+  height: clamp(120px, 22vh, 200px);
+  display: block;
+  overflow: visible;
+}
+.p_market-chart-line {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 8px var(--primary-glow));
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+  animation: p_market-draw 1.6s var(--ease) 0.5s forwards;
+}
+.p_market-chart-fill {
+  fill: url(#p_market_grad);
+  opacity: 0;
+  animation: p_market-fade 0.8s var(--ease) 1.7s forwards;
+}
+@keyframes p_market-draw { to { stroke-dashoffset: 0; } }
+@keyframes p_market-fade { to { opacity: 1; } }
+.p_market-chart-dot {
+  fill: var(--primary-bright);
+  filter: drop-shadow(0 0 6px var(--primary-glow));
+  opacity: 0;
+  animation: p_market-fade 0.4s var(--ease) forwards;
+}
+.p_market-chart-dot:nth-of-type(1) { animation-delay: 0.7s; }
+.p_market-chart-dot:nth-of-type(2) { animation-delay: 1.2s; }
+.p_market-chart-dot:nth-of-type(3) { animation-delay: 1.7s; }
+.p_market-chart-labels {
+  display: flex; justify-content: space-between;
+  margin-top: 0.55rem;
+  font-family: var(--font-mono);
+  font-size: clamp(0.62rem, 0.74vw, 0.72rem);
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+}
+.p_market-chart-label .yr { display: block; text-transform: uppercase; font-size: 0.85em; opacity: 0.65; }
+.p_market-chart-label .val { display: block; color: var(--text-variant); margin-top: 0.18rem; }
+.p_market-chart-callout {
+  position: absolute;
+  top: clamp(0.6rem, 1vw, 0.95rem);
+  right: clamp(0.7rem, 1vw, 1rem);
+  font-family: var(--font-mono);
+  font-size: clamp(0.7rem, 0.92vw, 0.86rem);
+  color: var(--tertiary-bright);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 0.32rem 0.72rem;
+  border: 1px solid rgba(255,171,81,0.4);
+  border-radius: 999px;
+  background: rgba(255,171,81,0.08);
+}
+.p_market-tam {
+  display: flex; flex-direction: column; gap: 0.45rem;
+}
+.p_market-tam-label {
+  font-family: var(--font-mono);
+  font-size: clamp(0.68rem, 0.85vw, 0.8rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.p_market-chart-head { display: flex; flex-direction: column; gap: clamp(0.35rem, 0.7vh, 0.55rem); }
+.p_market-chart-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.2rem, 1.85vw, 1.75rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  max-width: 24ch;
+}
+.p_market-tam-num {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2.8rem, 5.4vw, 4.8rem);
+  letter-spacing: -0.05em;
+  line-height: 0.86;
+  color: var(--primary-bright);
+  text-shadow: 0 0 28px var(--primary-glow);
+}
+.p_market-tam-unit {
+  font-size: 0.36em; color: var(--text-variant); letter-spacing: 0; font-weight: 400; margin-left: 0.12em;
+}
+.p_market-eq {
+  border-radius: var(--radius-sm);
+  background: rgba(7,14,25,0.5);
+  border: 1px solid rgba(99,235,251,0.14);
+  padding: clamp(0.8rem, 1.6vh, 1.15rem) clamp(0.9rem, 1.6vw, 1.2rem);
+  display: grid; gap: clamp(0.5rem, 0.9vh, 0.72rem);
+  font-family: var(--font-mono);
+}
+.p_market-eq .eq-row {
+  display: grid; grid-template-columns: 1fr auto; gap: 1rem;
+  align-items: baseline;
+  font-size: clamp(0.74rem, 0.94vw, 0.88rem);
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+  border-bottom: 1px solid rgba(99,235,251,0.1);
+  padding-bottom: clamp(0.45rem, 0.8vh, 0.6rem);
+}
+.p_market-eq .eq-row:last-child { border-bottom: 0; padding-bottom: 0; }
+.p_market-eq .val { color: var(--text-variant); font-weight: 600; white-space: nowrap; }
+.p_market-eq .val.hi { color: var(--primary-bright); font-size: 1.12em; }
+.p_market-replace {
+  font-family: var(--font-mono);
+  font-size: clamp(0.62rem, 0.75vw, 0.72rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  opacity: 0.85;
+  padding: 0.45rem 0;
+  border-top: 1px dashed rgba(255,255,255,0.08);
+  border-bottom: 1px dashed rgba(255,255,255,0.08);
+}
+.p_market-fee {
+  display: flex; flex-direction: column;
+  justify-content: center;
+  gap: clamp(0.55rem, 1vw, 0.9rem);
+  min-height: 0;
+  padding: clamp(1rem, 1.8vw, 1.6rem);
+  border: 1px solid rgba(99,235,251,0.22);
+  border-radius: var(--radius-md);
+  background: linear-gradient(180deg, rgba(99,235,251,0.04), rgba(99,235,251,0));
+  position: relative;
+}
+.p_market-fee::before {
+  content: '';
+  position: absolute; top: 0; left: clamp(1rem, 1.8vw, 1.6rem); right: clamp(1rem, 1.8vw, 1.6rem);
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary-bright), transparent);
+  opacity: 0.65;
+}
+.p_market-fee-label {
+  font-family: var(--font-mono);
+  font-size: clamp(0.7rem, 0.85vw, 0.8rem);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+.p_market-fee-num {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2.6rem, 5.6vw, 4.6rem);
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  color: var(--primary-bright);
+  text-shadow: 0 0 28px var(--primary-glow);
+}
+.p_market-fee-pct {
+  font-size: 0.55em; color: var(--text-variant); font-weight: 500; margin-left: 0.05em;
+}
+.p_market-fee-sub {
+  font-size: clamp(0.88rem, 1.1vw, 1rem);
+  color: var(--text-variant);
+  letter-spacing: -0.005em;
+  line-height: 1.35;
+}
+.p_market-fee-list {
+  list-style: none; padding: 0; margin: 0;
+  display: flex; flex-direction: column; gap: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: clamp(0.74rem, 0.92vw, 0.86rem);
+  color: var(--text-variant);
+  letter-spacing: 0.02em;
+}
+.p_market-fee-list li { display: flex; gap: 0.55rem; align-items: baseline; }
+.p_market-fee-list .b { color: var(--primary); font-weight: 600; }
+.p_market-fee-deriv {
+  margin-top: 0.25rem;
+  padding-top: clamp(0.65rem, 1.1vw, 0.95rem);
+  border-top: 1px solid rgba(99,235,251,0.18);
+  display: flex; flex-wrap: wrap; align-items: baseline;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: clamp(0.78rem, 0.98vw, 0.92rem);
+  letter-spacing: 0.04em;
+}
+.p_market-fee-deriv .lhs { color: var(--text-variant); }
+.p_market-fee-deriv .op { color: var(--text-muted); }
+.p_market-fee-deriv .rate { color: var(--primary); }
+.p_market-fee-deriv .rhs {
+  color: var(--primary-bright);
+  font-weight: 600;
+  font-size: 1.15em;
+}
+.p_market-fee-deriv .u { color: var(--text-variant); font-size: 0.75em; font-weight: 400; margin-left: 0.1em; }
+/* right column — bottom-up GMV card + take-rate card */
+.p_market-right {
+  display: flex; flex-direction: column;
+  justify-content: stretch;
+  gap: clamp(0.8rem, 1.4vw, 1.2rem);
+  min-height: 0;
+}
+.p_market-right .p_market-card { flex: 1; justify-content: center; }
+.p_market-card {
+  position: relative;
+  display: flex; flex-direction: column;
+  gap: clamp(0.4rem, 0.8vw, 0.7rem);
+  padding: clamp(0.95rem, 1.7vw, 1.5rem);
+  border: 1px solid rgba(99,235,251,0.22);
+  border-radius: var(--radius-md);
+  background: linear-gradient(180deg, rgba(99,235,251,0.04), rgba(99,235,251,0));
+}
+.p_market-card::before {
+  content: '';
+  position: absolute; top: 0; left: clamp(0.95rem,1.7vw,1.5rem); right: clamp(0.95rem,1.7vw,1.5rem);
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary-bright), transparent);
+  opacity: 0.6;
+}
+.p_market-card-label {
+  font-family: var(--font-mono);
+  font-size: clamp(0.68rem, 0.84vw, 0.78rem);
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--primary);
+}
+.p_market-card-lead {
+  font-family: var(--font-mono);
+  font-size: clamp(0.92rem, 1.18vw, 1.1rem);
+  color: var(--text-variant);
+}
+.p_market-card-lead .b { color: var(--primary-bright); font-weight: 600; }
+.p_market-bu {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column; gap: clamp(0.4rem, 0.8vh, 0.6rem);
+}
+.p_market-bu li {
+  display: flex; align-items: baseline; gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: clamp(0.78rem, 0.98vw, 0.92rem);
+  letter-spacing: 0.02em;
+  color: var(--text-variant);
+}
+.p_market-bu .s { flex: 1; min-width: 0; }
+.p_market-bu .op { color: var(--text-muted); }
+.p_market-bu .v { color: var(--primary-bright); font-weight: 600; font-size: 1.12em; white-space: nowrap; }
+.p_market-bu .v.hi { font-size: 1.32em; }
+.p_market-bu .v .u { color: var(--text-variant); font-size: 0.66em; font-weight: 400; margin-left: 0.1em; }
+.p_market-card--fee .p_market-fee-num { font-size: clamp(2.1rem, 4.2vw, 3.4rem); }
+.p_market-take {
+  margin-top: clamp(0.6rem, 1.4vh, 1.1rem);
+  font-family: var(--font-mono);
+  font-size: clamp(0.72rem, 0.9vw, 0.85rem);
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+.p_market-take .em { color: var(--primary); font-weight: 600; }
+.p_market-bu-note {
+  margin-top: 0.2rem;
+  padding-top: clamp(0.55rem, 1vw, 0.85rem);
+  border-top: 1px solid rgba(99,235,251,0.14);
+  font-family: var(--font-mono);
+  font-size: clamp(0.7rem, 0.84vw, 0.8rem);
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+}
+.p_market-source {
+  position: absolute;
+  bottom: clamp(1rem, 2.5vh, 2rem);
+  right: clamp(1.4rem, 4vw, 3.5rem);
+  font-family: var(--font-mono);
+  font-size: clamp(0.5rem, 0.6vw, 0.58rem);
+  color: var(--text-muted);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  max-width: 56ch;
+  text-align: right;
+  opacity: 0.6;
+  line-height: 1.5;
+}
+.p_market-bridge {
+  margin: 0;
+  padding-top: clamp(0.7rem, 1.3vw, 1.05rem);
+  border-top: 1px dashed rgba(255,255,255,0.09);
+  font-size: clamp(0.84rem, 1.05vw, 0.98rem);
+  line-height: 1.4;
+  letter-spacing: -0.005em;
+  color: var(--text-variant);
+}
+.p_market-bridge .em { color: var(--primary); font-weight: 500; }
+@media (max-height: 700px) {
+  .p_market-tam-num { font-size: clamp(2.4rem, 5vw, 4rem); }
+  .p_market-fee-num { font-size: clamp(2.2rem, 4.8vw, 3.8rem); }
+  .p_market-chart svg { height: clamp(70px, 12vh, 100px); }
+}
+@media (max-width: 880px) {
+  .p_market-body { grid-template-columns: 1fr; gap: 1rem; }
+}
+
+/* ==========================================================
+   P8 — PROOF / ARTIFACTS (ported from p8_artifact_wall mock)
+   Three artifact panels with focus rotation + real screenshots.
+   ========================================================== */
+.slide.p8 {
+  --mint: #8fecc4;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: clamp(16px, 1.8vw, 26px);
+  cursor: pointer;
+}
+.p8-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(16px, 1.8vw, 28px);
+  align-items: start;
+}
+.p8-eyebrow {
+  color: var(--mint);
+  font-family: var(--font-mono);
+  font-size: clamp(0.64rem, 0.76vw, 0.78rem);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.p8-h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2.1rem, 3.6vw, 3.6rem);
+  line-height: 1.0;
+  letter-spacing: -0.03em;
+  max-width: 980px;
+}
+.p8-h1 .em {
+  background: linear-gradient(180deg, var(--text), var(--mint));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.p8-status {
+  min-width: 230px;
+  padding: 11px 13px;
+  border: 1px solid rgba(232,238,233,0.14);
+  border-radius: 8px;
+  background: rgba(17,25,35,0.9);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: clamp(0.62rem, 0.72vw, 0.74rem);
+  line-height: 1.45;
+  letter-spacing: 0.04em;
+  box-shadow: 0 22px 60px rgba(0,0,0,0.22);
+}
+.p8-status strong { display: block; color: var(--text); font-weight: 600; }
+
+.p8-artifact-grid {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: clamp(12px, 1.4vw, 20px);
+  align-items: stretch;
+}
+.p8-artifact {
+  min-width: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  overflow: hidden;
+  border: 1px solid rgba(232,238,233,0.14);
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(21,31,43,0.94), rgba(13,19,27,0.92));
+  box-shadow: 0 26px 70px rgba(0,0,0,0.32);
+  opacity: 1;
+  transform: none;
+  transition: opacity 520ms ease, border-color 520ms ease, box-shadow 520ms ease;
+}
+.p8-artifact:nth-child(1) { transition-delay: 40ms; }
+.p8-artifact:nth-child(2) { transition-delay: 110ms; }
+.p8-artifact:nth-child(3) { transition-delay: 180ms; }
+.p8-shot {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(11,16,23,0.2), rgba(11,16,23,0.82)), #0b1017;
+}
+.p8-shot::after {
+  content: ''; position: absolute; inset: 0;
+  border-bottom: 1px solid rgba(232,238,233,0.08);
+  background: linear-gradient(180deg, transparent, rgba(11,16,23,0.18));
+  pointer-events: none;
+}
+.p8-shot :is(img, video) {
+  width: 100%; height: 100%;
+  max-width: none; max-height: none;
+  object-fit: cover;
+  filter: saturate(1.0) contrast(1.0);
+  opacity: 1;
+  transition: opacity 520ms ease, filter 520ms ease;
+}
+.p8-artifact:nth-child(1) .p8-shot :is(img, video) { object-position: 45% 45%; }
+.p8-artifact:nth-child(2) .p8-shot :is(img, video) { object-position: 50% 40%; }
+.p8-artifact:nth-child(3) .p8-shot :is(img, video) { object-position: 50% 50%; }
+
+.p8-artifact-copy {
+  min-height: clamp(135px, 16vh, 170px);
+  display: grid;
+  align-content: start;
+  gap: 7px;
+  padding: clamp(14px, 1.5vw, 20px);
+  background: linear-gradient(180deg, rgba(17,25,35,0.98), rgba(12,18,26,0.98));
+}
+.p8-artifact-number {
+  display: flex; align-items: center; gap: 8px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: clamp(0.56rem, 0.66vw, 0.68rem);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.p8-artifact-number::before {
+  content: ''; width: 9px; height: 9px;
+  border-radius: 50%;
+  border: 1px solid rgba(143,236,196,0.75);
+  background: rgba(143,236,196,0.25);
+  box-shadow: 0 0 16px rgba(143,236,196,0.16);
+}
+.p8-artifact h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.1rem, 1.6vw, 1.7rem);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+}
+.p8-artifact-meta {
+  color: var(--mint);
+  font-family: var(--font-mono);
+  font-size: clamp(0.66rem, 0.8vw, 0.8rem);
+  letter-spacing: 0.04em;
+  line-height: 1.34;
+}
+.p8-artifact-detail {
+  max-width: 32ch;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: clamp(0.6rem, 0.72vw, 0.74rem);
+  line-height: 1.42;
+}
+/* Stage-readable proof line */
+.p8-proves {
+  display: flex; align-items: baseline; gap: 0.55rem;
+  font-family: var(--font-display);
+  font-size: clamp(0.92rem, 1.18vw, 1.1rem);
+  font-weight: 500;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  margin-top: clamp(0.2rem, 0.4vh, 0.35rem);
+}
+.p8-proves .lbl {
+  font-family: var(--font-mono);
+  font-size: clamp(0.58rem, 0.7vw, 0.66rem);
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--mint);
+  flex-shrink: 0;
+  position: relative; top: -0.05em;
+}
+
+/* Disclosure strip — three coordinated status chips */
+.p8-disclosure {
+  display: inline-flex; align-items: center;
+  gap: clamp(0.4rem, 0.8vw, 0.7rem);
+  align-self: flex-start;
+  margin-top: clamp(0.4rem, 0.8vh, 0.65rem);
+  font-family: var(--font-mono);
+  font-size: clamp(0.58rem, 0.7vw, 0.66rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.p8-disclosure .chip {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  padding: clamp(0.3rem, 0.55vh, 0.4rem) clamp(0.55rem, 0.9vw, 0.75rem);
+  border-radius: 999px;
+  border: 1px solid rgba(143,236,196,0.4);
+  background: rgba(143,236,196,0.06);
+  color: var(--mint);
+  font-weight: 600;
+}
+.p8-disclosure .chip::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--mint);
+  box-shadow: 0 0 10px rgba(143,236,196,0.5);
+}
+.p8-disclosure .chip.neg {
+  border-color: rgba(232,238,233,0.18);
+  background: rgba(232,238,233,0.02);
+  color: var(--text-muted);
+  font-weight: 400;
+}
+.p8-disclosure .chip.neg::before {
+  background: transparent;
+  border: 1px solid var(--text-muted);
+  box-shadow: none;
+}
+
+.p8-foot {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 18px;
+  align-items: center;
+  padding: clamp(12px, 1.3vw, 16px) clamp(14px, 1.5vw, 20px);
+  border: 1px solid rgba(232,238,233,0.14);
+  border-radius: 10px;
+  background: rgba(17,25,35,0.84);
+  box-shadow: 0 20px 58px rgba(0,0,0,0.24);
+}
+.p8-next-step {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(0.95rem, 1.4vw, 1.5rem);
+  line-height: 1.18;
+  letter-spacing: -0.012em;
+}
+.p8-controls {
+  display: flex; gap: 8px; align-items: center;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: clamp(0.56rem, 0.66vw, 0.68rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.p8-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  border: 1px solid rgba(232,238,233,0.25);
+  background: rgba(232,238,233,0.07);
+  transition: background 260ms ease, border-color 260ms ease, box-shadow 260ms ease;
+}
+
+/* Focus rotation: active cell escapes grid and fills entire slide viewport */
+.slide.p8[data-step="0"] .p8-artifact:nth-child(1),
+.slide.p8[data-step="1"] .p8-artifact:nth-child(2),
+.slide.p8[data-step="2"] .p8-artifact:nth-child(3) {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  opacity: 1;
+  transform: none;
+  border-color: rgba(143,236,196,0.58);
+  border-radius: 0;
+  box-shadow: 0 0 0 1px rgba(143,236,196,0.18);
+}
+.slide.p8[data-step="0"] .p8-artifact:not(:nth-child(1)),
+.slide.p8[data-step="1"] .p8-artifact:not(:nth-child(2)),
+.slide.p8[data-step="2"] .p8-artifact:not(:nth-child(3)) {
+  opacity: 0;
+  pointer-events: none;
+}
+/* Active cell fullscreen: hide copy + video fits without crop */
+.slide.p8[data-step="0"] .p8-artifact:nth-child(1) .p8-artifact-copy,
+.slide.p8[data-step="1"] .p8-artifact:nth-child(2) .p8-artifact-copy,
+.slide.p8[data-step="2"] .p8-artifact:nth-child(3) .p8-artifact-copy {
+  display: none;
+}
+.slide.p8[data-step="0"] .p8-artifact:nth-child(1) .p8-shot :is(img, video),
+.slide.p8[data-step="1"] .p8-artifact:nth-child(2) .p8-shot :is(img, video),
+.slide.p8[data-step="2"] .p8-artifact:nth-child(3) .p8-shot :is(img, video) {
+  object-fit: contain;
+  object-position: center;
+}
+.slide.p8[data-step="0"] .p8-dot:nth-child(1),
+.slide.p8[data-step="1"] .p8-dot:nth-child(2),
+.slide.p8[data-step="2"] .p8-dot:nth-child(3) {
+  border-color: rgba(143,236,196,0.9);
+  background: var(--mint);
+  box-shadow: 0 0 16px rgba(143,236,196,0.45);
+}
+.slide.p8[data-step="0"] .p8-status strong::after { content: "Product surface"; }
+.slide.p8[data-step="1"] .p8-status strong::after { content: "Agent surface"; }
+.slide.p8[data-step="2"] .p8-status strong::after { content: "Transaction surface"; }
+.slide.p8[data-step="0"] .p8-artifact:nth-child(1) .p8-artifact-number,
+.slide.p8[data-step="1"] .p8-artifact:nth-child(2) .p8-artifact-number,
+.slide.p8[data-step="2"] .p8-artifact:nth-child(3) .p8-artifact-number {
+  color: var(--mint);
+}
+
+/* ==========================================================
+   P9 — GTM (cold-start motion)
+   4-step acquisition: seed both sides -> provide liquidity -> earn repeat -> distribute -> open.
+   ========================================================== */
+.slide.p9 { gap: clamp(1.1rem, 2.6vh, 2rem); justify-content: center; }
+.p9-headline { max-width: 40ch; }
+.p9-headline .em { color: var(--primary-bright); }
+
+/* ----- GTM cold-start: 4-step acquisition motion ----- */
+.p9-motion {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: clamp(0.4rem, 0.9vw, 0.9rem);
+  width: 100%;
+  max-width: min(96vw, 1300px);
+  margin: 0 auto;
+}
+.p9-step {
+  flex: 1 1 0;
+  min-width: 0;
+  position: relative;
+  display: flex; flex-direction: column; justify-content: center;
+  gap: clamp(0.45rem, 1vh, 0.8rem);
+  padding: clamp(1.4rem, 3.2vh, 2.2rem) clamp(1rem, 1.5vw, 1.4rem);
+  min-height: clamp(7rem, 14vh, 9.5rem);
+  background: var(--bg-elev-high);
+  border: 1px solid rgba(99,235,251,0.14);
+  border-radius: var(--radius-md);
+  box-shadow: 0 18px 44px rgba(0,0,0,0.3);
+  overflow: hidden;
+}
+.p9-step-num {
+  font-family: var(--font-mono);
+  font-size: clamp(0.66rem, 0.8vw, 0.76rem);
+  letter-spacing: 0.18em;
+  color: var(--text-muted);
+}
+.p9-step-label {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1rem, 1.35vw, 1.28rem);
+  line-height: 1.18;
+  letter-spacing: -0.012em;
+  color: var(--text);
+}
+.p9-step-note {
+  font-family: var(--font-mono);
+  font-size: clamp(0.7rem, 0.86vw, 0.8rem);
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+  color: var(--text-muted);
+}
+.p9-step--hero {
+  border-color: color-mix(in srgb, var(--primary-bright) 50%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--primary-bright) 28%, transparent) inset, 0 18px 50px rgba(0,0,0,0.36), 0 0 30px color-mix(in srgb, var(--primary-glow) 65%, transparent);
+}
+.p9-step--hero .p9-step-num { color: var(--primary-bright); }
+.p9-step-tag {
+  margin-top: clamp(0.2rem, 0.5vh, 0.4rem);
+  align-self: flex-start;
+  font-family: var(--font-mono);
+  font-size: clamp(0.6rem, 0.74vw, 0.7rem);
+  letter-spacing: 0.04em;
+  color: var(--primary-bright);
+  padding: 0.28em 0.65em;
+  border: 1px solid color-mix(in srgb, var(--primary-bright) 38%, transparent);
+  border-radius: 999px;
+  background: rgba(99,235,251,0.07);
+}
+.p9-step-arrow {
+  flex: 0 0 auto;
+  align-self: center;
+  font-family: var(--font-mono);
+  font-size: clamp(0.95rem, 1.3vw, 1.2rem);
+  color: var(--primary);
+  opacity: 0.5;
+}
+/* second acquisition layer — runs in parallel to the managed motion, not a step in it */
+/* + Second layer — an additional acquisition channel, shown as a contained callout band */
+.p9-second {
+  display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+  gap: clamp(0.6rem, 1.2vw, 1rem);
+  width: fit-content; max-width: min(94vw, 1080px); margin: 0 auto;
+  padding: clamp(0.55rem, 1.1vh, 0.8rem) clamp(1rem, 1.8vw, 1.5rem);
+  background: rgba(99,235,251,0.05);
+  border: 1px solid rgba(99,235,251,0.2);
+  border-radius: var(--radius-md);
+}
+.p9-second-tag {
+  flex: 0 0 auto;
+  font-family: var(--font-mono);
+  font-size: clamp(0.62rem, 0.78vw, 0.72rem);
+  letter-spacing: 0.16em; text-transform: uppercase;
+  font-weight: 600;
+  color: var(--primary-bright);
+  background: color-mix(in srgb, var(--primary) 16%, transparent);
+  border-radius: 999px;
+  padding: 0.34em 0.85em;
+}
+.p9-second-text {
+  font-family: var(--font-mono);
+  font-size: clamp(0.78rem, 0.96vw, 0.9rem);
+  letter-spacing: 0.01em;
+  color: var(--text-variant);
+}
+/* beachhead rationale — quiet footnote, clearly subordinate */
+.p9-why {
+  display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+  gap: clamp(0.4rem, 0.9vw, 0.7rem);
+  width: 100%; max-width: min(96vw, 1300px); margin: 0 auto;
+  font-family: var(--font-mono);
+  font-size: clamp(0.64rem, 0.8vw, 0.74rem);
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  opacity: 0.82;
+}
+.p9-why-key { text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-muted); opacity: 0.75; }
+.p9-why-mkt { color: var(--text-variant); font-weight: 600; }
+.p9-why-sep { opacity: 0.4; }
+@media (max-width: 880px) {
+  .p9-motion { flex-direction: column; align-items: stretch; gap: 0.6rem; }
+  .p9-step-arrow { transform: rotate(90deg); }
+}
+
+/* ==========================================================
+   P10 — CLOSE
+   ========================================================== */
+.slide.p10 { gap: clamp(0.8rem, 1.8vh, 1.4rem); justify-content: center; }
+.p10-headline {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2rem, 4.5vw, 3.6rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  max-width: 22ch;
+}
+.p10-headline .em {
+  background: linear-gradient(180deg, var(--text) 0%, var(--primary-bright) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 24px var(--primary-glow));
+}
+.p10-cols {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(0.8rem, 1.6vw, 1.4rem);
+  margin-top: clamp(0.5rem, 1vh, 0.8rem);
+}
+.p10-col {
+  background: var(--bg-elev-high);
+  border-radius: var(--radius-md);
+  padding: clamp(1rem, 1.6vw, 1.4rem);
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column;
+  gap: clamp(0.4rem, 0.8vh, 0.65rem);
+  box-shadow: 0 0 0 1px rgba(99,235,251,0.04) inset, 0 24px 56px rgba(0,0,0,0.35);
+  min-height: clamp(11rem, 26vh, 16rem);
+}
+.p10-col::before {
+  content: ''; position: absolute; left: 1.2rem; top: 0;
+  height: 2px; width: clamp(36px, 5vw, 60px);
+  background: linear-gradient(90deg, var(--primary), transparent);
+}
+.p10-col-label {
+  font-family: var(--font-mono);
+  font-size: clamp(0.62rem, 0.78vw, 0.72rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+.p10-col-list {
+  list-style: none;
+  display: flex; flex-direction: column;
+  gap: clamp(0.4rem, 0.7vh, 0.55rem);
+}
+.p10-col-list li {
+  font-family: var(--font-display);
+  font-size: clamp(0.85rem, 1.05vw, 0.98rem);
+  color: var(--text);
+  line-height: 1.4;
+  padding-left: 0.9rem; position: relative;
+}
+.p10-col-list li::before {
+  content: ''; position: absolute; left: 0; top: 0.6em;
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--primary);
+}
+.p10-col-list li.placeholder {
+  color: var(--text-muted);
+  font-style: italic;
+}
+.p10-col-list li.placeholder::before { background: var(--text-muted); opacity: 0.5; }
+.p10-vision {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1rem, 1.4vw, 1.22rem);
+  color: var(--text);
+  text-align: center;
+  line-height: 1.4;
+  max-width: 60ch;
+  margin: 0 auto;
+  padding-top: clamp(0.4rem, 0.8vh, 0.7rem);
+}
+.p10-vision .em { color: var(--primary-bright); }
+
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="progress-bar" id="progressBar"></div>
+<nav class="nav-dots" id="navDots" aria-label="Slide navigation"></nav>
+<div class="keyboard-hint" id="kbHint">← → · Space</div>
+
+
+<!-- ==================== P1 — COVER ==================== -->
+<section class="slide cover" data-slide="1" aria-label="Cover">
+  <div class="cover-top reveal">
+    <span class="brand-stamp">ACCESSURA · v0.1</span>
+    <span class="pulse-dot">PROTOCOL · DRAFT</span>
+  </div>
+  <div class="cover-hero">
+    <h1 class="cover-headline reveal">
+      Accessura is an <span class="em">open protocol</span> where agents buy the signals they need to trade prediction markets.
+    </h1>
+  </div>
+  <div class="cover-axera reveal">ACCESSURA</div>
+</section>
+
+
+<!-- ==================== P2 — SURVIVAL → PM EARNING ==================== -->
+<section class="slide p2" data-slide="2" aria-label="Why now">
+  <div class="p2-content">
+    <div class="p2-head">
+      <div class="eyebrow with-line reveal">WHY NOW</div>
+      <h2 class="p2-hero reveal">
+        Agents will dominate trading. <span class="em">Prediction markets are where they start.</span>
+      </h2>
+    </div>
+
+    <div class="p2-proofs reveal" aria-label="Live proof">
+      <div class="p2-proofs-tag">Live proof</div>
+      <div class="p2-proofs-grid">
+
+        <!-- Proof 1 · Volume — demand, shown as a chart -->
+        <figure class="p2-proof-col p2-proof-col--viz">
+          <div class="p2-proof-col-label">Volume · automation share</div>
+          <div class="p2-donut-wrap">
+            <svg class="p2-donut" viewBox="0 0 240 240" role="img" aria-label="Roughly 3 in 5 trades in fast markets are automation-driven">
+              <defs>
+                <linearGradient id="p2_donut_grad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#63ebfb"/>
+                  <stop offset="100%" stop-color="#3aa6d6"/>
+                </linearGradient>
+              </defs>
+              <circle class="p2-donut-track" cx="120" cy="120" r="96"/>
+              <circle class="p2-donut-arc" cx="120" cy="120" r="96"/>
+            </svg>
+            <div class="p2-viz-center">
+              <div class="p2-viz-frac">3<span class="p2-viz-frac-sep">/</span>5</div>
+              <div class="p2-viz-frac-cap">trades</div>
+            </div>
+          </div>
+          <figcaption class="p2-proof-col-cap">fast markets are <span class="em">automation-driven</span></figcaption>
+        </figure>
+
+        <!-- Proof 2 · Capability — supply, shown as a shipped checklist -->
+        <div class="p2-proof-col p2-proof-col--text">
+          <div class="p2-proof-col-label">Capability · rails shipped</div>
+          <ul class="p2-cap-list">
+            <li>Agent toolkits</li>
+            <li>Market APIs</li>
+            <li>On-chain settlement</li>
+          </ul>
+          <div class="p2-proof-col-cap">the rails agents trade on are <span class="em">all shipped</span></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="p2-source-footer">Source · Dune "Faster, Shorter, More Automated" · Anthropic MCP · Polymarket / Kalshi API docs</div>
+</section>
+
+
+<!-- ==================== P3 — WHY AGENTS WILL DOMINATE PMs ==================== -->
+<section class="slide p3" data-slide="3" aria-label="Why agents win this window">
+  <div class="slide-top">
+    <div class="eyebrow with-line reveal">WHY AGENTS WIN THIS WINDOW</div>
+    <h2 class="t-display-md slide-headline p3-headline reveal">
+      Prediction markets reward information edge. <span class="em">Agents are built to take it.</span>
+    </h2>
+  </div>
+
+  <!-- Block 1: price-response timeline + edge window -->
+  <figure class="p3-timeline reveal" aria-label="Edge window between information appearing and price catching up">
+    <svg class="p3-timeline-svg" viewBox="0 0 1200 280" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Timeline showing event, edge window, and price catch-up">
+      <!-- Edge window highlight -->
+      <rect class="p3-edge-window" x="300" y="44" width="550" height="196" rx="4"/>
+      <text class="p3-tl-window-label" x="575" y="30" text-anchor="middle">EDGE WINDOW</text>
+
+      <!-- Time axis -->
+      <line class="p3-tl-axis" x1="40" y1="240" x2="1160" y2="240"/>
+      <text class="p3-tl-axis-label" x="1160" y="262" text-anchor="end">TIME →</text>
+
+      <!-- Price line: pre-event flat -->
+      <path class="p3-tl-line p3-tl-line-pre" d="M 40 170 L 300 170"/>
+      <!-- Post-event but pre-catchup flat -->
+      <path class="p3-tl-line p3-tl-line-lag" d="M 300 170 L 780 170"/>
+      <!-- Catch-up curve -->
+      <path class="p3-tl-line p3-tl-line-rise" d="M 780 170 Q 815 170 850 105"/>
+      <!-- Post catch-up flat -->
+      <path class="p3-tl-line p3-tl-line-post" d="M 850 105 L 1160 105"/>
+
+      <!-- Event marker -->
+      <circle class="p3-tl-event-halo" cx="300" cy="170" r="14"/>
+      <circle class="p3-tl-event-dot" cx="300" cy="170" r="7"/>
+      <text class="p3-tl-event-label" x="300" y="202" text-anchor="middle">event happens</text>
+
+      <!-- Priced-in marker -->
+      <circle class="p3-tl-priced-halo" cx="850" cy="105" r="14"/>
+      <circle class="p3-tl-priced-dot" cx="850" cy="105" r="7"/>
+      <text class="p3-tl-priced-label" x="850" y="80" text-anchor="middle">priced in</text>
+    </svg>
+    <figcaption class="p3-tl-caption">where the trade lives — the lag between info and price catching up</figcaption>
+  </figure>
+
+  <!-- Block 2: why agents win this window — vs humans + vs algorithms in one line -->
+  <div class="p3-edge reveal">
+    <p class="p3-edge-line">Agents: human judgment at machine speed.</p>
+  </div>
+</section>
+
+
+<!-- ==================== P4 — WHY IT DOESN'T REACH ==================== -->
+<section class="slide p4" data-slide="4" aria-label="Why information doesn't reach agents">
+  <div class="slide-top">
+    <div class="eyebrow with-line reveal">WHY IT DOESN'T REACH</div>
+    <h2 class="t-display-md slide-headline p4-headline reveal">
+      Market-moving signals exist.<br><span class="em">They just aren't packaged for agent calls.</span>
+    </h2>
+  </div>
+  <!-- V6 P4 body — two-column mirror: same information, two packagings.
+       LEFT = Source-shaped (made for the source's own reasons, not the agent's trade).
+       RIGHT = Agent-callable (delivered shaped for the trade). Center seam = the wrong packaging.
+       Databases/APIs live under "existing information", never framed as inaccessible — the gap is packaging, not access. -->
+  <div class="p4-mirror reveal">
+    <div class="p4-pole p4-pole--source">
+      <div class="p4-pole-side">SELL SIDE</div>
+      <div class="p4-pole-word">Source-shaped</div>
+      <ul class="p4-axes">
+        <li>appears where it is created</li>
+        <li>carried in source formats</li>
+        <li>sold as access</li>
+      </ul>
+    </div>
+
+    <div class="p4-seam" aria-hidden="true">
+      <div class="p4-seam-bar"></div>
+      <div class="p4-seam-label">Wrong<br>packaging</div>
+    </div>
+
+    <div class="p4-pole p4-pole--agent">
+      <div class="p4-pole-side">BUY SIDE</div>
+      <div class="p4-pole-word">Agent-callable</div>
+      <ul class="p4-axes">
+        <li>requested when needed</li>
+        <li>delivered in call format</li>
+        <li>priced per use</li>
+      </ul>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ==================== P5 — WHAT WE BUILT (PROTOCOL REVEAL) ==================== -->
+<section class="slide p5" data-slide="5" aria-label="What we built">
+  <div class="slide-top">
+    <div class="eyebrow with-line reveal">WHAT WE BUILT</div>
+    <h2 class="t-display-md slide-headline reveal">
+      So we built the <span class="em">open protocol</span> that reshapes information — for an agent to call.
+    </h2>
+  </div>
+  <!-- V6 P5 body — bilateral 3-node net.
+       LEFT: Seller-side agent · CENTER: ACCESSURA protocol · RIGHT: Buyer-side agent -->
+  <div class="p5-net reveal">
+    <div class="p5-net-node p5-net-seller">
+      <div class="p5-net-name">Seller-side agent</div>
+      <div class="p5-net-state">publishes signals into the market</div>
+    </div>
+
+    <div class="p5-net-flow" aria-hidden="true">
+      <div class="p5-net-flow-row p5-net-flow-signal">
+        <span class="p5-net-flow-line"></span>
+        <span class="p5-net-flow-arrow">▶</span>
+      </div>
+      <div class="p5-net-flow-row p5-net-flow-pay">
+        <span class="p5-net-flow-arrow rev">◀</span>
+        <span class="p5-net-flow-line"></span>
+      </div>
+    </div>
+
+    <div class="p5-net-node p5-net-protocol">
+      <div class="p5-net-protocol-mark"><span class="pulse-dot"></span>ACCESSURA</div>
+      <div class="p5-net-protocol-tag">the open protocol where agents trade information</div>
+    </div>
+
+    <div class="p5-net-flow" aria-hidden="true">
+      <div class="p5-net-flow-row p5-net-flow-signal">
+        <span class="p5-net-flow-line"></span>
+        <span class="p5-net-flow-arrow">▶</span>
+      </div>
+      <div class="p5-net-flow-row p5-net-flow-pay">
+        <span class="p5-net-flow-arrow rev">◀</span>
+        <span class="p5-net-flow-line"></span>
+      </div>
+    </div>
+
+    <div class="p5-net-node p5-net-buyer">
+      <div class="p5-net-name">Buyer-side agent</div>
+      <div class="p5-net-state">calls signals from the market</div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ==================== P6 — THE MECHANISM (three rails) ==================== -->
+<section class="slide p6" data-slide="6" aria-label="The mechanism — call path, live price, delivery proof">
+  <div class="slide-top">
+    <div class="eyebrow with-line reveal">THE MECHANISM</div>
+    <h2 class="t-display-md slide-headline p6-headline reveal">
+      Accessura turns incoming signals into <span class="em">tradable Packs</span> agents can call, price, and settle.
+    </h2>
+    <div class="p6-bridge reveal">
+      A <span class="em">Pack</span> bundles all three — the market unit for one signal or stream.
+    </div>
+  </div>
+
+  <!-- V6 P6 body — three plain mechanism cards; protocol/component names demoted to secondary proof.
+       Plain label → display claim (how it works) → mono impl name as secondary footer.
+       Card 1 call path / AUI · Card 2 bid-ask market / per-pack orderbook · Card 3 paid delivery / x402 + receipt. -->
+  <div class="p6-rails reveal">
+    <div class="p6-rail">
+      <div class="p6-rail-label">One call path</div>
+      <div class="p6-rail-claim">Any agent can request, buy, or sell signals through the same market boundary.</div>
+      <div class="p6-rail-impl">Agent Unified Interface</div>
+    </div>
+    <div class="p6-rail">
+      <div class="p6-rail-label">Bid/ask signal market</div>
+      <div class="p6-rail-claim">Each signal clears through visible bids and asks.</div>
+      <div class="p6-rail-impl">Per-pack orderbook</div>
+    </div>
+    <div class="p6-rail">
+      <div class="p6-rail-label">Paid delivery</div>
+      <div class="p6-rail-claim">Payment, access, and delivery proof move together in one settled call.</div>
+      <div class="p6-rail-impl">x402 + delivery receipt</div>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ==================== P7 — WORKFLOW (one trade end-to-end) ==================== -->
+<!-- Click anywhere on the slide (or arrow keys when this slide is active) to advance step. -->
+<section class="slide p5" data-slide="7" aria-label="One trade workflow">
+  <div class="slide-top">
+    <div class="eyebrow with-line reveal">ONE TRADE</div>
+    <h2 class="t-display-md slide-headline reveal">
+      One missing signal, <span class="em">one paid call.</span>
+    </h2>
+  </div>
+  <iframe src="accessura_p5_transaction_motion_story_v3.html" class="p5-iframe" title="One trade motion story" allow="autoplay" loading="lazy"></iframe>
+</section>
+
+<!-- ==================== P8 — THE MARKET (data layer for PM trading) ==================== -->
+<section class="slide p_pilot" data-slide="8" aria-label="The market — data layer for prediction-market trading">
+  <div class="slide-top">
+    <div class="eyebrow with-line reveal">MARKET</div>
+    <h2 class="t-display-md slide-headline p_pilot-headline reveal">
+      A large, accelerating market for <span class="em">agent-callable information.</span>
+    </h2>
+  </div>
+
+  <div class="p_market-body reveal">
+    <!-- LEFT: PM volume growth chart -->
+    <div class="p_market-hero">
+      <div class="p_market-chart-head">
+        <div class="p_market-card-label">Prediction-market volume</div>
+        <div class="p_market-chart-title">A trading market big enough to need its own information layer.</div>
+      </div>
+      <div class="p_market-chart">
+        <svg viewBox="0 0 240 100" preserveAspectRatio="none" aria-label="PM volume trajectory">
+          <defs>
+            <linearGradient id="p_market_grad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#63ebfb" stop-opacity="0.45"/>
+              <stop offset="100%" stop-color="#63ebfb" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path class="p_market-chart-fill" d="M 20 82 L 120 35 L 220 12 L 220 95 L 20 95 Z"/>
+          <path class="p_market-chart-line" d="M 20 82 L 120 35 L 220 12"/>
+          <circle class="p_market-chart-dot" cx="20" cy="82" r="3.5"/>
+          <circle class="p_market-chart-dot" cx="120" cy="35" r="3.5"/>
+          <circle class="p_market-chart-dot" cx="220" cy="12" r="3.5"/>
+        </svg>
+        <div class="p_market-chart-labels">
+          <span class="p_market-chart-label"><span class="yr">2024</span><span class="val">$9B</span></span>
+          <span class="p_market-chart-label"><span class="yr">2025</span><span class="val">$40B+</span></span>
+          <span class="p_market-chart-label"><span class="yr">2026e</span><span class="val">$80–120B</span></span>
+        </div>
+        <div class="p_market-chart-callout">4× in one year</div>
+      </div>
+
+
+    </div>
+
+    <!-- RIGHT: top-down sizing + bottom-up sanity check -->
+    <div class="p_market-right">
+      <div class="p_market-card p_market-card--tam">
+        <div class="p_market-card-label">Information market · top-down</div>
+        <div class="p_market-tam-num">~$1.2B<span class="p_market-tam-unit">/yr</span></div>
+        <div class="p_market-eq">
+          <div class="eq-row"><span>2026e PM volume</span><span class="val">$80–120B</span></div>
+          <div class="eq-row"><span>signal / tool / info spend</span><span class="val">0.5–1%</span></div>
+          <div class="eq-row"><span>information-layer GMV</span><span class="val hi">~$1.2B/yr</span></div>
+        </div>
+      </div>
+      <div class="p_market-card">
+        <div class="p_market-card-label">Bottom-up · sanity check</div>
+        <div class="p_market-card-lead"><span class="b">$0.01</span> per paid call</div>
+        <ul class="p_market-bu">
+          <li><span class="s">100k agents × 100 calls/day</span><span class="op">≈</span><span class="v">$36M<span class="u">/yr</span></span></li>
+          <li><span class="s">10M agents × 100 calls/day</span><span class="op">≈</span><span class="v hi">$3.6B<span class="u">/yr</span></span></li>
+        </ul>
+        <div class="p_market-bu-note">Higher-frequency workflows push this further.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="p_market-take reveal">Accessura takes <span class="em">0.25–1%</span> of cleared value, at settlement.</div>
+
+  <div class="p_market-source">
+    Source · Kalshi / Polymarket / Pew / founder est.
+  </div>
+
+</section>
+
+
+<!-- ==================== P9 — GTM (3 on-ramps) ==================== -->
+<section class="slide p9" data-slide="9" aria-label="Go-to-market — cold-start motion">
+  <div class="slide-top">
+    <div class="eyebrow with-line reveal">GTM · sports &amp; politics first</div>
+    <h2 class="t-display-md slide-headline p9-headline reveal">
+      Two-sided markets stall at zero — <span class="em">so we build the first loop by hand.</span>
+    </h2>
+  </div>
+
+  <!-- V6 P9 body — cold-start acquisition motion (NOT the trade loop, which lives in P6/P7).
+       Hero step = we provide the first liquidity (managed demand budget); framed as temporary
+       bootstrap that retires once one repeatable buyer-provider loop self-sustains. -->
+  <div class="p9-motion reveal">
+    <div class="p9-step">
+      <div class="p9-step-num">01</div>
+      <div class="p9-step-label">Seed both sides</div>
+      <div class="p9-step-note">recruit providers + traders by hand</div>
+    </div>
+    <div class="p9-step-arrow" aria-hidden="true">→</div>
+    <div class="p9-step p9-step--hero">
+      <div class="p9-step-num">02</div>
+      <div class="p9-step-label">Provide the first liquidity</div>
+      <div class="p9-step-tag">Accessura is the market maker</div>
+    </div>
+    <div class="p9-step-arrow" aria-hidden="true">→</div>
+    <div class="p9-step">
+      <div class="p9-step-num">03</div>
+      <div class="p9-step-label">Earn repeat via trust</div>
+      <div class="p9-step-note">receipts + disputes, not promises</div>
+    </div>
+  </div>
+
+  <div class="p9-second reveal">
+    <span class="p9-second-tag">+ Second layer</span>
+    <span class="p9-second-text">Subscriptions — creators bring their existing audiences into the same loop.</span>
+  </div>
+
+  <div class="p9-why reveal">
+    <span class="p9-why-key">Why here</span>
+    <span class="p9-why-item"><span class="p9-why-mkt">Sports</span> · live, stream-speed signal demand</span>
+    <span class="p9-why-sep">·</span>
+    <span class="p9-why-item"><span class="p9-why-mkt">Politics</span> · large, liquid, constant repricing</span>
+  </div>
+
+</section>
+
+
+<!-- ==================== P10 — TEAM + ASK + VISION ==================== -->
+<section class="slide p10" data-slide="10" aria-label="Team, ask, and vision">
+  <div class="eyebrow with-line reveal">CLOSE</div>
+  <h2 class="p10-headline reveal">
+    Accessura is an open protocol building the <span class="em">missing information market</span><br>
+    — agents buy the signals they need to trade prediction markets.
+  </h2>
+  <div class="p10-cols reveal">
+    <div class="p10-col">
+      <div class="p10-col-label">Team</div>
+      <ul class="p10-col-list">
+        <li class="placeholder">[Founder / team proof point]</li>
+        <li class="placeholder">[Market · protocol · AI-agent · or product proof point]</li>
+        <li class="placeholder">[Relevant execution proof point]</li>
+      </ul>
+    </div>
+    <div class="p10-col">
+      <div class="p10-col-label">Current state</div>
+      <ul class="p10-col-list">
+        <li>Built end-to-end</li>
+        <li>Ready for pilot calls</li>
+        <li>No live traction yet</li>
+      </ul>
+    </div>
+    <div class="p10-col">
+      <div class="p10-col-label">Ask</div>
+      <ul class="p10-col-list">
+        <li class="placeholder">Capital — [round size]</li>
+        <li>Pilot buyers — PM trading teams (sports + politics)</li>
+        <li>Pilot producers — independent observers, beat reporters</li>
+      </ul>
+    </div>
+  </div>
+  <p class="p10-vision reveal">
+    In 18 months: <span class="em">the information market behind every prediction market.</span>
+  </p>
+</section>
+
+
+<script>
+/* ==========================================================
+   PRESENTATION CONTROLLER
+   ========================================================== */
+class SlidePresentation {
+  constructor() {
+    this.slides = Array.from(document.querySelectorAll('.slide'));
+    this.currentSlide = 0;
+    this.progressBar = document.getElementById('progressBar');
+    this.navDotsContainer = document.getElementById('navDots');
+    this.kbHint = document.getElementById('kbHint');
+    this.setupNavDots();
+    this.setupIntersectionObserver();
+    this.setupKeyboardNav();
+    this.setupTouchNav();
+    this.setupWheelNav();
+    this.fadeKbHintOnInteraction();
+    requestAnimationFrame(() => {
+      this.slides[0].classList.add('visible');
+      this.updateProgress();
+    });
+  }
+  setupNavDots() {
+    this.navDotsContainer.innerHTML = '';
+    this.slides.forEach((s, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+      dot.addEventListener('click', () => this.goTo(i));
+      this.navDotsContainer.appendChild(dot);
+    });
+    this.navDots = Array.from(this.navDotsContainer.querySelectorAll('.nav-dot'));
+  }
+  setupIntersectionObserver() {
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          const idx = this.slides.indexOf(e.target);
+          if (idx >= 0) {
+            this.currentSlide = idx;
+            this.updateNavDots();
+            this.updateProgress();
+          }
+        }
+      });
+    }, { threshold: 0.5 });
+    this.slides.forEach(s => obs.observe(s));
+  }
+  setupKeyboardNav() {
+    document.addEventListener('keydown', (e) => {
+      if (['ArrowDown', 'ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); this.next(); }
+      else if (['ArrowUp', 'ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); this.prev(); }
+      else if (e.key === 'Home') { e.preventDefault(); this.goTo(0); }
+      else if (e.key === 'End') { e.preventDefault(); this.goTo(this.slides.length - 1); }
+    });
+  }
+  setupTouchNav() {
+    let startY = 0;
+    document.addEventListener('touchstart', (e) => { startY = e.touches[0].clientY; }, { passive: true });
+    document.addEventListener('touchend', (e) => {
+      const dy = startY - e.changedTouches[0].clientY;
+      if (Math.abs(dy) < 50) return;
+      if (dy > 0) this.next(); else this.prev();
+    });
+  }
+  setupWheelNav() {
+    let lock = false;
+    document.addEventListener('wheel', (e) => {
+      if (lock) return;
+      if (Math.abs(e.deltaY) < 30) return;
+      lock = true;
+      if (e.deltaY > 0) this.next(); else this.prev();
+      setTimeout(() => { lock = false; }, 700);
+    }, { passive: true });
+  }
+  fadeKbHintOnInteraction() {
+    const fade = () => { this.kbHint.classList.add('fade'); };
+    window.addEventListener('keydown', fade, { once: true });
+    window.addEventListener('wheel', fade, { once: true, passive: true });
+    window.addEventListener('touchstart', fade, { once: true, passive: true });
+  }
+  next() { this.goTo(Math.min(this.currentSlide + 1, this.slides.length - 1)); }
+  prev() { this.goTo(Math.max(this.currentSlide - 1, 0)); }
+  goTo(i) {
+    this.slides[i].scrollIntoView({ behavior: 'smooth' });
+    this.currentSlide = i;
+    this.updateNavDots();
+    this.updateProgress();
+  }
+  updateNavDots() { this.navDots.forEach((d, i) => d.classList.toggle('active', i === this.currentSlide)); }
+  updateProgress() {
+    const denom = Math.max(this.slides.length - 1, 1);
+    this.progressBar.style.transform = `scaleX(${this.currentSlide / denom})`;
+  }
+}
+
+/* P5Stepper (V5 inline transaction stepper) removed — V6 P7 uses iframe-based motion story instead. */
+
+/* ==========================================================
+   P8 — ARTIFACT FOCUS ROTATION
+   Click anywhere on slide P8 to rotate focus across 3 panels.
+   Auto-rotates every 3.6s when slide is visible.
+   ========================================================== */
+class P8FocusRotator {
+  constructor() {
+    this.slide = document.querySelector('.slide.p8');
+    if (!this.slide) return;
+    // Fixed cycle: click anywhere advances. idle → focus 0 → idle → focus 1 → idle → focus 2 → idle → ...
+    this.cycle = ['idle', '0', 'idle', '1', 'idle', '2'];
+    this.index = 0;
+    this.slide.addEventListener('click', () => this.advance());
+  }
+  apply() {
+    const state = this.cycle[this.index];
+    if (state === 'idle') {
+      this.slide.removeAttribute('data-step');
+    } else {
+      this.slide.dataset.step = state;
+      const card = this.slide.querySelectorAll('.p8-artifact')[Number(state)];
+      const video = card?.querySelector('video');
+      if (video) {
+        video.currentTime = 0;
+        video.play().catch(() => {});
+      }
+    }
+  }
+  advance() {
+    this.index = (this.index + 1) % this.cycle.length;
+    this.apply();
+  }
+}
+
+const __sp = new SlidePresentation();
+new P8FocusRotator();
+
+class P5IframeReset {
+  constructor(sp) {
+    this.iframe = document.querySelector('.p5-iframe');
+    this.slide = this.iframe?.closest('.slide');
+    if (!this.slide || !this.iframe) return;
+    this.slideIdx = sp.slides.indexOf(this.slide);
+    if (this.slideIdx < 0) return;
+    this.baseSrc = this.iframe.getAttribute('src');
+    this.lastReset = 0;
+    this.iframe.addEventListener('load', () => {
+      if (sp.currentSlide === this.slideIdx) this.reset();
+    });
+
+    // Hook navigation: reset iframe animation whenever we navigate TO P7.
+    const originalGoTo = sp.goTo.bind(sp);
+    sp.goTo = (i) => {
+      const wasNotHere = sp.currentSlide !== this.slideIdx;
+      originalGoTo(i);
+      if (i === this.slideIdx && wasNotHere) this.reset();
+    };
+
+    // Backup: IntersectionObserver for non-goTo entry paths.
+    new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) this.reset(); });
+    }, { threshold: 0.5 }).observe(this.slide);
+  }
+  reset() {
+    // Debounce so goTo + observer don't double-reset.
+    const now = performance.now();
+    if (now - this.lastReset < 500) return;
+    this.lastReset = now;
+    // Ask the iframe to restart its own state from frame 0.
+    try {
+      this.iframe.contentWindow?.postMessage('p5-reset', '*');
+    } catch (err) {
+      // Fallback if iframe messaging is blocked: bust cache via src.
+      this.iframe.src = this.baseSrc.split('?')[0] + '?_=' + Date.now();
+    }
+  }
+}
+new P5IframeReset(__sp);
+
+window.addEventListener("message", (e) => {
+  if (e.data && e.data.type === "p5-forward-key" && typeof e.data.key === "string") {
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: e.data.key, bubbles: true }));
+    // Move focus back to parent so subsequent keys go directly to the deck.
+    if (document.activeElement && document.activeElement.tagName === 'IFRAME') {
+      document.activeElement.blur();
+    }
+    window.focus();
+  }
+});
+</script>
+</body>
+</html>
