@@ -282,7 +282,7 @@ body::after {
 /* ==========================================================
    P2 — SURVIVAL → PM EARNING
    ========================================================== */
-.slide.p2 { justify-content: center; gap: clamp(1rem, 3vh, 2rem); }
+.slide.p2 { justify-content: center; gap: clamp(1.2rem, 3.2vh, 2.2rem); padding-bottom: clamp(2.5rem, 7vh, 5rem); }
 .p2-content {
   display: flex; flex-direction: column;
   gap: clamp(1.4rem, 3.6vh, 2.8rem);
@@ -422,14 +422,22 @@ body::after {
   display: flex; flex-direction: column; justify-content: space-between;
   gap: clamp(0.7rem, 1.6vh, 1.05rem);
 }
-.p2-proof-col--viz { align-items: center; text-align: center; }
+.p2-proof-col--viz { text-align: center; }
+.p2-viz-row {
+  display: flex; flex-direction: row; align-items: center;
+  justify-content: flex-start; text-align: left;
+  gap: clamp(1.1rem, 2.2vw, 2rem);
+}
+.p2-viz-row .p2-donut-wrap { flex: 0 0 auto; }
+.p2-viz-row .p2-proof-col-cap { flex: 1; min-width: 0; font-size: clamp(0.92rem, 1.1vw, 1.02rem); }
+.p2-proof-col-cap .hl { color: var(--text); font-weight: 600; }
 .p2-proof-col--text { align-items: center; text-align: center; }
 .p2-proof-col--text .p2-cap-list { text-align: left; }
 .p2-proof-col-label {
   font-family: var(--font-mono);
-  font-size: clamp(0.58rem, 0.7vw, 0.66rem);
+  font-size: clamp(0.9rem, 1.15vw, 1.08rem);
   font-weight: 600;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--primary);
 }
@@ -441,7 +449,7 @@ body::after {
   color: var(--text-variant);
   max-width: 30ch;
 }
-.p2-proof-col--viz .p2-proof-col-cap { max-width: 24ch; }
+.p2-proof-col--viz .p2-proof-col-cap { max-width: 30ch; }
 .p2-proof-col-cap .em { color: var(--primary-bright); font-weight: 600; }
 
 /* Proof 1 — automation-share donut */
@@ -495,8 +503,8 @@ body::after {
 .p2-cap-list li {
   position: relative;
   padding-left: clamp(1.5rem, 2vw, 1.85rem);
-  font-family: var(--font-display);
-  font-size: clamp(1rem, 1.3vw, 1.2rem);
+  font-family: var(--font-mono);
+  font-size: clamp(0.92rem, 1.1vw, 1.02rem);
   line-height: 1.25;
   letter-spacing: -0.005em;
   color: var(--text);
@@ -1159,7 +1167,7 @@ body::after {
 .p_market-tam-num {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(2.8rem, 5.4vw, 4.8rem);
+  font-size: clamp(2.3rem, 4.4vw, 3.8rem);
   letter-spacing: -0.05em;
   line-height: 0.86;
   color: var(--primary-bright);
@@ -1325,13 +1333,16 @@ body::after {
 .p_market-bu .v .u { color: var(--text-variant); font-size: 0.66em; font-weight: 400; margin-left: 0.1em; }
 .p_market-card--fee .p_market-fee-num { font-size: clamp(2.1rem, 4.2vw, 3.4rem); }
 .p_market-take {
-  margin-top: clamp(0.6rem, 1.4vh, 1.1rem);
-  font-family: var(--font-mono);
-  font-size: clamp(0.72rem, 0.9vw, 0.85rem);
-  letter-spacing: 0.04em;
-  color: var(--text-muted);
+  margin-top: clamp(0.7rem, 1.6vh, 1.25rem);
+  padding-top: clamp(0.7rem, 1.4vh, 1.1rem);
+  border-top: 1px solid rgba(99,235,251,0.18);
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.05rem, 1.9vw, 1.6rem);
+  letter-spacing: -0.01em;
+  color: var(--text);
 }
-.p_market-take .em { color: var(--primary); font-weight: 600; }
+.p_market-take .em { color: var(--primary-bright); font-weight: 700; text-shadow: 0 0 18px var(--primary-glow); }
 .p_market-bu-note {
   margin-top: 0.2rem;
   padding-top: clamp(0.55rem, 1vw, 0.85rem);
@@ -1666,7 +1677,12 @@ body::after {
    P9 — GTM (cold-start motion)
    4-step acquisition: seed both sides -> provide liquidity -> earn repeat -> distribute -> open.
    ========================================================== */
-.slide.p9 { gap: clamp(1.1rem, 2.6vh, 2rem); justify-content: center; }
+.slide.p9 { gap: clamp(1.5rem, 3.5vh, 2.6rem); justify-content: flex-start; }
+.p9-lower {
+  flex: 1; min-height: 0; width: 100%;
+  display: flex; flex-direction: column; justify-content: center;
+  gap: clamp(1.8rem, 4vh, 3.2rem);
+}
 .p9-headline { max-width: 40ch; }
 .p9-headline .em { color: var(--primary-bright); }
 
@@ -1675,7 +1691,7 @@ body::after {
   display: flex;
   align-items: stretch;
   justify-content: center;
-  gap: clamp(0.4rem, 0.9vw, 0.9rem);
+  gap: clamp(0.8rem, 1.5vw, 1.5rem);
   width: 100%;
   max-width: min(96vw, 1300px);
   margin: 0 auto;
@@ -1685,9 +1701,9 @@ body::after {
   min-width: 0;
   position: relative;
   display: flex; flex-direction: column; justify-content: center;
-  gap: clamp(0.45rem, 1vh, 0.8rem);
-  padding: clamp(1.4rem, 3.2vh, 2.2rem) clamp(1rem, 1.5vw, 1.4rem);
-  min-height: clamp(7rem, 14vh, 9.5rem);
+  gap: clamp(0.55rem, 1.3vh, 1rem);
+  padding: clamp(1.8rem, 4.2vh, 2.9rem) clamp(1.2rem, 1.8vw, 1.7rem);
+  min-height: clamp(8.5rem, 18vh, 12rem);
   background: var(--bg-elev-high);
   border: 1px solid rgba(99,235,251,0.14);
   border-radius: var(--radius-md);
@@ -1771,17 +1787,26 @@ body::after {
 /* beachhead rationale — quiet footnote, clearly subordinate */
 .p9-why {
   display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
-  gap: clamp(0.4rem, 0.9vw, 0.7rem);
-  width: 100%; max-width: min(96vw, 1300px); margin: 0 auto;
+  gap: clamp(0.7rem, 1.4vw, 1.2rem);
+  width: 100%; max-width: min(96vw, 1200px); margin: 0 auto;
   font-family: var(--font-mono);
-  font-size: clamp(0.64rem, 0.8vw, 0.74rem);
-  letter-spacing: 0.04em;
-  color: var(--text-muted);
-  opacity: 0.82;
 }
-.p9-why-key { text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-muted); opacity: 0.75; }
-.p9-why-mkt { color: var(--text-variant); font-weight: 600; }
-.p9-why-sep { opacity: 0.4; }
+.p9-why-key {
+  text-transform: uppercase; letter-spacing: 0.2em;
+  font-size: clamp(0.66rem, 0.82vw, 0.78rem);
+  color: var(--primary); font-weight: 600;
+}
+.p9-why-chip {
+  display: flex; align-items: baseline; gap: 0.55rem;
+  font-size: clamp(0.78rem, 0.95vw, 0.9rem);
+  letter-spacing: 0.01em;
+  color: var(--text-variant);
+  padding: clamp(0.5rem, 1vh, 0.72rem) clamp(0.9rem, 1.5vw, 1.25rem);
+  border: 1px solid rgba(99,235,251,0.2);
+  border-radius: var(--radius-sm);
+  background: rgba(99,235,251,0.035);
+}
+.p9-why-mkt { color: var(--primary-bright); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
 @media (max-width: 880px) {
   .p9-motion { flex-direction: column; align-items: stretch; gap: 0.6rem; }
   .p9-step-arrow { transform: rotate(90deg); }
@@ -1794,22 +1819,27 @@ body::after {
 .p10-headline {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(2rem, 4.5vw, 3.6rem);
-  line-height: 1.1;
-  letter-spacing: -0.03em;
-  max-width: 22ch;
+  font-size: clamp(1.35rem, 2.3vw, 1.95rem);
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  max-width: 34ch;
 }
 .p10-headline .em {
   background: linear-gradient(180deg, var(--text) 0%, var(--primary-bright) 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   background-clip: text;
-  filter: drop-shadow(0 0 24px var(--primary-glow));
+  filter: drop-shadow(0 0 14px var(--primary-glow));
 }
 .p10-cols {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(0.8rem, 1.6vw, 1.4rem);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.75rem, 1.5vh, 1.25rem);
   margin-top: clamp(0.5rem, 1vh, 0.8rem);
+}
+.p10-row2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(0.8rem, 1.6vw, 1.4rem);
 }
 .p10-col {
   background: var(--bg-elev-high);
@@ -1819,7 +1849,7 @@ body::after {
   display: flex; flex-direction: column;
   gap: clamp(0.4rem, 0.8vh, 0.65rem);
   box-shadow: 0 0 0 1px rgba(99,235,251,0.04) inset, 0 24px 56px rgba(0,0,0,0.35);
-  min-height: clamp(11rem, 26vh, 16rem);
+  min-height: clamp(6.5rem, 14vh, 9rem);
 }
 .p10-col::before {
   content: ''; position: absolute; left: 1.2rem; top: 0;
@@ -1855,6 +1885,59 @@ body::after {
   font-style: italic;
 }
 .p10-col-list li.placeholder::before { background: var(--text-muted); opacity: 0.5; }
+.p10-team-people {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(0.9rem, 2.2vw, 2rem);
+  margin-top: clamp(0.3rem, 0.7vh, 0.55rem);
+}
+.p10-person {
+  display: flex; align-items: center;
+  gap: clamp(0.6rem, 0.9vw, 0.95rem);
+}
+.p10-person-avatar {
+  flex: 0 0 auto;
+  width: clamp(2.6rem, 3.6vw, 3.4rem);
+  height: clamp(2.6rem, 3.6vw, 3.4rem);
+  border-radius: 50%;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.03);
+  border: 1.5px solid color-mix(in srgb, var(--primary) 55%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 12%, transparent), 0 6px 18px rgba(0,0,0,0.42);
+  background: var(--bg-elev-high);
+}
+.p10-person-avatar.is-empty {
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--primary) 38%, transparent);
+  background: radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--primary) 10%, transparent), transparent 70%), var(--bg-elev-high);
+  box-shadow: none;
+  filter: none;
+}
+.p10-person-info {
+  display: flex; flex-direction: column; gap: 0.18rem; min-width: 0;
+}
+.p10-person-name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(0.95rem, 1.15vw, 1.12rem);
+  color: var(--text);
+  line-height: 1.25;
+}
+.p10-person-role {
+  font-family: var(--font-mono);
+  font-size: clamp(0.58rem, 0.72vw, 0.68rem);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+.p10-person-proof {
+  font-family: var(--font-display);
+  font-size: clamp(0.78rem, 0.95vw, 0.9rem);
+  color: var(--text-variant);
+  line-height: 1.35;
+}
+.p10-person.placeholder .p10-person-name,
+.p10-person.placeholder .p10-person-proof { color: var(--text-muted); font-style: italic; }
 .p10-vision {
   font-family: var(--font-display);
   font-weight: 500;
@@ -1903,15 +1986,16 @@ body::after {
       </h2>
     </div>
 
+    <div class="p2-proofs-tag p2-proofs-tag--top">Live proof</div>
     <div class="p2-proofs reveal" aria-label="Live proof">
-      <div class="p2-proofs-tag">Live proof</div>
       <div class="p2-proofs-grid">
 
         <!-- Proof 1 · Volume — demand, shown as a chart -->
         <figure class="p2-proof-col p2-proof-col--viz">
           <div class="p2-proof-col-label">Volume · automation share</div>
+          <div class="p2-viz-row">
           <div class="p2-donut-wrap">
-            <svg class="p2-donut" viewBox="0 0 240 240" role="img" aria-label="Roughly 3 in 5 trades in fast markets are automation-driven">
+            <svg class="p2-donut" viewBox="0 0 240 240" role="img" aria-label="Roughly 3 in 5 of nominal volume in fast markets is automation-driven">
               <defs>
                 <linearGradient id="p2_donut_grad" x1="0" y1="0" x2="1" y2="1">
                   <stop offset="0%" stop-color="#63ebfb"/>
@@ -1923,10 +2007,11 @@ body::after {
             </svg>
             <div class="p2-viz-center">
               <div class="p2-viz-frac">3<span class="p2-viz-frac-sep">/</span>5</div>
-              <div class="p2-viz-frac-cap">trades</div>
+              <div class="p2-viz-frac-cap">volume</div>
             </div>
           </div>
-          <figcaption class="p2-proof-col-cap">fast markets are <span class="em">automation-driven</span></figcaption>
+          <figcaption class="p2-proof-col-cap"><span class="em">~55–62%</span> of <span class="hl">fast-market</span> volume is already automated</figcaption>
+          </div>
         </figure>
 
         <!-- Proof 2 · Capability — supply, shown as a shipped checklist -->
@@ -2152,7 +2237,6 @@ body::after {
     <div class="p_market-hero">
       <div class="p_market-chart-head">
         <div class="p_market-card-label">Prediction-market volume</div>
-        <div class="p_market-chart-title">A trading market big enough to need its own information layer.</div>
       </div>
       <div class="p_market-chart">
         <svg viewBox="0 0 240 100" preserveAspectRatio="none" aria-label="PM volume trajectory">
@@ -2191,18 +2275,16 @@ body::after {
         </div>
       </div>
       <div class="p_market-card">
-        <div class="p_market-card-label">Bottom-up · sanity check</div>
-        <div class="p_market-card-lead"><span class="b">$0.01</span> per paid call</div>
+        <div class="p_market-card-label">Bottom-up · <span class="b">$0.01</span> per paid call</div>
         <ul class="p_market-bu">
           <li><span class="s">100k agents × 100 calls/day</span><span class="op">≈</span><span class="v">$36M<span class="u">/yr</span></span></li>
           <li><span class="s">10M agents × 100 calls/day</span><span class="op">≈</span><span class="v hi">$3.6B<span class="u">/yr</span></span></li>
         </ul>
-        <div class="p_market-bu-note">Higher-frequency workflows push this further.</div>
       </div>
     </div>
   </div>
 
-  <div class="p_market-take reveal">Accessura takes <span class="em">0.25–1%</span> of cleared value, at settlement.</div>
+  <div class="p_market-take reveal">Accessura takes <span class="em">0.25–1%</span> at settlement.</div>
 
   <div class="p_market-source">
     Source · Kalshi / Polymarket / Pew / founder est.
@@ -2223,6 +2305,7 @@ body::after {
   <!-- V6 P9 body — cold-start acquisition motion (NOT the trade loop, which lives in P6/P7).
        Hero step = we provide the first liquidity (managed demand budget); framed as temporary
        bootstrap that retires once one repeatable buyer-provider loop self-sustains. -->
+  <div class="p9-lower">
   <div class="p9-motion reveal">
     <div class="p9-step">
       <div class="p9-step-num">01</div>
@@ -2250,9 +2333,9 @@ body::after {
 
   <div class="p9-why reveal">
     <span class="p9-why-key">Why here</span>
-    <span class="p9-why-item"><span class="p9-why-mkt">Sports</span> · live, stream-speed signal demand</span>
-    <span class="p9-why-sep">·</span>
-    <span class="p9-why-item"><span class="p9-why-mkt">Politics</span> · large, liquid, constant repricing</span>
+    <div class="p9-why-chip"><span class="p9-why-mkt">Sports</span> live, stream-speed signal demand</div>
+    <div class="p9-why-chip"><span class="p9-why-mkt">Politics</span> large, liquid, constant repricing</div>
+  </div>
   </div>
 
 </section>
@@ -2262,33 +2345,56 @@ body::after {
 <section class="slide p10" data-slide="10" aria-label="Team, ask, and vision">
   <div class="eyebrow with-line reveal">CLOSE</div>
   <h2 class="p10-headline reveal">
-    Accessura is an open protocol building the <span class="em">missing information market</span><br>
-    — agents buy the signals they need to trade prediction markets.
+    We've built it — <span class="em">now we raise to prove the first loop.</span>
   </h2>
   <div class="p10-cols reveal">
-    <div class="p10-col">
+    <div class="p10-col p10-col--team">
       <div class="p10-col-label">Team</div>
-      <ul class="p10-col-list">
-        <li class="placeholder">[Founder / team proof point]</li>
-        <li class="placeholder">[Market · protocol · AI-agent · or product proof point]</li>
-        <li class="placeholder">[Relevant execution proof point]</li>
-      </ul>
+      <div class="p10-team-people">
+        <div class="p10-person placeholder">
+          <div class="p10-person-avatar is-empty" aria-hidden="true"></div>
+          <div class="p10-person-info">
+            <div class="p10-person-name">[Name]</div>
+            <div class="p10-person-role">[Role]</div>
+            <div class="p10-person-proof">[One-line proof]</div>
+          </div>
+        </div>
+        <div class="p10-person placeholder">
+          <div class="p10-person-avatar is-empty" aria-hidden="true"></div>
+          <div class="p10-person-info">
+            <div class="p10-person-name">[Name]</div>
+            <div class="p10-person-role">[Role]</div>
+            <div class="p10-person-proof">[One-line proof]</div>
+          </div>
+        </div>
+        <div class="p10-person placeholder">
+          <div class="p10-person-avatar is-empty" aria-hidden="true"></div>
+          <div class="p10-person-info">
+            <div class="p10-person-name">[Name]</div>
+            <div class="p10-person-role">[Role]</div>
+            <div class="p10-person-proof">[One-line proof]</div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="p10-col">
-      <div class="p10-col-label">Current state</div>
-      <ul class="p10-col-list">
-        <li>Built end-to-end</li>
-        <li>Ready for pilot calls</li>
-        <li>No live traction yet</li>
-      </ul>
-    </div>
-    <div class="p10-col">
-      <div class="p10-col-label">Ask</div>
-      <ul class="p10-col-list">
-        <li class="placeholder">Capital — [round size]</li>
-        <li>Pilot buyers — PM trading teams (sports + politics)</li>
-        <li>Pilot producers — independent observers, beat reporters</li>
-      </ul>
+    <div class="p10-row2">
+      <div class="p10-col">
+        <div class="p10-col-label">Now → this raise</div>
+        <ul class="p10-col-list">
+          <li>Built end-to-end · pre-pilot, no live traction</li>
+          <li class="placeholder">[Milestone — first self-sustaining buyer–provider loop]</li>
+          <li class="placeholder">[Proof — first real GMV / active pairs]</li>
+        </ul>
+      </div>
+      <div class="p10-col">
+        <div class="p10-col-label">The ask</div>
+        <ul class="p10-col-list">
+          <li class="placeholder">Raising [round size · SAFE]</li>
+          <li class="placeholder">[N months] runway to the milestone</li>
+          <li>Pilot buyers — PM trading teams (sports + politics)</li>
+          <li>Pilot producers — observers, beat reporters</li>
+        </ul>
+      </div>
     </div>
   </div>
   <p class="p10-vision reveal">
