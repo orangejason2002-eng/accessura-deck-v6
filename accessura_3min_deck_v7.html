@@ -1952,6 +1952,20 @@ body::after {
   color: var(--text-variant);
   line-height: 1.35;
 }
+.p10-person-points {
+  list-style: none; margin: 0.2rem 0 0; padding: 0;
+  display: flex; flex-direction: column; gap: clamp(0.2rem, 0.4vh, 0.32rem);
+}
+.p10-person-points li {
+  position: relative; padding-left: 0.85rem;
+  font-family: var(--font-display);
+  font-size: clamp(0.74rem, 0.9vw, 0.85rem);
+  color: var(--text-variant); line-height: 1.3;
+}
+.p10-person-points li::before {
+  content: ''; position: absolute; left: 0; top: 0.52em;
+  width: 4px; height: 4px; border-radius: 50%; background: var(--primary);
+}
 .p10-person.placeholder .p10-person-name,
 .p10-person.placeholder .p10-person-proof { color: var(--text-muted); font-style: italic; }
 .p10-vision {
@@ -2371,28 +2385,40 @@ body::after {
     <div class="p10-col p10-col--team">
       <div class="p10-col-label">Team</div>
       <div class="p10-team-people">
-        <div class="p10-person placeholder">
-          <div class="p10-person-avatar is-empty" aria-hidden="true"></div>
+        <div class="p10-person">
+          <div class="p10-person-avatar" aria-hidden="true" style="display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-weight:600;font-size:clamp(0.78rem,1vw,0.95rem);letter-spacing:0.04em;color:var(--primary-bright);filter:none;">JC</div>
           <div class="p10-person-info">
-            <div class="p10-person-name">[Name]</div>
-            <div class="p10-person-role">[Role]</div>
-            <div class="p10-person-proof">[One-line proof]</div>
+            <div class="p10-person-name">Jiaxin Cheng</div>
+            <div class="p10-person-role">Founder &amp; CEO</div>
+            <ul class="p10-person-points">
+              <li>80%+ win rate · NBA prediction markets</li>
+              <li>Finance &amp; investment-research background</li>
+              <li>Owns thesis → product → GTM</li>
+            </ul>
           </div>
         </div>
-        <div class="p10-person placeholder">
-          <div class="p10-person-avatar is-empty" aria-hidden="true"></div>
+        <div class="p10-person">
+          <div class="p10-person-avatar" aria-hidden="true" style="display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-weight:600;font-size:clamp(0.78rem,1vw,0.95rem);letter-spacing:0.04em;color:var(--primary-bright);filter:none;">YJ</div>
           <div class="p10-person-info">
-            <div class="p10-person-name">[Name]</div>
-            <div class="p10-person-role">[Role]</div>
-            <div class="p10-person-proof">[One-line proof]</div>
+            <div class="p10-person-name">Yiyang Jiang</div>
+            <div class="p10-person-role">Co-founder · Pricing</div>
+            <ul class="p10-person-points">
+              <li>Incoming Math PhD · UC Berkeley</li>
+              <li>Ex-Microsoft SWE</li>
+              <li>Math, stats &amp; optimization</li>
+            </ul>
           </div>
         </div>
-        <div class="p10-person placeholder">
-          <div class="p10-person-avatar is-empty" aria-hidden="true"></div>
+        <div class="p10-person">
+          <div class="p10-person-avatar" aria-hidden="true" style="display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-weight:600;font-size:clamp(0.78rem,1vw,0.95rem);letter-spacing:0.04em;color:var(--primary-bright);filter:none;">PZ</div>
           <div class="p10-person-info">
-            <div class="p10-person-name">[Name]</div>
-            <div class="p10-person-role">[Role]</div>
-            <div class="p10-person-proof">[One-line proof]</div>
+            <div class="p10-person-name">Peiyu Zang</div>
+            <div class="p10-person-role">Co-founder · Agents &amp; Protocol</div>
+            <ul class="p10-person-points">
+              <li>Lead architect · KernelGenBench (open source)</li>
+              <li>Beijing Academy of AI (BAAI)</li>
+              <li>LLM &amp; code-agent developer</li>
+            </ul>
           </div>
         </div>
       </div>
@@ -2410,9 +2436,9 @@ body::after {
         <div class="p10-col-label">The ask</div>
         <ul class="p10-col-list">
           <li>A spot in EASY Residency S4 ($150K equity + $350K SAFE)</li>
-          <li>Help recruiting pilot buyers — PM trading teams (sports first)</li>
-          <li>Help recruiting providers — observers, beat reporters</li>
-          <li>x402 / stablecoin payments + BNB reach &amp; GTM</li>
+          <li>Binance’s playbook for building &amp; running a community</li>
+          <li>Intros to both sides of the market</li>
+          <li>x402 / stablecoin payments + BNB ecosystem reach</li>
         </ul>
       </div>
     </div>
