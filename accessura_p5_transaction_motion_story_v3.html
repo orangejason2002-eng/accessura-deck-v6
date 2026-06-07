@@ -154,6 +154,7 @@ body::before {
 .node,
 .photo,
 .market,
+.target-market,
 .route-chip,
 .payment-chip,
 .receipt,
@@ -202,6 +203,77 @@ body::before {
   min-height: clamp(190px, 27vh, 285px);
   transform: translateY(-50%);
   border-color: rgba(143, 242, 200, 0.34);
+}
+
+.target-market {
+  left: clamp(3.2rem, 7vw, 7.2rem);
+  top: clamp(5.8rem, 17vh, 8.6rem);
+  width: clamp(330px, 26vw, 470px);
+  transform: translateY(-8px);
+  border: 1px solid rgba(120, 239, 255, 0.34);
+  border-radius: clamp(0.62rem, 0.9vw, 0.82rem);
+  background:
+    linear-gradient(180deg, rgba(20, 31, 49, 0.96), rgba(6, 13, 25, 0.94));
+  box-shadow: 0 22px 58px rgba(0, 0, 0, 0.28), 0 0 30px rgba(120, 239, 255, 0.06);
+  padding: clamp(0.55rem, 0.82vw, 0.72rem) clamp(0.72rem, 1vw, 0.95rem);
+}
+
+@media (min-width: 1100px) and (min-height: 660px) {
+  .target-market {
+    top: clamp(8.75rem, 36vh, 14.5rem);
+  }
+}
+
+.target-market-kicker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.7rem;
+  color: var(--cyan);
+  font-family: var(--mono);
+  font-size: clamp(0.52rem, 0.64vw, 0.68rem);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.target-market-kicker span:last-child {
+  color: var(--muted);
+  font-weight: 600;
+}
+.target-market-title {
+  margin-top: clamp(0.28rem, 0.46vh, 0.42rem);
+  color: var(--text);
+  font-size: clamp(0.92rem, 1.2vw, 1.28rem);
+  line-height: 1.08;
+  font-weight: 700;
+}
+.target-market-question {
+  margin-top: clamp(0.32rem, 0.55vh, 0.48rem);
+  color: #aeb8c8;
+  font-family: var(--mono);
+  font-size: clamp(0.56rem, 0.68vw, 0.72rem);
+  line-height: 1.22;
+}
+.target-market-action {
+  margin-top: clamp(0.42rem, 0.64vh, 0.58rem);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border: 1px solid rgba(143, 242, 200, 0.28);
+  border-radius: 999px;
+  background: rgba(143, 242, 200, 0.06);
+  color: var(--mint);
+  font-family: var(--mono);
+  font-size: clamp(0.54rem, 0.66vw, 0.7rem);
+  font-weight: 700;
+  padding: clamp(0.32rem, 0.5vw, 0.44rem) clamp(0.5rem, 0.74vw, 0.68rem);
+}
+.target-market-action::before {
+  content: "";
+  width: 0.46rem;
+  height: 0.46rem;
+  border-radius: 999px;
+  background: var(--mint);
+  box-shadow: 0 0 14px rgba(143, 242, 200, 0.65);
 }
 .agent-inner {
   display: grid;
@@ -470,7 +542,7 @@ body::before {
 
 .route-chip {
   top: 18%;
-  width: clamp(210px, 18vw, 320px);
+  width: clamp(130px, 34vw, 320px);
   border: 1px solid var(--line);
   border-radius: clamp(0.65rem, 0.9vw, 0.82rem);
   background: var(--panel-2);
@@ -478,11 +550,11 @@ body::before {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
 }
 .route-chip.left {
-  left: clamp(4rem, 11vw, 11rem);
+  left: clamp(0.5rem, 3vw, 11rem);
   border-color: rgba(143, 242, 200, 0.42);
 }
 .route-chip.right {
-  right: clamp(4rem, 11vw, 11rem);
+  right: clamp(0.5rem, 3vw, 11rem);
   border-color: rgba(149, 185, 255, 0.28);
 }
 .route-chip .node-title { font-size: clamp(1rem, 1.35vw, 1.45rem); }
@@ -1083,11 +1155,14 @@ body::before {
 }
 
 .step-0 .agent,
+.step-0 .target-market,
 .step-0 .model,
 .step-0 .track-line.main,
 .step-1 .photo,
+.step-1 .target-market,
 .step-1 .capture-source,
 .step-2 .agent,
+.step-2 .target-market,
 .step-2 .router,
 .step-2 .track-line.main,
 .step-3 .router,
@@ -1111,6 +1186,16 @@ body::before {
 .step-7 .loop-visual {
   opacity: 1;
   visibility: visible;
+}
+
+.step-1 .target-market {
+  opacity: 0.82;
+  transform: translateY(-8px) scale(0.96);
+}
+
+.step-0 .agent,
+.step-2 .agent {
+  top: 60%;
 }
 
 .step-4 .router,
@@ -1425,12 +1510,20 @@ body::before {
   </header>
 
   <section class="canvas step-0" id="canvas" aria-label="Accessura Pack call motion story">
-    <div class="scene-title" id="sceneTitle">The spread reads one variable: when Wembanyama checks in</div>
+    <div class="scene-title" id="sceneTitle">The agent targets one market: NBA Finals Game 1 spread</div>
 
     <div class="track-line main" aria-hidden="true"></div>
     <div class="track-line market-to-seller" aria-hidden="true"></div>
     <div class="track-line market-to-model" aria-hidden="true"></div>
     <div class="loop-visual" aria-hidden="true"></div>
+
+    <div class="target-market" aria-label="Target prediction market">
+      <div class="target-market-kicker">
+        <span>Target market</span>
+      </div>
+      <div class="target-market-title">NBA Finals Game 1 · Spurs spread</div>
+      <div class="target-market-action" id="targetAction">live rotation signal needed</div>
+    </div>
 
     <div class="node agent">
       <div class="agent-inner">
@@ -1481,15 +1574,13 @@ body::before {
 
     <div class="route-chip left">
       <div class="route-num">1</div>
-      <div class="label">Listed Pack</div>
-      <div class="node-title">Bench-Intent Stream</div>
-      <div class="small">route 1</div>
+      <div class="label">Route 1</div>
+      <div class="node-title">Listed Pack</div>
     </div>
     <div class="route-chip right">
       <div class="route-num">2</div>
-      <div class="label">RequestBrief</div>
-      <div class="node-title">Public or targeted</div>
-      <div class="small">route 2</div>
+      <div class="label">Route 2</div>
+      <div class="node-title">RequestBrief</div>
     </div>
 
     <div class="market">
@@ -1569,9 +1660,10 @@ body::before {
 const frames = [
   {
     phase: "Frame 01 · Strategy",
-    title: "The spread reads one variable: when Wembanyama checks in",
+    title: "The agent targets one market: NBA Finals Game 1 spread",
     label: "Missing input",
     main: "Wemby on-court?",
+    action: "rotation signal needed",
     caption: "strategy",
     progress: 0.125,
     hold: 1450
@@ -1581,6 +1673,7 @@ const frames = [
     title: "Courtside: Wembanyama heads to the scorer's table",
     label: "Live cue",
     main: "Wembanyama, bench → scorer's table",
+    action: "market locked",
     caption: "live cue",
     progress: 0.25,
     hold: 1450
@@ -1590,15 +1683,17 @@ const frames = [
     title: "The agent asks Accessura for the missing signal",
     label: "Pack call",
     main: "call Accessura",
+    action: "requesting signal",
     caption: "api call",
     progress: 0.375,
     hold: 1350
   },
   {
     phase: "Frame 04 · Route",
-    title: "Two routes lead to a Pack object",
-    label: "Pack object",
+    title: "Two ways to get the same live signal",
+    label: "Same signal object",
     main: "Bench-Intent Stream",
+    action: "same signal object",
     caption: "route",
     progress: 0.5,
     hold: 1550
@@ -1608,6 +1703,7 @@ const frames = [
     title: "Bid meets ask",
     label: "Current delivery",
     main: "ask hit",
+    action: "signal clears",
     caption: "market clears",
     progress: 0.625,
     hold: 1500
@@ -1617,6 +1713,7 @@ const frames = [
     title: "Pay and deliver together",
     label: "Paid Pack call",
     main: "x402 + signal",
+    action: "x402 delivery",
     caption: "paid delivery",
     progress: 0.75,
     hold: 1500
@@ -1626,6 +1723,7 @@ const frames = [
     title: "The model input fills",
     label: "Delivered signal",
     main: "Wemby on-court",
+    action: "input filled",
     caption: "model update",
     progress: 0.875,
     hold: 1450
@@ -1635,6 +1733,7 @@ const frames = [
     title: "Next signal, next call",
     label: "Next signal",
     main: "new call",
+    action: "rotation signal needed",
     caption: "stream continues",
     progress: 1,
     hold: 1550
@@ -1651,6 +1750,7 @@ const phase = document.getElementById("phase");
 const sceneTitle = document.getElementById("sceneTitle");
 const objectLabel = document.getElementById("objectLabel");
 const objectMain = document.getElementById("objectMain");
+const targetAction = document.getElementById("targetAction");
 const progress = document.getElementById("progress");
 const caption = document.getElementById("caption");
 const btnPrev = document.getElementById("btnPrev");
@@ -1680,6 +1780,7 @@ function showFrame(index) {
   sceneTitle.textContent = frame.title;
   objectLabel.textContent = frame.label;
   objectMain.textContent = frame.main;
+  targetAction.textContent = frame.action;
   caption.textContent = frame.caption;
   progress.style.transform = `scaleX(${frame.progress})`;
   scheduleNext();
