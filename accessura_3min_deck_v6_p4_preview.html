@@ -287,17 +287,17 @@ body::after {
   display: flex; flex-direction: column;
   gap: clamp(1.4rem, 3.6vh, 2.8rem);
   width: 100%;
-  max-width: 100%;
-  margin: 0;
+  max-width: min(94vw, 1060px);
+  margin: 0 auto;
 }
 .p2-hero {
   font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(1.8rem, 4vw, 3.2rem);
-  line-height: 1.08;
+  font-weight: 500;
+  font-size: clamp(1.7rem, 3.4vw, 2.9rem);
+  line-height: 1.18;
   letter-spacing: -0.025em;
   color: var(--text);
-  max-width: 28ch;
+  max-width: 26ch;
 }
 .p2-hero .em {
   color: var(--primary-bright);
@@ -381,9 +381,6 @@ body::after {
 
 .p2-proofs {
   position: relative;
-  width: 100%;
-  max-width: min(94vw, 1200px);
-  margin: 0 auto;
   border: 1px solid rgba(99,235,251,0.18);
   border-left: 2px solid var(--primary);
   border-radius: var(--radius-sm);
@@ -419,20 +416,10 @@ body::after {
 }
 .p2-proof-col {
   margin: 0; min-width: 0;
-  display: flex; flex-direction: column; justify-content: space-between;
+  display: flex; flex-direction: column; justify-content: center;
   gap: clamp(0.7rem, 1.6vh, 1.05rem);
 }
-.p2-proof-col--viz {
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  text-align: left;
-  gap: clamp(1.1rem, 2.2vw, 2rem);
-}
-.p2-proof-col--viz .p2-donut-wrap { flex: 0 0 auto; }
-.p2-viz-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: clamp(0.5rem, 1.1vh, 0.85rem); }
-.p2-proof-col--text { align-items: center; text-align: center; }
-.p2-proof-col--text .p2-cap-list { text-align: left; }
+.p2-proof-col--viz { align-items: center; text-align: center; }
 .p2-proof-col-label {
   font-family: var(--font-mono);
   font-size: clamp(0.58rem, 0.7vw, 0.66rem);
@@ -594,6 +581,12 @@ body::after {
   font-size: 14px;
   font-weight: 600;
 }
+.p3-tl-event-sub {
+  fill: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+}
 .p3-tl-priced-halo { fill: rgba(99, 235, 251, 0.22); }
 .p3-tl-priced-dot { fill: var(--primary-bright); }
 .p3-tl-priced-label {
@@ -601,6 +594,12 @@ body::after {
   font-family: var(--font-display);
   font-size: 14px;
   font-weight: 600;
+}
+.p3-tl-priced-sub {
+  fill: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
 }
 .p3-tl-caption {
   font-family: var(--font-display);
@@ -660,128 +659,197 @@ body::after {
 /* ==========================================================
    P4 — PROTOCOL REVEAL
    ========================================================== */
-.slide.p4 { gap: clamp(1.4rem, 3.5vh, 2.6rem); justify-content: flex-start; }
+.slide.p4 { gap: clamp(0.7rem, 1.6vh, 1.3rem); }
 .p4-headline { max-width: 48ch; }
 .p4-headline .em {
   background: linear-gradient(180deg, var(--text) 0%, var(--primary-bright) 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   background-clip: text;
 }
-/* ----- V6 P4 body: two-column mirror — same information, two packagings ----- */
-.p4-mirror {
+/* ----- V6 P4 preview: existing signal -> missing call layer -> agent-callable ----- */
+.p4-rupture {
   flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(14rem, 19vw, 19rem) minmax(0, 1fr);
+  align-items: stretch;
+  gap: clamp(0.8rem, 1.4vw, 1.2rem);
   width: 100%;
   max-width: min(96vw, 1280px);
   margin: 0 auto;
+  align-content: center;
 }
-.p4-pole {
-  flex: 1 1 0;
-  min-width: 0;
+.p4-node {
   position: relative;
-  display: flex; flex-direction: column;
-  gap: clamp(0.85rem, 2vh, 1.4rem);
-  padding: clamp(1.6rem, 3.4vh, 2.5rem) clamp(1.5rem, 2.4vw, 2.2rem);
-  min-height: clamp(16rem, 38vh, 23rem);
   background: var(--bg-elev-high);
   border-radius: var(--radius-md);
-  box-shadow: 0 0 0 1px rgba(99,235,251,0.10) inset, 0 24px 60px rgba(0,0,0,0.4);
+  padding: clamp(1.4rem, 3vh, 2.2rem) clamp(1.4rem, 2.4vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(0.45rem, 0.9vh, 0.75rem);
+  box-shadow: 0 0 0 1px rgba(99,235,251,0.12) inset, 0 28px 70px rgba(0,0,0,0.45);
   overflow: hidden;
+  min-height: clamp(13rem, 30vh, 19rem);
 }
-.p4-pole::before {
-  content: ''; position: absolute; top: 0;
-  height: 2px; width: clamp(48px, 7vw, 86px);
+.p4-node::before {
+  content: '';
+  position: absolute; top: 0; height: 2px;
+  width: clamp(48px, 7vw, 84px);
 }
-.p4-pole--source::before { left: clamp(1.5rem, 2.4vw, 2.2rem); background: linear-gradient(90deg, var(--text-muted), transparent); }
-.p4-pole--agent { text-align: right; align-items: flex-end; }
-.p4-pole--agent::before { right: clamp(1.5rem, 2.4vw, 2.2rem); background: linear-gradient(270deg, var(--primary-bright), transparent); }
-.p4-pole-side {
+.p4-node-sell::before {
+  left: clamp(1.4rem, 2.4vw, 2rem);
+  background: linear-gradient(90deg, var(--primary), transparent);
+}
+.p4-node-buy::before {
+  right: clamp(1.4rem, 2.4vw, 2rem);
+  background: linear-gradient(270deg, var(--primary), transparent);
+}
+.p4-node-buy { text-align: right; }
+
+.p4-node-eyebrow {
   font-family: var(--font-mono);
   font-size: clamp(0.62rem, 0.78vw, 0.72rem);
-  letter-spacing: 0.26em;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: var(--text-muted);
-}
-.p4-pole-word {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(2.3rem, 3.8vw, 3.4rem);
-  line-height: 1.02;
-  letter-spacing: -0.015em;
-  white-space: nowrap;
-  color: var(--text-variant);
-}
-.p4-pole--agent .p4-pole-word {
   color: var(--primary-bright);
-  text-shadow: 0 0 26px var(--primary-glow);
 }
-.p4-pole--agent .p4-pole-side { color: var(--primary); }
-.p4-pole--agent .p4-pole-tag { color: var(--text-variant); }
-.p4-pole-tag {
+.p4-node-name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2rem, 3.4vw, 3rem);
+  color: var(--text);
+  letter-spacing: -0.025em;
+  line-height: 1;
+}
+.p4-node-state {
   font-family: var(--font-mono);
-  font-size: clamp(0.82rem, 1.05vw, 1.0rem);
-  font-style: italic;
-  letter-spacing: 0.01em;
+  font-size: clamp(0.72rem, 0.9vw, 0.84rem);
+  letter-spacing: 0.04em;
   color: var(--text-muted);
+  font-style: italic;
 }
-.p4-axes {
-  list-style: none; margin: auto 0 0; padding: 0;
-  display: flex; flex-direction: column;
-  gap: clamp(0.7rem, 1.7vh, 1.15rem);
+.p4-node-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(0.35rem, 0.7vw, 0.55rem);
+  margin-top: clamp(0.55rem, 1.2vh, 0.95rem);
 }
-.p4-axes li {
+.p4-node-buy .p4-node-chips { justify-content: flex-end; }
+.p4-chip-sm {
+  display: inline-flex;
+  align-items: center;
+  padding: clamp(0.28rem, 0.55vh, 0.4rem) clamp(0.55rem, 0.95vw, 0.78rem);
+  border: 1px solid rgba(99,235,251,0.22);
+  border-radius: 999px;
   font-family: var(--font-mono);
-  font-size: clamp(0.82rem, 1.02vw, 1rem);
-  line-height: 1.3;
-  letter-spacing: 0.02em;
+  font-size: clamp(0.58rem, 0.72vw, 0.68rem);
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
   color: var(--text-variant);
+  background: rgba(99,235,251,0.04);
+  white-space: nowrap;
 }
-.p4-pole--agent .p4-axes li { color: var(--text); }
-/* center seam — the wrong packaging between the two */
-.p4-seam {
-  flex: 0 0 auto;
-  align-self: stretch;
+
+/* central missing layer */
+.p4-gap {
   position: relative;
-  width: clamp(92px, 10vw, 150px);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: clamp(0.7rem, 1.6vh, 1.1rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.p4-seam::before {
-  content: ''; position: absolute; top: 50%; left: 8%; right: 8%;
-  border-top: 1px dashed color-mix(in srgb, var(--tertiary-bright) 32%, transparent);
+.p4-gap-line {
+  position: absolute;
+  top: 50%;
+  height: 1px;
+  width: 44%;
+  background-image: linear-gradient(90deg, rgba(99,235,251,0.5) 0 6px, transparent 6px 14px);
+  background-size: 14px 1px;
+  background-repeat: repeat-x;
+  transform: translateY(-0.5px);
 }
-.p4-seam-bar {
-  position: relative; z-index: 1;
-  width: clamp(15px, 1.7vw, 21px);
-  height: clamp(96px, 19vh, 158px);
-  border: 1px solid color-mix(in srgb, var(--tertiary-bright) 55%, transparent);
-  background: repeating-linear-gradient(45deg, var(--tertiary-bright) 0 1.5px, transparent 1.5px 7px);
-  border-radius: 2px;
+.p4-gap-line-left {
+  left: -8%;
+  mask-image: linear-gradient(90deg, transparent, #000 30%, #000 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 30%, #000 100%);
 }
-.p4-seam-label {
-  position: relative; z-index: 1;
-  font-family: var(--font-mono);
-  font-size: clamp(0.6rem, 0.76vw, 0.7rem);
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  text-align: center;
-  line-height: 1.4;
+.p4-gap-line-right {
+  right: -8%;
+  mask-image: linear-gradient(270deg, transparent, #000 30%, #000 100%);
+  -webkit-mask-image: linear-gradient(270deg, transparent, #000 30%, #000 100%);
+}
+.p4-gap-fault {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  min-height: clamp(13rem, 28vh, 18rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(0.55rem, 1vh, 0.8rem);
+  padding: clamp(1.15rem, 2.2vh, 1.6rem) clamp(1rem, 1.5vw, 1.3rem);
+  background: rgba(6, 13, 25, 0.94);
+  border: 1px solid rgba(255, 194, 102, 0.42);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 0 0 1px rgba(255, 194, 102, 0.08) inset, 0 0 34px rgba(255, 194, 102, 0.08);
+}
+.p4-gap-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 1.7vw, 1.45rem);
+  line-height: 1.1;
   color: var(--tertiary-bright);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+.p4-gap-subtitle {
+  font-family: var(--font-mono);
+  font-size: clamp(0.58rem, 0.72vw, 0.68rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.p4-gap-list {
+  display: grid;
+  gap: clamp(0.35rem, 0.75vh, 0.5rem);
+  margin-top: clamp(0.35rem, 0.8vh, 0.55rem);
+}
+.p4-gap-step {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.45rem, 0.8vw, 0.65rem);
+  font-family: var(--font-mono);
+  font-size: clamp(0.68rem, 0.86vw, 0.78rem);
+  color: var(--text);
+  letter-spacing: 0.02em;
+}
+.p4-gap-step::before {
+  content: '';
+  width: 0.44rem;
+  height: 0.44rem;
+  border-radius: 50%;
+  background: var(--tertiary-bright);
+  box-shadow: 0 0 12px var(--tertiary-glow);
+  flex: 0 0 auto;
 }
 
 @media (max-width: 880px) {
-  .p4-mirror { flex-direction: column; align-items: stretch; gap: clamp(0.8rem, 2vh, 1.3rem); max-width: 96vw; }
-  .p4-pole { min-height: 0; }
-  .p4-pole--agent { text-align: left; align-items: flex-start; }
-  .p4-pole--agent::before { left: clamp(1.5rem, 2.4vw, 2.2rem); right: auto; background: linear-gradient(90deg, var(--primary-bright), transparent); }
-  .p4-axes { margin: clamp(0.5rem, 1.2vh, 0.85rem) 0 0; }
-  .p4-seam { flex-direction: row; width: auto; align-self: center; gap: 0.9rem; padding: 0.3rem 0; }
-  .p4-seam::before { top: 50%; left: 6%; right: 6%; }
-  .p4-seam-bar { width: clamp(90px, 42vw, 180px); height: clamp(15px, 4vw, 20px); background: repeating-linear-gradient(135deg, var(--tertiary-bright) 0 1.5px, transparent 1.5px 7px); }
+  .p4-rupture {
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+  }
+  .p4-node { min-height: 0; }
+  .p4-node-buy { text-align: left; }
+  .p4-node-buy .p4-node-chips { justify-content: flex-start; }
+  .p4-gap { height: clamp(7rem, 16vh, 10rem); }
+  .p4-gap-line {
+    width: 1px; height: 44%; top: auto; left: 50%;
+    transform: translateX(-0.5px);
+    background-image: linear-gradient(180deg, rgba(99,235,251,0.5) 0 6px, transparent 6px 14px);
+    background-size: 1px 14px; background-repeat: repeat-y;
+  }
+  .p4-gap-line-left  { top: -8%; mask-image: linear-gradient(180deg, transparent, #000 30%, #000 100%); -webkit-mask-image: linear-gradient(180deg, transparent, #000 30%, #000 100%); }
+  .p4-gap-line-right { bottom: -8%; top: auto; mask-image: linear-gradient(0deg, transparent, #000 30%, #000 100%); -webkit-mask-image: linear-gradient(0deg, transparent, #000 30%, #000 100%); }
+  .p4-gap-label { top: auto; bottom: clamp(0.5rem, 2vh, 1rem); }
 }
 
 /* ==========================================================
@@ -1083,13 +1151,9 @@ body::after {
   border-radius: var(--radius-md);
   padding: clamp(0.9rem, 1.5vw, 1.3rem);
 }
-.p_market-chart {
-  flex: 1;
-  display: flex; flex-direction: column; justify-content: center;
-}
 .p_market-chart svg {
   width: 100%;
-  height: clamp(120px, 22vh, 200px);
+  height: clamp(80px, 14vh, 130px);
   display: block;
   overflow: visible;
 }
@@ -1154,48 +1218,26 @@ body::after {
   text-transform: uppercase;
   color: var(--text-muted);
 }
-.p_market-chart-head { display: flex; flex-direction: column; gap: clamp(0.35rem, 0.7vh, 0.55rem); }
-.p_market-chart-title {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(1.2rem, 1.85vw, 1.75rem);
-  line-height: 1.12;
-  letter-spacing: -0.02em;
-  color: var(--text);
-  max-width: 24ch;
-}
 .p_market-tam-num {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(2.8rem, 5.4vw, 4.8rem);
+  font-size: clamp(3rem, 6.6vw, 5.4rem);
   letter-spacing: -0.05em;
-  line-height: 0.86;
+  line-height: 0.88;
   color: var(--primary-bright);
   text-shadow: 0 0 28px var(--primary-glow);
 }
 .p_market-tam-unit {
-  font-size: 0.36em; color: var(--text-variant); letter-spacing: 0; font-weight: 400; margin-left: 0.12em;
+  font-size: 0.4em; color: var(--text-variant); letter-spacing: 0; font-weight: 400; margin-left: 0.12em;
 }
-.p_market-eq {
-  border-radius: var(--radius-sm);
-  background: rgba(7,14,25,0.5);
-  border: 1px solid rgba(99,235,251,0.14);
-  padding: clamp(0.8rem, 1.6vh, 1.15rem) clamp(0.9rem, 1.6vw, 1.2rem);
-  display: grid; gap: clamp(0.5rem, 0.9vh, 0.72rem);
-  font-family: var(--font-mono);
+.p_market-tam-meta {
+  font-size: clamp(0.88rem, 1.12vw, 1.02rem);
+  color: var(--text-variant);
+  letter-spacing: -0.005em;
+  font-weight: 400;
+  line-height: 1.4;
 }
-.p_market-eq .eq-row {
-  display: grid; grid-template-columns: 1fr auto; gap: 1rem;
-  align-items: baseline;
-  font-size: clamp(0.74rem, 0.94vw, 0.88rem);
-  letter-spacing: 0.02em;
-  color: var(--text-muted);
-  border-bottom: 1px solid rgba(99,235,251,0.1);
-  padding-bottom: clamp(0.45rem, 0.8vh, 0.6rem);
-}
-.p_market-eq .eq-row:last-child { border-bottom: 0; padding-bottom: 0; }
-.p_market-eq .val { color: var(--text-variant); font-weight: 600; white-space: nowrap; }
-.p_market-eq .val.hi { color: var(--primary-bright); font-size: 1.12em; }
+.p_market-tam-meta .em { color: var(--primary); font-weight: 500; }
 .p_market-replace {
   font-family: var(--font-mono);
   font-size: clamp(0.62rem, 0.75vw, 0.72rem);
@@ -1279,76 +1321,6 @@ body::after {
   font-size: 1.15em;
 }
 .p_market-fee-deriv .u { color: var(--text-variant); font-size: 0.75em; font-weight: 400; margin-left: 0.1em; }
-/* right column — bottom-up GMV card + take-rate card */
-.p_market-right {
-  display: flex; flex-direction: column;
-  justify-content: stretch;
-  gap: clamp(0.8rem, 1.4vw, 1.2rem);
-  min-height: 0;
-}
-.p_market-right .p_market-card { flex: 1; justify-content: center; }
-.p_market-card {
-  position: relative;
-  display: flex; flex-direction: column;
-  gap: clamp(0.4rem, 0.8vw, 0.7rem);
-  padding: clamp(0.95rem, 1.7vw, 1.5rem);
-  border: 1px solid rgba(99,235,251,0.22);
-  border-radius: var(--radius-md);
-  background: linear-gradient(180deg, rgba(99,235,251,0.04), rgba(99,235,251,0));
-}
-.p_market-card::before {
-  content: '';
-  position: absolute; top: 0; left: clamp(0.95rem,1.7vw,1.5rem); right: clamp(0.95rem,1.7vw,1.5rem);
-  height: 2px;
-  background: linear-gradient(90deg, var(--primary-bright), transparent);
-  opacity: 0.6;
-}
-.p_market-card-label {
-  font-family: var(--font-mono);
-  font-size: clamp(0.68rem, 0.84vw, 0.78rem);
-  letter-spacing: 0.22em; text-transform: uppercase;
-  color: var(--primary);
-}
-.p_market-card-lead {
-  font-family: var(--font-mono);
-  font-size: clamp(0.92rem, 1.18vw, 1.1rem);
-  color: var(--text-variant);
-}
-.p_market-card-lead .b { color: var(--primary-bright); font-weight: 600; }
-.p_market-bu {
-  list-style: none; margin: 0; padding: 0;
-  display: flex; flex-direction: column; gap: clamp(0.4rem, 0.8vh, 0.6rem);
-}
-.p_market-bu li {
-  display: flex; align-items: baseline; gap: 0.6rem;
-  font-family: var(--font-mono);
-  font-size: clamp(0.78rem, 0.98vw, 0.92rem);
-  letter-spacing: 0.02em;
-  color: var(--text-variant);
-}
-.p_market-bu .s { flex: 1; min-width: 0; }
-.p_market-bu .op { color: var(--text-muted); }
-.p_market-bu .v { color: var(--primary-bright); font-weight: 600; font-size: 1.12em; white-space: nowrap; }
-.p_market-bu .v.hi { font-size: 1.32em; }
-.p_market-bu .v .u { color: var(--text-variant); font-size: 0.66em; font-weight: 400; margin-left: 0.1em; }
-.p_market-card--fee .p_market-fee-num { font-size: clamp(2.1rem, 4.2vw, 3.4rem); }
-.p_market-take {
-  margin-top: clamp(0.6rem, 1.4vh, 1.1rem);
-  font-family: var(--font-mono);
-  font-size: clamp(0.72rem, 0.9vw, 0.85rem);
-  letter-spacing: 0.04em;
-  color: var(--text-muted);
-}
-.p_market-take .em { color: var(--primary); font-weight: 600; }
-.p_market-bu-note {
-  margin-top: 0.2rem;
-  padding-top: clamp(0.55rem, 1vw, 0.85rem);
-  border-top: 1px solid rgba(99,235,251,0.14);
-  font-family: var(--font-mono);
-  font-size: clamp(0.7rem, 0.84vw, 0.8rem);
-  letter-spacing: 0.02em;
-  color: var(--text-muted);
-}
 .p_market-source {
   position: absolute;
   bottom: clamp(1rem, 2.5vh, 2rem);
@@ -1671,128 +1643,95 @@ body::after {
 }
 
 /* ==========================================================
-   P9 — GTM (cold-start motion)
-   4-step acquisition: seed both sides -> provide liquidity -> earn repeat -> distribute -> open.
+   P9 — GTM (3 on-ramps)
+   Three-card layout: community / PM platforms / creators.
    ========================================================== */
-.slide.p9 { gap: clamp(1.1rem, 2.6vh, 2rem); justify-content: center; }
-.p9-headline { max-width: 40ch; }
+.slide.p9 { gap: clamp(1rem, 2.2vh, 1.6rem); }
+.p9-headline { max-width: 38ch; }
 .p9-headline .em { color: var(--primary-bright); }
 
-/* ----- GTM cold-start: 4-step acquisition motion ----- */
-.p9-motion {
-  display: flex;
-  align-items: stretch;
+.p9-funnel {
+  flex: 1;
+  display: flex; flex-direction: column;
   justify-content: center;
-  gap: clamp(0.4rem, 0.9vw, 0.9rem);
-  width: 100%;
-  max-width: min(96vw, 1300px);
-  margin: 0 auto;
+  gap: clamp(0.8rem, 2vh, 1.6rem);
+  min-height: 0;
 }
-.p9-step {
-  flex: 1 1 0;
-  min-width: 0;
-  position: relative;
-  display: flex; flex-direction: column; justify-content: center;
-  gap: clamp(0.45rem, 1vh, 0.8rem);
-  padding: clamp(1.4rem, 3.2vh, 2.2rem) clamp(1rem, 1.5vw, 1.4rem);
-  min-height: clamp(7rem, 14vh, 9.5rem);
+.p9-onramps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.8rem);
+}
+.p9-onramp {
+  display: flex; flex-direction: column;
+  gap: clamp(0.5rem, 1vh, 0.8rem);
+  padding: clamp(1rem, 1.8vw, 1.4rem);
   background: var(--bg-elev-high);
-  border: 1px solid rgba(99,235,251,0.14);
+  border: 1px solid rgba(99,235,251,0.16);
   border-radius: var(--radius-md);
-  box-shadow: 0 18px 44px rgba(0,0,0,0.3);
-  overflow: hidden;
+  position: relative; overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(99,235,251,0.04) inset, 0 24px 56px rgba(0,0,0,0.32);
 }
-.p9-step-num {
+.p9-onramp::before {
+  content: '';
+  position: absolute; top: 0; left: clamp(1rem, 1.8vw, 1.4rem); right: clamp(1rem, 1.8vw, 1.4rem);
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary-bright), transparent);
+  opacity: 0.7;
+}
+.p9-onramp-label {
   font-family: var(--font-mono);
-  font-size: clamp(0.66rem, 0.8vw, 0.76rem);
-  letter-spacing: 0.18em;
-  color: var(--text-muted);
+  font-size: clamp(0.72rem, 0.88vw, 0.82rem);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--primary);
 }
-.p9-step-label {
+.p9-onramp-claim {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(1rem, 1.35vw, 1.28rem);
-  line-height: 1.18;
-  letter-spacing: -0.012em;
+  font-size: clamp(1rem, 1.35vw, 1.25rem);
   color: var(--text);
+  line-height: 1.3;
+  letter-spacing: -0.012em;
 }
-.p9-step-note {
+.p9-funnel-arrows {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.8rem);
+  text-align: center;
   font-family: var(--font-mono);
-  font-size: clamp(0.7rem, 0.86vw, 0.8rem);
-  line-height: 1.35;
-  letter-spacing: 0.01em;
-  color: var(--text-muted);
-}
-.p9-step--hero {
-  border-color: color-mix(in srgb, var(--primary-bright) 50%, transparent);
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--primary-bright) 28%, transparent) inset, 0 18px 50px rgba(0,0,0,0.36), 0 0 30px color-mix(in srgb, var(--primary-glow) 65%, transparent);
-}
-.p9-step--hero .p9-step-num { color: var(--primary-bright); }
-.p9-step-tag {
-  margin-top: clamp(0.2rem, 0.5vh, 0.4rem);
-  align-self: flex-start;
-  font-family: var(--font-mono);
-  font-size: clamp(0.6rem, 0.74vw, 0.7rem);
-  letter-spacing: 0.04em;
+  font-size: clamp(1.3rem, 1.9vw, 1.7rem);
   color: var(--primary-bright);
-  padding: 0.28em 0.65em;
-  border: 1px solid color-mix(in srgb, var(--primary-bright) 38%, transparent);
-  border-radius: 999px;
-  background: rgba(99,235,251,0.07);
+  line-height: 1;
 }
-.p9-step-arrow {
-  flex: 0 0 auto;
-  align-self: center;
-  font-family: var(--font-mono);
-  font-size: clamp(0.95rem, 1.3vw, 1.2rem);
-  color: var(--primary);
-  opacity: 0.5;
-}
-/* second acquisition layer — runs in parallel to the managed motion, not a step in it */
-/* + Second layer — an additional acquisition channel, shown as a contained callout band */
-.p9-second {
-  display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+.p9-loop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
   gap: clamp(0.6rem, 1.2vw, 1rem);
-  width: fit-content; max-width: min(94vw, 1080px); margin: 0 auto;
-  padding: clamp(0.55rem, 1.1vh, 0.8rem) clamp(1rem, 1.8vw, 1.5rem);
-  background: rgba(99,235,251,0.05);
-  border: 1px solid rgba(99,235,251,0.2);
+  padding: clamp(0.9rem, 1.8vh, 1.4rem) clamp(1rem, 2vw, 1.8rem);
+  background: rgba(99,235,251,0.06);
+  border: 1px solid rgba(99,235,251,0.22);
   border-radius: var(--radius-md);
 }
-.p9-second-tag {
-  flex: 0 0 auto;
-  font-family: var(--font-mono);
-  font-size: clamp(0.62rem, 0.78vw, 0.72rem);
-  letter-spacing: 0.16em; text-transform: uppercase;
+.p9-loop-step {
+  font-family: var(--font-display);
   font-weight: 600;
-  color: var(--primary-bright);
-  background: color-mix(in srgb, var(--primary) 16%, transparent);
-  border-radius: 999px;
-  padding: 0.34em 0.85em;
+  font-size: clamp(1.1rem, 1.5vw, 1.4rem);
+  color: var(--text);
+  letter-spacing: -0.015em;
 }
-.p9-second-text {
+.p9-loop-step-repeat { color: var(--primary-bright); }
+.p9-loop-arrow {
   font-family: var(--font-mono);
-  font-size: clamp(0.78rem, 0.96vw, 0.9rem);
-  letter-spacing: 0.01em;
-  color: var(--text-variant);
+  font-size: clamp(1rem, 1.3vw, 1.25rem);
+  color: var(--primary);
+  opacity: 0.7;
 }
-/* beachhead rationale — quiet footnote, clearly subordinate */
-.p9-why {
-  display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
-  gap: clamp(0.4rem, 0.9vw, 0.7rem);
-  width: 100%; max-width: min(96vw, 1300px); margin: 0 auto;
-  font-family: var(--font-mono);
-  font-size: clamp(0.64rem, 0.8vw, 0.74rem);
-  letter-spacing: 0.04em;
-  color: var(--text-muted);
-  opacity: 0.82;
-}
-.p9-why-key { text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-muted); opacity: 0.75; }
-.p9-why-mkt { color: var(--text-variant); font-weight: 600; }
-.p9-why-sep { opacity: 0.4; }
 @media (max-width: 880px) {
-  .p9-motion { flex-direction: column; align-items: stretch; gap: 0.6rem; }
-  .p9-step-arrow { transform: rotate(90deg); }
+  .p9-onramps { grid-template-columns: 1fr; gap: 0.8rem; }
+  .p9-funnel-arrows { display: none; }
 }
 
 /* ==========================================================
@@ -1917,6 +1856,7 @@ body::after {
 
         <!-- Proof 1 · Volume — demand, shown as a chart -->
         <figure class="p2-proof-col p2-proof-col--viz">
+          <div class="p2-proof-col-label">Volume · automation share</div>
           <div class="p2-donut-wrap">
             <svg class="p2-donut" viewBox="0 0 240 240" role="img" aria-label="Roughly 3 in 5 trades in fast markets are automation-driven">
               <defs>
@@ -1933,10 +1873,7 @@ body::after {
               <div class="p2-viz-frac-cap">trades</div>
             </div>
           </div>
-          <div class="p2-viz-text">
-            <div class="p2-proof-col-label">Volume · automation share</div>
-            <figcaption class="p2-proof-col-cap">~3 of every 5 trades in fast markets are <span class="em">automation-driven</span></figcaption>
-          </div>
+          <figcaption class="p2-proof-col-cap">~3 of every 5 trades in fast markets are <span class="em">automation-driven</span></figcaption>
         </figure>
 
         <!-- Proof 2 · Capability — supply, shown as a shipped checklist -->
@@ -1975,7 +1912,6 @@ body::after {
 
       <!-- Time axis -->
       <line class="p3-tl-axis" x1="40" y1="240" x2="1160" y2="240"/>
-      <text class="p3-tl-axis-label" x="1160" y="262" text-anchor="end">TIME →</text>
 
       <!-- Price line: pre-event flat -->
       <path class="p3-tl-line p3-tl-line-pre" d="M 40 170 L 300 170"/>
@@ -2011,37 +1947,46 @@ body::after {
   <div class="slide-top">
     <div class="eyebrow with-line reveal">WHY IT DOESN'T REACH</div>
     <h2 class="t-display-md slide-headline p4-headline reveal">
-      Market-moving signals exist.<br><span class="em">They just aren't packaged for agent calls.</span>
+      Market-moving signals exist.<br><span class="em">They just don't arrive as agent calls.</span>
     </h2>
   </div>
-  <!-- V6 P4 body — two-column mirror: same information, two packagings.
-       LEFT = Source-shaped (made for the source's own reasons, not the agent's trade).
-       RIGHT = Agent-callable (delivered shaped for the trade). Center seam = the wrong packaging.
-       Databases/APIs live under "existing information", never framed as inaccessible — the gap is packaging, not access. -->
-  <div class="p4-mirror reveal">
-    <div class="p4-pole p4-pole--source">
-      <div class="p4-pole-side">SELL SIDE</div>
-      <div class="p4-pole-word">Source-shaped</div>
-      <ul class="p4-axes">
-        <li>appears where it is created</li>
-        <li>carried in source formats</li>
-        <li>sold as access</li>
-      </ul>
+  <!-- V6 P4 preview — define the gap before introducing Pack in P6.
+       Do not name Pack here; this page only shows why existing signals do not reach agents. -->
+  <div class="p4-rupture reveal">
+    <div class="p4-node p4-node-sell">
+      <div class="p4-node-eyebrow">Existing signal</div>
+      <div class="p4-node-name">Source-controlled</div>
+      <div class="p4-node-state">the source decides when, how, and who gets it</div>
+      <div class="p4-node-chips">
+        <span class="p4-chip-sm">feeds / reports / broadcasts</span>
+        <span class="p4-chip-sm">subscriptions or licenses</span>
+        <span class="p4-chip-sm">not requested per trade</span>
+      </div>
     </div>
 
-    <div class="p4-seam" aria-hidden="true">
-      <div class="p4-seam-bar"></div>
-      <div class="p4-seam-label">Wrong<br>packaging</div>
+    <div class="p4-gap" aria-hidden="true">
+      <div class="p4-gap-line p4-gap-line-left"></div>
+      <div class="p4-gap-line p4-gap-line-right"></div>
+      <div class="p4-gap-fault">
+        <div class="p4-gap-subtitle">Missing layer</div>
+        <div class="p4-gap-title">Not packaged as a call</div>
+        <div class="p4-gap-list">
+          <div class="p4-gap-step">requestable</div>
+          <div class="p4-gap-step">priced per use</div>
+          <div class="p4-gap-step">delivered into workflow</div>
+        </div>
+      </div>
     </div>
 
-    <div class="p4-pole p4-pole--agent">
-      <div class="p4-pole-side">BUY SIDE</div>
-      <div class="p4-pole-word">Agent-callable</div>
-      <ul class="p4-axes">
-        <li>requested when needed</li>
-        <li>delivered in call format</li>
-        <li>priced per use</li>
-      </ul>
+    <div class="p4-node p4-node-buy">
+      <div class="p4-node-eyebrow">Agent need</div>
+      <div class="p4-node-name">Agent-callable</div>
+      <div class="p4-node-state">requested when the strategy needs it</div>
+      <div class="p4-node-chips">
+        <span class="p4-chip-sm">specific signal request</span>
+        <span class="p4-chip-sm">priced for one use</span>
+        <span class="p4-chip-sm">delivered to the agent</span>
+      </div>
     </div>
   </div>
 
@@ -2153,17 +2098,13 @@ body::after {
   <div class="slide-top">
     <div class="eyebrow with-line reveal">MARKET</div>
     <h2 class="t-display-md slide-headline p_pilot-headline reveal">
-      A large, accelerating market for <span class="em">agent-callable information.</span>
+      A small fee per call — <span class="em">meaningful at PM scale.</span>
     </h2>
   </div>
 
   <div class="p_market-body reveal">
-    <!-- LEFT: PM volume growth chart -->
+    <!-- LEFT: PM volume chart + TAM number -->
     <div class="p_market-hero">
-      <div class="p_market-chart-head">
-        <div class="p_market-card-label">Prediction-market volume</div>
-        <div class="p_market-chart-title">A trading market big enough to need its own information layer.</div>
-      </div>
       <div class="p_market-chart">
         <svg viewBox="0 0 240 100" preserveAspectRatio="none" aria-label="PM volume trajectory">
           <defs>
@@ -2186,33 +2127,27 @@ body::after {
         <div class="p_market-chart-callout">4× in one year</div>
       </div>
 
+      <div class="p_market-replace">we replace · Bloomberg · Substack · Discord · PM alert tools</div>
 
+      <div class="p_market-tam">
+        <div class="p_market-tam-label">Information-layer TAM</div>
+        <div class="p_market-tam-num">~$1B<span class="p_market-tam-unit">/yr</span></div>
+        <div class="p_market-tam-meta">Illustrative scenario — <span class="em">~1%</span> of projected PM volume.</div>
+      </div>
     </div>
 
-    <!-- RIGHT: top-down sizing + bottom-up sanity check -->
-    <div class="p_market-right">
-      <div class="p_market-card p_market-card--tam">
-        <div class="p_market-card-label">Information market · top-down</div>
-        <div class="p_market-tam-num">~$1.2B<span class="p_market-tam-unit">/yr</span></div>
-        <div class="p_market-eq">
-          <div class="eq-row"><span>2026e PM volume</span><span class="val">$80–120B</span></div>
-          <div class="eq-row"><span>signal / tool / info spend</span><span class="val">0.5–1%</span></div>
-          <div class="eq-row"><span>information-layer GMV</span><span class="val hi">~$1.2B/yr</span></div>
-        </div>
-      </div>
-      <div class="p_market-card">
-        <div class="p_market-card-label">Bottom-up · sanity check</div>
-        <div class="p_market-card-lead"><span class="b">$0.01</span> per paid call</div>
-        <ul class="p_market-bu">
-          <li><span class="s">100k agents × 100 calls/day</span><span class="op">≈</span><span class="v">$36M<span class="u">/yr</span></span></li>
-          <li><span class="s">10M agents × 100 calls/day</span><span class="op">≈</span><span class="v hi">$3.6B<span class="u">/yr</span></span></li>
-        </ul>
-        <div class="p_market-bu-note">Higher-frequency workflows push this further.</div>
+    <!-- RIGHT: fee mechanics + TAM derivation -->
+    <div class="p_market-fee">
+      <div class="p_market-fee-label">Fee per Pack call</div>
+      <div class="p_market-fee-num">0.25 – 1.0<span class="p_market-fee-pct">%</span></div>
+      <div class="p_market-fee-sub">of cleared value, taken at settlement</div>
+      <div class="p_market-fee-deriv">
+        <span class="lhs">Scenario · PM 2026 ~$100B</span><span class="op">×</span><span class="rate">1% fee</span><span class="op">≈</span><span class="rhs">~$1B<span class="u">/yr</span></span>
       </div>
     </div>
   </div>
 
-  <div class="p_market-take reveal">Accessura takes <span class="em">0.25–1%</span> of cleared value, at settlement.</div>
+  <p class="p_market-bridge reveal">We start narrow: one sports or prediction-market signal, one buyer, one provider, <span class="em">one paid delivery.</span></p>
 
   <div class="p_market-source">
     Source · Kalshi / Polymarket / Pew / founder est.
@@ -2222,49 +2157,44 @@ body::after {
 
 
 <!-- ==================== P9 — GTM (3 on-ramps) ==================== -->
-<section class="slide p9" data-slide="9" aria-label="Go-to-market — cold-start motion">
+<section class="slide p9" data-slide="9" aria-label="Go-to-market — three channels">
   <div class="slide-top">
-    <div class="eyebrow with-line reveal">GTM · sports &amp; politics first</div>
+    <div class="eyebrow with-line reveal">GTM</div>
     <h2 class="t-display-md slide-headline p9-headline reveal">
-      Two-sided markets stall at zero — <span class="em">so we build the first loop by hand.</span>
+      To repeat the paid loop, we enter through <span class="em">three channels.</span>
     </h2>
   </div>
 
-  <!-- V6 P9 body — cold-start acquisition motion (NOT the trade loop, which lives in P6/P7).
-       Hero step = we provide the first liquidity (managed demand budget); framed as temporary
-       bootstrap that retires once one repeatable buyer-provider loop self-sustains. -->
-  <div class="p9-motion reveal">
-    <div class="p9-step">
-      <div class="p9-step-num">01</div>
-      <div class="p9-step-label">Seed both sides</div>
-      <div class="p9-step-note">recruit providers + traders by hand</div>
+  <div class="p9-funnel reveal">
+    <div class="p9-onramps">
+      <div class="p9-onramp">
+        <div class="p9-onramp-label">Community-led</div>
+        <div class="p9-onramp-claim">Gather traders, agent operators, analysts, and providers.</div>
+      </div>
+      <div class="p9-onramp">
+        <div class="p9-onramp-label">Platform-led</div>
+        <div class="p9-onramp-claim">Route demand from PM communities, tools, and venues.</div>
+      </div>
+      <div class="p9-onramp">
+        <div class="p9-onramp-label">Supply-led</div>
+        <div class="p9-onramp-claim">Convert creators, observers, and insiders into signal sellers.</div>
+      </div>
     </div>
-    <div class="p9-step-arrow" aria-hidden="true">→</div>
-    <div class="p9-step p9-step--hero">
-      <div class="p9-step-num">02</div>
-      <div class="p9-step-label">Provide the first liquidity</div>
-      <div class="p9-step-tag">Accessura is the market maker</div>
+    <div class="p9-funnel-arrows" aria-hidden="true">
+      <span>↓</span><span>↓</span><span>↓</span>
     </div>
-    <div class="p9-step-arrow" aria-hidden="true">→</div>
-    <div class="p9-step">
-      <div class="p9-step-num">03</div>
-      <div class="p9-step-label">Earn repeat via trust</div>
-      <div class="p9-step-note">receipts + disputes, not promises</div>
+    <div class="p9-loop">
+      <span class="p9-loop-step">Request</span>
+      <span class="p9-loop-arrow">→</span>
+      <span class="p9-loop-step">Deliver</span>
+      <span class="p9-loop-arrow">→</span>
+      <span class="p9-loop-step">Pay</span>
+      <span class="p9-loop-arrow">→</span>
+      <span class="p9-loop-step">Prove</span>
+      <span class="p9-loop-arrow">→</span>
+      <span class="p9-loop-step p9-loop-step-repeat">Repeat</span>
     </div>
   </div>
-
-  <div class="p9-second reveal">
-    <span class="p9-second-tag">+ Second layer</span>
-    <span class="p9-second-text">Subscriptions — creators bring their existing audiences into the same loop.</span>
-  </div>
-
-  <div class="p9-why reveal">
-    <span class="p9-why-key">Why here</span>
-    <span class="p9-why-item"><span class="p9-why-mkt">Sports</span> · live, stream-speed signal demand</span>
-    <span class="p9-why-sep">·</span>
-    <span class="p9-why-item"><span class="p9-why-mkt">Politics</span> · large, liquid, constant repricing</span>
-  </div>
-
 </section>
 
 

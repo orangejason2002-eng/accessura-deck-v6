@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Accessura P8 Market Redesign Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07101d;
+      --panel: rgba(20, 31, 49, 0.92);
+      --panel-deep: rgba(8, 16, 29, 0.94);
+      --text: #edf3ff;
+      --muted: #97a6b8;
+      --faint: rgba(151,166,184,0.58);
+      --cyan: #8eeeff;
+      --cyan-2: #b9f6ff;
+      --mint: #9cf6c3;
+      --amber: #ffd36a;
+      --line: rgba(142, 238, 255, 0.22);
+      --line-strong: rgba(142, 238, 255, 0.5);
+      --glow: rgba(142, 238, 255, 0.16);
+      --font-display: "Space Grotesk", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    body {
+      font-family: var(--font-display);
+      background:
+        radial-gradient(circle at 82% 8%, rgba(83,178,210,0.24), transparent 32%),
+        radial-gradient(circle at 8% 85%, rgba(103,247,194,0.10), transparent 36%),
+        linear-gradient(180deg, #07101d 0%, #07101d 45%, #050b14 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(142,238,255,0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(142,238,255,0.045) 1px, transparent 1px);
+      background-size: 5.9vw 5.9vw;
+      mask-image: linear-gradient(180deg, rgba(0,0,0,0.66), rgba(0,0,0,0.18));
+    }
+
+    .slide {
+      position: relative;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      padding: clamp(2rem, 4.1vh, 3.4rem) clamp(2.8rem, 5vw, 5.8rem);
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: clamp(1.2rem, 2.5vh, 2rem);
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: clamp(0.7rem, 1vw, 1rem);
+      font-family: var(--font-mono);
+      font-size: clamp(0.66rem, 0.88vw, 0.8rem);
+      letter-spacing: 0.36em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      font-weight: 700;
+      margin-bottom: clamp(0.7rem, 1.5vh, 1rem);
+    }
+    .eyebrow::before {
+      content: "";
+      width: clamp(2.2rem, 4vw, 3.2rem);
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--cyan));
+    }
+
+    h1 {
+      width: min(86vw, 1180px);
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 4.9vw, 5.6rem);
+      line-height: 0.98;
+      letter-spacing: -0.04em;
+      font-weight: 700;
+    }
+    h1 .em {
+      color: var(--cyan-2);
+      text-shadow: 0 0 30px rgba(142, 238, 255, 0.13);
+    }
+
+    .market-grid {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+      gap: clamp(1rem, 2vw, 1.7rem);
+      width: min(94vw, 1420px);
+      margin: 0 auto;
+      align-items: stretch;
+    }
+
+    .card {
+      position: relative;
+      border-radius: clamp(0.7rem, 1vw, 1rem);
+      border: 1px solid var(--line);
+      background: var(--panel);
+      box-shadow: 0 28px 80px rgba(0,0,0,0.36), inset 0 1px 0 rgba(255,255,255,0.035);
+      overflow: hidden;
+    }
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: clamp(1.2rem, 2vw, 1.7rem);
+      width: clamp(4rem, 7vw, 7rem);
+      height: 2px;
+      background: linear-gradient(90deg, var(--cyan), transparent);
+    }
+
+    .growth-card {
+      padding: clamp(1.2rem, 2.4vh, 1.75rem);
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      gap: clamp(0.8rem, 1.5vh, 1.1rem);
+    }
+
+    .label {
+      font-family: var(--font-mono);
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      font-size: clamp(0.6rem, 0.78vw, 0.72rem);
+      font-weight: 700;
+    }
+
+    .growth-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.35rem, 1.9vw, 1.9rem);
+      line-height: 1.08;
+      letter-spacing: -0.025em;
+      font-weight: 700;
+      margin-top: clamp(0.5rem, 1vh, 0.8rem);
+    }
+
+    .chart {
+      min-height: 0;
+      display: grid;
+      align-items: end;
+      padding: clamp(0.4rem, 1vh, 0.8rem) 0 0;
+    }
+    svg { width: 100%; height: min(28vh, 250px); overflow: visible; }
+    .chart-grid { stroke: rgba(142,238,255,0.08); stroke-width: 1; }
+    .chart-line {
+      fill: none;
+      stroke: var(--cyan);
+      stroke-width: 3.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 0 12px rgba(142,238,255,0.38));
+    }
+    .chart-fill { fill: url(#volumeFill); opacity: 0.72; }
+    .chart-dot { fill: var(--cyan-2); filter: drop-shadow(0 0 12px rgba(142,238,255,0.45)); }
+    .callout {
+      fill: rgba(255, 211, 106, 0.07);
+      stroke: rgba(255, 211, 106, 0.46);
+      stroke-width: 1.2;
+    }
+    .callout-text {
+      fill: var(--amber);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+    }
+
+    .year-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(0.6rem, 1vw, 0.9rem);
+    }
+    .year {
+      padding-top: clamp(0.55rem, 1vh, 0.75rem);
+      border-top: 1px solid rgba(142,238,255,0.16);
+      font-family: var(--font-mono);
+    }
+    .year .k {
+      display: block;
+      color: var(--faint);
+      font-size: clamp(0.58rem, 0.72vw, 0.66rem);
+      letter-spacing: 0.12em;
+    }
+    .year .v {
+      display: block;
+      color: var(--text);
+      font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+      font-weight: 700;
+      margin-top: 0.2rem;
+    }
+    .year:last-child .v { color: var(--cyan-2); }
+
+    .math-stack {
+      display: grid;
+      grid-template-rows: minmax(0, 1fr) auto;
+      gap: clamp(0.85rem, 1.7vh, 1.25rem);
+    }
+
+    .topdown {
+      padding: clamp(1.35rem, 2.6vh, 2rem);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+      align-items: center;
+      gap: clamp(1rem, 1.8vw, 1.5rem);
+    }
+
+    .big-number {
+      display: grid;
+      align-content: center;
+      gap: clamp(0.4rem, 1vh, 0.7rem);
+      min-width: 0;
+    }
+    .big-number .tag {
+      font-family: var(--font-mono);
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      font-size: clamp(0.6rem, 0.78vw, 0.72rem);
+      font-weight: 700;
+    }
+    .big-number .num {
+      font-family: var(--font-display);
+      color: var(--cyan-2);
+      font-size: clamp(4rem, 7vw, 7.4rem);
+      line-height: 0.82;
+      letter-spacing: -0.065em;
+      font-weight: 700;
+      text-shadow: 0 0 28px rgba(142,238,255,0.18);
+      white-space: nowrap;
+    }
+    .big-number .unit {
+      font-size: clamp(1.45rem, 2.25vw, 2.2rem);
+      color: var(--text);
+      letter-spacing: -0.035em;
+      margin-left: 0.18em;
+    }
+    .big-number .note {
+      font-family: var(--font-mono);
+      color: var(--muted);
+      font-size: clamp(0.68rem, 0.88vw, 0.82rem);
+      line-height: 1.45;
+    }
+
+    .equation {
+      border-radius: 0.7rem;
+      background: rgba(7, 14, 25, 0.82);
+      border: 1px solid rgba(142,238,255,0.14);
+      padding: clamp(0.95rem, 1.9vh, 1.35rem);
+      display: grid;
+      gap: clamp(0.55rem, 1vh, 0.8rem);
+      font-family: var(--font-mono);
+    }
+    .eq-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: baseline;
+      font-size: clamp(0.72rem, 0.92vw, 0.86rem);
+      color: var(--muted);
+      border-bottom: 1px solid rgba(142,238,255,0.11);
+      padding-bottom: 0.55rem;
+    }
+    .eq-row:last-child { border-bottom: 0; padding-bottom: 0; }
+    .eq-row .value {
+      color: var(--text);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .eq-row .hi { color: var(--cyan-2); }
+
+    .bottom-cards {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.82fr);
+      gap: clamp(0.85rem, 1.4vw, 1.1rem);
+    }
+
+    .small-card {
+      padding: clamp(1rem, 2vh, 1.4rem);
+      min-height: clamp(8.7rem, 20vh, 12rem);
+    }
+    .small-card .small-title {
+      font-family: var(--font-mono);
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.24em;
+      font-size: clamp(0.56rem, 0.72vw, 0.66rem);
+      font-weight: 700;
+      margin-bottom: clamp(0.65rem, 1.1vh, 0.9rem);
+    }
+    .call-price {
+      font-family: var(--font-display);
+      font-size: clamp(1.4rem, 2.2vw, 2rem);
+      line-height: 1.05;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      margin-bottom: clamp(0.6rem, 1.2vh, 0.9rem);
+    }
+    .call-price .em { color: var(--cyan-2); }
+
+    .call-rows {
+      display: grid;
+      gap: 0.45rem;
+      font-family: var(--font-mono);
+      font-size: clamp(0.68rem, 0.88vw, 0.8rem);
+      color: var(--muted);
+    }
+    .call-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: baseline;
+    }
+    .call-row strong {
+      color: var(--cyan-2);
+      font-size: clamp(0.86rem, 1.12vw, 1.03rem);
+      white-space: nowrap;
+    }
+
+    .take-rate {
+      display: grid;
+      align-content: center;
+      gap: clamp(0.5rem, 1vh, 0.75rem);
+      background: linear-gradient(135deg, rgba(142,238,255,0.10), rgba(156,246,195,0.045));
+    }
+    .take-rate .rate {
+      font-family: var(--font-display);
+      color: var(--mint);
+      font-size: clamp(2.2rem, 4vw, 4.1rem);
+      line-height: 0.95;
+      letter-spacing: -0.045em;
+      font-weight: 700;
+    }
+    .take-rate .desc {
+      font-family: var(--font-mono);
+      font-size: clamp(0.66rem, 0.84vw, 0.78rem);
+      line-height: 1.45;
+      color: var(--muted);
+    }
+
+    .footer {
+      width: min(94vw, 1420px);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: center;
+      color: var(--faint);
+      font-family: var(--font-mono);
+      font-size: clamp(0.58rem, 0.72vw, 0.66rem);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+    .footer .bridge {
+      color: var(--muted);
+      text-transform: none;
+      letter-spacing: 0.02em;
+      font-size: clamp(0.68rem, 0.86vw, 0.78rem);
+    }
+    .footer .bridge .em { color: var(--cyan-2); font-weight: 700; }
+
+    @media (max-width: 980px) {
+      .slide { padding: 1.5rem; }
+      h1 { font-size: clamp(2.2rem, 7vw, 3.2rem); }
+      .market-grid, .topdown, .bottom-cards { grid-template-columns: 1fr; }
+      .footer { grid-template-columns: 1fr; }
+    }
+
+    @media (max-height: 760px) {
+      .slide { padding-top: 1.5rem; padding-bottom: 1.2rem; gap: 0.8rem; }
+      h1 { font-size: clamp(2.35rem, 4.1vw, 4.5rem); }
+      svg { height: min(24vh, 190px); }
+      .topdown { padding: 1.15rem; }
+      .big-number .num { font-size: clamp(3.3rem, 6.1vw, 6rem); }
+      .small-card { min-height: 7.5rem; }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .eyebrow, h1, .card, .footer {
+        animation: rise 720ms cubic-bezier(.2,.8,.2,1) both;
+      }
+      h1 { animation-delay: 70ms; }
+      .growth-card { animation-delay: 160ms; }
+      .topdown { animation-delay: 240ms; }
+      .bottom-cards { animation-delay: 320ms; }
+      .footer { animation-delay: 400ms; }
+      @keyframes rise {
+        from { opacity: 0; transform: translateY(16px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="slide" aria-label="Accessura market slide redesign demo">
+    <header>
+      <div class="eyebrow">MARKET</div>
+      <h1>A large, accelerating market for <span class="em">agent-callable information.</span></h1>
+    </header>
+
+    <section class="market-grid" aria-label="Market sizing">
+      <div class="card growth-card">
+        <div>
+          <div class="label">Prediction-market volume</div>
+          <div class="growth-title">A trading market big enough to create its own information layer.</div>
+        </div>
+        <div class="chart" aria-label="Prediction market volume chart">
+          <svg viewBox="0 0 640 270" preserveAspectRatio="none" role="img">
+            <defs>
+              <linearGradient id="volumeFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#8eeeff" stop-opacity="0.42"/>
+                <stop offset="100%" stop-color="#8eeeff" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <line class="chart-grid" x1="34" y1="212" x2="612" y2="212"/>
+            <line class="chart-grid" x1="34" y1="144" x2="612" y2="144"/>
+            <line class="chart-grid" x1="34" y1="76" x2="612" y2="76"/>
+            <path class="chart-fill" d="M 48 210 L 305 140 L 568 58 L 568 236 L 48 236 Z"/>
+            <path class="chart-line" d="M 48 210 L 305 140 L 568 58"/>
+            <circle class="chart-dot" cx="48" cy="210" r="7"/>
+            <circle class="chart-dot" cx="305" cy="140" r="7"/>
+            <circle class="chart-dot" cx="568" cy="58" r="7"/>
+            <rect class="callout" x="448" y="26" width="152" height="34" rx="17"/>
+            <text class="callout-text" x="524" y="48" text-anchor="middle">4× IN ONE YEAR</text>
+          </svg>
+        </div>
+        <div class="year-row">
+          <div class="year"><span class="k">2024</span><span class="v">$9B</span></div>
+          <div class="year"><span class="k">2025</span><span class="v">$40B+</span></div>
+          <div class="year"><span class="k">2026e</span><span class="v">$80–120B</span></div>
+        </div>
+      </div>
+
+      <div class="math-stack">
+        <div class="card topdown">
+          <div class="big-number">
+            <div class="tag">Information market · top-down</div>
+            <div class="num">~$1.2B<span class="unit">/yr</span></div>
+            <div class="note">Estimated annual spend on signals, tools, and information around PM trading.</div>
+          </div>
+          <div class="equation" aria-label="Top-down market size equation">
+            <div class="eq-row"><span>2026e PM volume</span><span class="value">$80–120B</span></div>
+            <div class="eq-row"><span>signal / tool / info spend</span><span class="value">0.5–1%</span></div>
+            <div class="eq-row"><span>information-layer GMV</span><span class="value hi">~$1.2B / yr</span></div>
+          </div>
+        </div>
+
+        <div class="bottom-cards">
+          <div class="card small-card">
+            <div class="small-title">Bottom-up sanity check</div>
+            <div class="call-price"><span class="em">$0.01</span> per paid call</div>
+            <div class="call-rows">
+              <div class="call-row"><span>100k agents × 100 calls/day</span><strong>~$36M/yr</strong></div>
+              <div class="call-row"><span>10M agents × 100 calls/day</span><strong>~$3.6B/yr</strong></div>
+            </div>
+          </div>
+
+          <div class="card small-card take-rate">
+            <div class="small-title">Accessura take rate</div>
+            <div class="rate">0.25–1%</div>
+            <div class="desc">of cleared value, taken at settlement.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="bridge">We start narrow: <span class="em">one market, one signal, one paid delivery.</span></div>
+      <div>Source · Kalshi / Polymarket / Pew / founder est.</div>
+    </footer>
+  </main>
+</body>
+</html>

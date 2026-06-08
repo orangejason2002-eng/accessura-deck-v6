@@ -486,30 +486,61 @@ body::before {
   border-color: rgba(149, 185, 255, 0.28);
 }
 .route-chip .node-title { font-size: clamp(1rem, 1.35vw, 1.45rem); }
-.step-3 .route-chip.left,
+.step-3 .route-chip.left {
+  border-color: rgba(143, 242, 200, 0.5);
+  box-shadow: 0 0 34px rgba(143, 242, 200, 0.1), 0 20px 60px rgba(0, 0, 0, 0.28);
+}
 .step-3 .route-chip.right {
-  border-color: rgba(143, 242, 200, 0.44);
-  box-shadow: 0 0 34px rgba(143, 242, 200, 0.08), 0 20px 60px rgba(0, 0, 0, 0.28);
+  border-color: rgba(149, 185, 255, 0.5);
+  box-shadow: 0 0 34px rgba(149, 185, 255, 0.1), 0 20px 60px rgba(0, 0, 0, 0.28);
 }
 .step-3 .route-chip::after {
   content: "";
   position: absolute;
   left: 50%;
   bottom: calc(-1 * clamp(4.6rem, 12vh, 7rem));
-  width: 2px;
+  width: 3px;
   height: clamp(4rem, 11vh, 6.4rem);
+  border-radius: 2px;
   transform-origin: top;
-  background: linear-gradient(180deg, rgba(143, 242, 200, 0.72), transparent);
+  background-size: 100% 220%;
+  animation: routeFlow 1.5s linear infinite;
 }
 .step-3 .route-chip.left::after {
-  transform: rotate(48deg);
+  transform: rotate(-48deg);
+  background-image: linear-gradient(180deg, rgba(143, 242, 200, 0) 0%, rgba(143, 242, 200, 0.85) 42%, #d8ffec 52%, rgba(143, 242, 200, 0.85) 62%, rgba(143, 242, 200, 0.22) 100%);
+  box-shadow: 0 0 12px rgba(143, 242, 200, 0.6);
 }
 .step-3 .route-chip.right::after {
-  transform: rotate(-48deg);
+  transform: rotate(48deg);
+  background-image: linear-gradient(180deg, rgba(149, 185, 255, 0) 0%, rgba(149, 185, 255, 0.85) 42%, #e0ebff 52%, rgba(149, 185, 255, 0.85) 62%, rgba(149, 185, 255, 0.22) 100%);
+  box-shadow: 0 0 12px rgba(149, 185, 255, 0.6);
 }
-.step-3 .route-chip .small {
-  color: var(--mint);
+@keyframes routeFlow {
+  from { background-position: 0 -80%; }
+  to   { background-position: 0 180%; }
 }
+.step-3 .route-chip.left .small { color: var(--mint); }
+.step-3 .route-chip.right .small { color: #95b9ff; }
+
+/* Numbered route badge — only visible in step-3 (chips hidden otherwise) */
+.route-num {
+  position: absolute;
+  top: clamp(-0.75rem, -0.65vw, -0.55rem);
+  left: clamp(-0.75rem, -0.65vw, -0.55rem);
+  width: clamp(1.7rem, 2vw, 2.15rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: clamp(0.9rem, 1.1vw, 1.18rem);
+  background: var(--panel-2);
+  border: 1.5px solid currentColor;
+}
+.route-chip.left .route-num { color: var(--mint); box-shadow: 0 0 18px rgba(143, 242, 200, 0.55); }
+.route-chip.right .route-num { color: #95b9ff; box-shadow: 0 0 18px rgba(149, 185, 255, 0.55); }
 
 .market {
   left: 50%;
@@ -620,30 +651,45 @@ body::before {
   gap: clamp(0.22rem, 0.4vh, 0.34rem);
 }
 .book-label {
-  color: var(--muted);
   font-family: var(--mono);
-  font-size: clamp(0.5rem, 0.62vw, 0.66rem);
+  font-size: clamp(0.74rem, 0.98vw, 1.05rem);
   font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
+.book-side.bid .book-label { color: var(--mint); text-align: right; }
+.book-side.ask .book-label { color: var(--amber); }
 .book-row {
-  height: clamp(12px, 1.5vh, 17px);
-  border-radius: 999px;
-  opacity: 0.58;
+  height: clamp(15px, 1.9vh, 22px);
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  gap: clamp(0.3rem, 0.5vw, 0.5rem);
+  padding: 0 clamp(0.4rem, 0.55vw, 0.62rem);
+  font-family: var(--mono);
+  font-size: clamp(0.58rem, 0.74vw, 0.84rem);
+  font-weight: 700;
+  opacity: 0.92;
 }
+.bk-price { color: var(--text); }
+.bk-size { color: var(--muted); font-weight: 600; }
+.book-side.bid .bk-price { color: var(--mint); }
+.book-side.ask .bk-price { color: var(--amber); }
 .book-side.bid .book-row {
   margin-left: auto;
-  background: linear-gradient(90deg, transparent, rgba(143, 242, 200, 0.76));
+  justify-content: flex-end;
+  background: linear-gradient(90deg, transparent, rgba(143, 242, 200, 0.34));
 }
 .book-side.ask .book-row {
-  background: linear-gradient(90deg, rgba(255, 214, 111, 0.82), transparent);
+  justify-content: flex-start;
+  background: linear-gradient(90deg, rgba(255, 214, 111, 0.36), transparent);
 }
-.book-side.bid .book-row:nth-child(2) { width: 42%; }
-.book-side.bid .book-row:nth-child(3) { width: 68%; opacity: 0.76; }
-.book-side.bid .book-row:nth-child(4) { width: 88%; opacity: 1; }
-.book-side.ask .book-row:nth-child(2) { width: 88%; opacity: 1; }
-.book-side.ask .book-row:nth-child(3) { width: 64%; opacity: 0.76; }
-.book-side.ask .book-row:nth-child(4) { width: 40%; }
+.book-side.bid .book-row:nth-child(2) { width: 92%; }
+.book-side.bid .book-row:nth-child(3) { width: 70%; opacity: 0.8; }
+.book-side.bid .book-row:nth-child(4) { width: 50%; opacity: 0.64; }
+.book-side.ask .book-row:nth-child(2) { width: 92%; }
+.book-side.ask .book-row:nth-child(3) { width: 68%; opacity: 0.8; }
+.book-side.ask .book-row:nth-child(4) { width: 46%; opacity: 0.64; }
 .clear-dot {
   position: relative;
   width: clamp(28px, 2.6vw, 38px);
@@ -690,6 +736,41 @@ body::before {
   0%, 34% { box-shadow: none; }
   72%, 100% { box-shadow: 0 0 18px rgba(255, 214, 111, 0.78); opacity: 1; }
 }
+
+/* Center match point — pulses as the clearing dot arrives */
+.step-4 .clear-dot {
+  border-color: rgba(120, 239, 255, 0.7);
+  animation: matchPulse 1.25s var(--ease) infinite;
+}
+@keyframes matchPulse {
+  0%, 42% { box-shadow: 0 0 22px rgba(120, 239, 255, 0.18); }
+  72% { box-shadow: 0 0 34px rgba(255, 214, 111, 0.5), 0 0 0 4px rgba(255, 214, 111, 0.12); }
+  100% { box-shadow: 0 0 22px rgba(120, 239, 255, 0.18); }
+}
+
+/* Spread -> cleared status, above the ladder */
+.book-status {
+  position: absolute;
+  left: 50%;
+  top: clamp(-1.5rem, -2.4vh, -1.05rem);
+  transform: translateX(-50%);
+  display: grid;
+  place-items: center;
+  font-family: var(--mono);
+  font-size: clamp(0.62rem, 0.82vw, 0.92rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  z-index: 6;
+}
+.book-status > span { grid-area: 1 / 1; }
+.bs-spread { color: var(--muted); }
+.bs-cleared { color: var(--mint); opacity: 0; text-shadow: 0 0 16px rgba(143, 242, 200, 0.6); }
+.step-4 .bs-spread { animation: bsSpread 1.25s var(--ease) infinite; }
+.step-4 .bs-cleared { animation: bsCleared 1.25s var(--ease) infinite; }
+@keyframes bsSpread { 0%, 30% { opacity: 0.7; } 60%, 100% { opacity: 0; } }
+@keyframes bsCleared { 0%, 46% { opacity: 0; } 74%, 100% { opacity: 1; } }
 
 .seller {
   left: clamp(4rem, 9vw, 9rem);
@@ -1401,14 +1482,16 @@ body::before {
     </div>
 
     <div class="route-chip left">
+      <div class="route-num">1</div>
       <div class="label">Listed Pack</div>
       <div class="node-title">Bench-Intent Stream</div>
-      <div class="small">route</div>
+      <div class="small">route 1</div>
     </div>
     <div class="route-chip right">
+      <div class="route-num">2</div>
       <div class="label">RequestBrief</div>
       <div class="node-title">Public or targeted</div>
-      <div class="small">route</div>
+      <div class="small">route 2</div>
     </div>
 
     <div class="market">
@@ -1416,18 +1499,22 @@ body::before {
       <div class="market-grid">
         <div class="market-cell">
           <div class="book-visual" aria-label="Bid ask orderbook clears">
+            <div class="book-status">
+              <span class="bs-spread">spread 0.02</span>
+              <span class="bs-cleared">cleared @ 0.62</span>
+            </div>
             <div class="book-side bid">
               <div class="book-label">bid</div>
-              <div class="book-row"></div>
-              <div class="book-row"></div>
-              <div class="book-row"></div>
+              <div class="book-row"><span class="bk-size">120</span><span class="bk-price">0.61</span></div>
+              <div class="book-row"><span class="bk-size">84</span><span class="bk-price">0.60</span></div>
+              <div class="book-row"><span class="bk-size">56</span><span class="bk-price">0.59</span></div>
             </div>
             <div class="clear-dot"></div>
             <div class="book-side ask">
               <div class="book-label">ask</div>
-              <div class="book-row"></div>
-              <div class="book-row"></div>
-              <div class="book-row"></div>
+              <div class="book-row"><span class="bk-price">0.63</span><span class="bk-size">110</span></div>
+              <div class="book-row"><span class="bk-price">0.64</span><span class="bk-size">76</span></div>
+              <div class="book-row"><span class="bk-price">0.65</span><span class="bk-size">48</span></div>
             </div>
           </div>
         </div>
