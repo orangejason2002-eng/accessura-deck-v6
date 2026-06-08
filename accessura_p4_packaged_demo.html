@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Accessura P4 Demo - Packaged</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07101d;
+      --bg2: #0b1727;
+      --panel: rgba(20, 31, 49, 0.92);
+      --panel2: rgba(10, 20, 34, 0.94);
+      --text: #e9efff;
+      --muted: #94a2b4;
+      --faint: rgba(148, 162, 180, 0.58);
+      --cyan: #8eeeff;
+      --cyan2: #b9f6ff;
+      --mint: #9cf6c3;
+      --amber: #ffd36a;
+      --line: rgba(142, 238, 255, 0.22);
+      --line2: rgba(255, 211, 106, 0.36);
+      --font-display: "Space Grotesk", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    body {
+      font-family: var(--font-display);
+      background:
+        radial-gradient(circle at 80% 12%, rgba(83, 178, 210, 0.22), transparent 32%),
+        radial-gradient(circle at 20% 85%, rgba(103, 247, 194, 0.10), transparent 35%),
+        linear-gradient(180deg, #07101d 0%, #07101d 48%, #050b14 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(142, 238, 255, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(142, 238, 255, 0.045) 1px, transparent 1px);
+      background-size: 5.8vw 5.8vw;
+      mask-image: linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.18));
+    }
+
+    .slide {
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      padding: clamp(2.3rem, 4.8vh, 4.2rem) clamp(2.7rem, 5vw, 5.8rem);
+      display: flex;
+      flex-direction: column;
+      gap: clamp(1rem, 2vh, 1.6rem);
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: clamp(0.7rem, 1vw, 1rem);
+      font-family: var(--font-mono);
+      font-size: clamp(0.68rem, 0.95vw, 0.86rem);
+      letter-spacing: 0.36em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      font-weight: 700;
+    }
+    .eyebrow::before {
+      content: "";
+      width: clamp(2.3rem, 4vw, 3.3rem);
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--cyan));
+    }
+
+    h1 {
+      width: min(94vw, 1280px);
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 5.3vw, 6rem);
+      line-height: 0.98;
+      letter-spacing: -0.035em;
+      font-weight: 700;
+      color: var(--text);
+    }
+    h1 .em {
+      color: var(--cyan2);
+      text-shadow: 0 0 28px rgba(142, 238, 255, 0.12);
+    }
+
+    .stage {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) clamp(17rem, 22vw, 24rem) minmax(0, 0.92fr);
+      gap: clamp(0.85rem, 1.3vw, 1.3rem);
+      align-items: center;
+      width: min(94vw, 1400px);
+      margin: 0 auto;
+    }
+
+    .card {
+      position: relative;
+      min-height: clamp(18rem, 42vh, 27rem);
+      border-radius: clamp(0.7rem, 1vw, 1rem);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.36), inset 0 1px 0 rgba(255,255,255,0.03);
+      padding: clamp(1.35rem, 2.5vh, 2.2rem);
+      overflow: hidden;
+    }
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: clamp(1.35rem, 2.5vw, 2rem);
+      width: clamp(3.6rem, 7vw, 7rem);
+      height: 2px;
+      background: linear-gradient(90deg, var(--cyan), transparent);
+    }
+
+    .label {
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.32em;
+      color: var(--cyan);
+      font-weight: 700;
+      font-size: clamp(0.62rem, 0.82vw, 0.76rem);
+      margin-bottom: clamp(0.8rem, 1.5vh, 1.1rem);
+    }
+
+    .title {
+      font-family: var(--font-display);
+      font-size: clamp(1.65rem, 2.6vw, 2.75rem);
+      line-height: 1;
+      letter-spacing: -0.03em;
+      font-weight: 700;
+      margin-bottom: clamp(0.75rem, 1.4vh, 1rem);
+    }
+
+    .sub {
+      font-family: var(--font-mono);
+      font-size: clamp(0.78rem, 0.98vw, 0.94rem);
+      line-height: 1.45;
+      color: var(--muted);
+      max-width: 34ch;
+    }
+
+    .source-map {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(0.45rem, 0.75vw, 0.7rem);
+      margin-top: clamp(1.1rem, 2.2vh, 1.7rem);
+    }
+
+    .info-chip {
+      min-height: clamp(3rem, 7vh, 4.1rem);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 0.5rem;
+      border-radius: 0.55rem;
+      background: rgba(6, 13, 24, 0.82);
+      border: 1px solid rgba(142, 238, 255, 0.18);
+      font-family: var(--font-mono);
+      font-size: clamp(0.64rem, 0.82vw, 0.78rem);
+      color: #c8d3e2;
+      letter-spacing: 0.03em;
+    }
+
+    .info-stack {
+      display: grid;
+      gap: clamp(0.55rem, 1vh, 0.82rem);
+      margin-top: clamp(1.05rem, 2vh, 1.5rem);
+    }
+
+    .info-row {
+      display: grid;
+      grid-template-columns: clamp(8.4rem, 12vw, 11.2rem) minmax(0, 1fr);
+      align-items: center;
+      gap: clamp(0.75rem, 1.1vw, 1rem);
+      min-height: clamp(3.4rem, 7vh, 4.45rem);
+      padding: clamp(0.65rem, 1.25vh, 0.95rem) clamp(0.75rem, 1.3vw, 1rem);
+      border-radius: 0.6rem;
+      background: rgba(6, 13, 24, 0.78);
+      border: 1px solid rgba(142, 238, 255, 0.18);
+    }
+
+    .info-kind {
+      font-family: var(--font-display);
+      font-size: clamp(0.92rem, 1.2vw, 1.14rem);
+      line-height: 1.08;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      color: var(--text);
+    }
+
+    .info-examples {
+      font-family: var(--font-mono);
+      font-size: clamp(0.62rem, 0.78vw, 0.72rem);
+      line-height: 1.35;
+      color: var(--muted);
+    }
+
+    .package {
+      min-height: clamp(18rem, 42vh, 27rem);
+      border-radius: clamp(0.7rem, 1vw, 1rem);
+      padding: clamp(1.25rem, 2.3vh, 1.75rem);
+      background: rgba(8, 15, 27, 0.96);
+      border: 1px solid var(--line2);
+      box-shadow: 0 0 0 1px rgba(255, 211, 106, 0.06) inset, 0 0 42px rgba(255, 211, 106, 0.08);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: clamp(0.75rem, 1.5vh, 1rem);
+    }
+
+    .package .label { color: var(--amber); margin: 0; }
+    .package .title {
+      color: var(--amber);
+      margin-bottom: 0;
+      font-size: clamp(1.5rem, 2.2vw, 2.25rem);
+    }
+    .package .sub {
+      max-width: 30ch;
+      color: #c7b98f;
+    }
+
+    .missing-list {
+      display: grid;
+      gap: clamp(0.45rem, 0.9vh, 0.7rem);
+      margin-top: clamp(0.35rem, 0.8vh, 0.65rem);
+    }
+
+    .missing-item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.65rem;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: clamp(0.74rem, 0.92vw, 0.86rem);
+      color: var(--text);
+    }
+    .missing-item::before {
+      content: "";
+      width: 0.48rem;
+      height: 0.48rem;
+      border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 13px rgba(255, 211, 106, 0.48);
+    }
+
+    .package-divider {
+      height: 1px;
+      width: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,211,106,0.48), transparent);
+      margin: clamp(0.1rem, 0.6vh, 0.3rem) 0;
+    }
+
+    .package-formula {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      align-items: center;
+      gap: clamp(0.35rem, 0.6vw, 0.55rem);
+      margin-top: clamp(0.1rem, 0.5vh, 0.25rem);
+    }
+
+    .formula-box {
+      min-height: clamp(2.2rem, 4.8vh, 3rem);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      border-radius: 0.55rem;
+      border: 1px solid rgba(255, 211, 106, 0.26);
+      background: rgba(255, 211, 106, 0.055);
+      color: #ffe6a1;
+      font-family: var(--font-mono);
+      font-size: clamp(0.56rem, 0.72vw, 0.66rem);
+      line-height: 1.2;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.35rem;
+    }
+
+    .formula-arrow {
+      color: var(--amber);
+      font-family: var(--font-mono);
+      font-size: clamp(0.72rem, 1vw, 0.9rem);
+      opacity: 0.8;
+    }
+
+    .agent-card {
+      text-align: right;
+    }
+    .agent-card::before {
+      left: auto;
+      right: clamp(1.35rem, 2.5vw, 2rem);
+      background: linear-gradient(270deg, var(--cyan), transparent);
+    }
+    .agent-card .sub { margin-left: auto; }
+
+    .call-flow {
+      margin-top: clamp(1.2rem, 2.4vh, 1.9rem);
+      display: grid;
+      gap: clamp(0.55rem, 1vh, 0.82rem);
+    }
+    .call-step {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.8rem;
+      align-items: center;
+      min-height: clamp(3rem, 6.2vh, 3.8rem);
+      border-radius: 0.55rem;
+      background: rgba(6, 13, 24, 0.82);
+      border: 1px solid rgba(142, 238, 255, 0.18);
+      padding: 0.55rem clamp(0.8rem, 1.2vw, 1rem);
+      font-family: var(--font-mono);
+      font-size: clamp(0.72rem, 0.9vw, 0.84rem);
+      color: #d5deec;
+    }
+    .call-step span {
+      width: clamp(1.65rem, 2vw, 2rem);
+      height: clamp(1.65rem, 2vw, 2rem);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(156, 246, 195, 0.1);
+      color: var(--mint);
+      border: 1px solid rgba(156, 246, 195, 0.4);
+      font-weight: 700;
+    }
+
+    .connector {
+      position: absolute;
+      top: 50%;
+      width: clamp(2rem, 4vw, 4rem);
+      height: 1px;
+      background-image: linear-gradient(90deg, rgba(142, 238, 255, 0.48) 0 8px, transparent 8px 16px);
+      background-size: 16px 1px;
+      transform: translateY(-0.5px);
+      pointer-events: none;
+    }
+    .connector.left { left: calc(33.333% - clamp(2rem, 4vw, 4rem)); }
+    .connector.right { right: calc(33.333% - clamp(2rem, 4vw, 4rem)); }
+
+    .footer {
+      width: min(94vw, 1400px);
+      margin: 0 auto;
+      padding-top: clamp(0.5rem, 1vh, 0.8rem);
+      border-top: 1px solid rgba(142, 238, 255, 0.16);
+      text-align: center;
+      font-family: var(--font-display);
+      font-size: clamp(1rem, 1.4vw, 1.35rem);
+      color: var(--text);
+      font-weight: 600;
+    }
+    .footer .em { color: var(--cyan2); }
+
+    @media (max-width: 920px) {
+      .slide { padding: 1.4rem; }
+      h1 { font-size: clamp(2.3rem, 8vw, 3.2rem); }
+      .stage {
+        grid-template-columns: 1fr;
+        overflow: hidden;
+      }
+      .card, .package { min-height: 0; }
+      .agent-card { text-align: left; }
+      .agent-card .sub { margin-left: 0; }
+      .connector { display: none; }
+      .source-map { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .info-row { grid-template-columns: 1fr; }
+    }
+
+    @media (max-height: 720px) {
+      .slide { padding-top: 1.8rem; padding-bottom: 1.6rem; gap: 0.8rem; }
+      h1 { font-size: clamp(2.5rem, 4.6vw, 4.6rem); }
+      .card, .package { min-height: clamp(15rem, 39vh, 20rem); }
+      .source-map { gap: 0.38rem; margin-top: 0.8rem; }
+      .info-chip { min-height: 2.65rem; }
+      .info-stack { gap: 0.42rem; margin-top: 0.7rem; }
+      .info-row { min-height: 3rem; padding: 0.55rem 0.7rem; }
+      .footer { font-size: clamp(0.9rem, 1.2vw, 1.1rem); }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .eyebrow, h1, .card, .package, .footer {
+        animation: rise 700ms cubic-bezier(.2,.8,.2,1) both;
+      }
+      h1 { animation-delay: 80ms; }
+      .card:nth-child(1) { animation-delay: 170ms; }
+      .package { animation-delay: 260ms; }
+      .agent-card { animation-delay: 350ms; }
+      .footer { animation-delay: 430ms; }
+      @keyframes rise {
+        from { opacity: 0; transform: translateY(16px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="slide" aria-label="P4 demo">
+    <div class="eyebrow">WHY IT DOESN'T REACH</div>
+    <h1>
+      Market-moving signals exist.<br>
+      <span class="em">They just aren't packaged for agent calls.</span>
+    </h1>
+
+    <section class="stage" aria-label="Existing information, missing package, agent-callable transaction">
+      <div class="card">
+        <div class="label">Signal side</div>
+        <div class="title">Information already exists</div>
+        <div class="sub">It is shaped by where it is created, who sees it, and how the source releases it.</div>
+        <div class="info-stack" aria-label="Information forms">
+          <div class="info-row">
+            <div class="info-kind">Local observation</div>
+            <div class="info-examples">venue state · on-site cues · camera views</div>
+          </div>
+          <div class="info-row">
+            <div class="info-kind">Messy context</div>
+            <div class="info-examples">video · chats · human judgment · live interpretation</div>
+          </div>
+          <div class="info-row">
+            <div class="info-kind">Digital sources</div>
+            <div class="info-examples">APIs · databases · feeds · reports</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="package">
+        <div class="label">Wrong packaging</div>
+        <div class="title">Machine-readable is not agent-callable</div>
+        <div class="sub">The signal is not packaged around the agent's trade.</div>
+        <div class="package-divider"></div>
+        <div class="missing-list">
+          <div class="missing-item">not one request</div>
+          <div class="missing-item">not one market price</div>
+          <div class="missing-item">not one delivery</div>
+        </div>
+        <div class="package-formula" aria-label="Package formula">
+          <div class="formula-box">request</div>
+          <div class="formula-arrow">→</div>
+          <div class="formula-box">price</div>
+          <div class="formula-arrow">→</div>
+          <div class="formula-box">deliver</div>
+        </div>
+      </div>
+
+      <div class="card agent-card">
+        <div class="label">Agent side</div>
+        <div class="title">Callable</div>
+        <div class="sub">A strategy needs a specific signal at the moment it can change a trade.</div>
+        <div class="call-flow" aria-label="Agent-callable transaction">
+          <div class="call-step">ask for one signal <span>1</span></div>
+          <div class="call-step">pay for one use <span>2</span></div>
+          <div class="call-step">receive it in workflow <span>3</span></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      The gap is not the signal. <span class="em">The gap is the packaging.</span>
+    </div>
+  </main>
+</body>
+</html>

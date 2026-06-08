@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P9 — how we enter (v D)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap">
+<style>
+:root {
+  --bg:#0b1220; --bg-surface:#0c1321; --bg-elev-high:#19202e;
+  --text:#dce2f6; --text-variant:#bbc9cb; --text-muted:#869395;
+  --primary:#63ebfb; --primary-bright:#8af2ff; --primary-glow:rgba(99,235,251,0.45);
+  --tertiary:#ffd0a6; --tertiary-bright:#ffab51; --tertiary-glow:rgba(255,208,166,0.32);
+  --font-display:'Space Grotesk',sans-serif; --font-mono:'IBM Plex Mono',monospace;
+  --radius-md:1.25rem; --ease:cubic-bezier(0.16,1,0.3,1);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:var(--font-display); letter-spacing:-0.005em; padding:clamp(1rem,3vw,2.5rem); }
+body::before { content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:radial-gradient(ellipse 60% 50% at 78% 22%, rgba(99,235,251,0.14) 0%, transparent 60%),
+            radial-gradient(ellipse 50% 40% at 18% 82%, rgba(255,208,166,0.05) 0%, transparent 60%); }
+.wrap { position:relative; z-index:2; max-width:1320px; margin:0 auto; }
+.variant-tag { font-family:var(--font-mono); font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--tertiary-bright); margin-bottom:0.7rem; display:flex; align-items:center; gap:0.7rem; }
+.variant-tag::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,var(--tertiary-glow),transparent); }
+.variant-note { color:var(--text-muted); font-size:0.82rem; font-family:var(--font-mono); letter-spacing:0.04em; margin-top:0.7rem; line-height:1.6; }
+.variant-note b { color:var(--text-variant); font-weight:500; }
+
+.frame { width:100%; aspect-ratio:16/9; border-radius:var(--radius-md); border:1px solid rgba(99,235,251,0.18); overflow:hidden; position:relative; background:var(--bg-surface); box-shadow:0 24px 70px rgba(0,0,0,0.4); }
+.slide { width:100%; height:100%; display:flex; flex-direction:column; padding:clamp(1.4rem,3.4vw,3rem); gap:clamp(1rem,2.6vh,1.9rem); }
+.slide-top { display:flex; flex-direction:column; gap:clamp(0.4rem,1vh,0.8rem); }
+.eyebrow { font-family:var(--font-mono); font-size:clamp(0.62rem,0.8vw,0.76rem); letter-spacing:0.22em; text-transform:uppercase; color:var(--primary); display:inline-flex; align-items:center; gap:0.6rem; }
+.eyebrow.with-line::before { content:''; width:clamp(20px,3vw,38px); height:1px; background:linear-gradient(90deg,transparent,var(--primary)); }
+.t-display-md { font-weight:600; font-size:clamp(1.5rem,3.2vw,2.6rem); line-height:1.08; letter-spacing:-0.025em; }
+.slide-headline { max-width:38ch; }
+.em { color:var(--primary-bright); }
+
+.vC { flex:1; display:flex; flex-direction:column; justify-content:center; gap:clamp(1rem,2.4vh,1.8rem); min-height:0; }
+.vC-steps { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:clamp(0.9rem,1.8vw,1.6rem); }
+.vC-step { display:flex; flex-direction:column; gap:clamp(0.45rem,1vh,0.75rem); padding:clamp(1rem,1.7vw,1.4rem); background:var(--bg-elev-high); border:1px solid rgba(99,235,251,0.16); border-radius:var(--radius-md); box-shadow:0 0 0 1px rgba(99,235,251,0.04) inset, 0 22px 52px rgba(0,0,0,0.32); position:relative; overflow:hidden; }
+.vC-step::before { content:''; position:absolute; top:0; left:clamp(1rem,1.7vw,1.4rem); right:clamp(1rem,1.7vw,1.4rem); height:2px; background:linear-gradient(90deg,var(--primary-bright),transparent); opacity:0.7; }
+.vC-num { font-family:var(--font-mono); font-size:clamp(0.66rem,0.84vw,0.78rem); letter-spacing:0.22em; color:var(--primary); }
+.vC-label { font-family:var(--font-mono); font-size:clamp(0.8rem,1.02vw,0.98rem); letter-spacing:0.14em; text-transform:uppercase; color:var(--primary-bright); }
+.vC-claim { font-weight:600; font-size:clamp(0.92rem,1.24vw,1.14rem); color:var(--text); line-height:1.34; letter-spacing:-0.012em; }
+.vC-claim .hot { color:var(--tertiary-bright); }
+
+.p9-loop { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:clamp(0.5rem,1.1vw,0.9rem); padding:clamp(0.7rem,1.5vh,1.1rem) clamp(0.9rem,2vw,1.6rem); background:rgba(99,235,251,0.06); border:1px solid rgba(99,235,251,0.22); border-radius:var(--radius-md); }
+.p9-loop-pre { font-family:var(--font-mono); font-size:clamp(0.62rem,0.8vw,0.74rem); letter-spacing:0.16em; text-transform:uppercase; color:var(--text-muted); margin-right:0.4rem; }
+.p9-loop-step { font-family:var(--font-display); font-weight:600; font-size:clamp(0.95rem,1.35vw,1.25rem); color:var(--text); letter-spacing:-0.015em; }
+.p9-loop-step-repeat { color:var(--primary-bright); }
+.p9-loop-arrow { font-family:var(--font-mono); font-size:clamp(0.88rem,1.2vw,1.12rem); color:var(--primary); opacity:0.7; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="variant-tag">Version D · the three levers ARE the body</div>
+  <div class="frame">
+    <div class="slide">
+      <div class="slide-top">
+        <div class="eyebrow with-line">GTM</div>
+        <h2 class="t-display-md slide-headline">We enter beside the markets agents already trade — and <span class="em">seed both sides.</span></h2>
+      </div>
+
+      <div class="vC">
+        <div class="vC-steps">
+          <div class="vC-step">
+            <div class="vC-num">01</div>
+            <div class="vC-label">Land beside existing PM</div>
+            <div class="vC-claim">Start in <span class="hot">sports &amp; politics</span> — traders bring the first requests, and that demand pulls providers in.</div>
+          </div>
+          <div class="vC-step">
+            <div class="vC-num">02</div>
+            <div class="vC-label">Make the first buy safe</div>
+            <div class="vC-claim">Source boundaries, delivery receipts, and dispute history let buyers commit and reliable providers win repeat demand.</div>
+          </div>
+          <div class="vC-step">
+            <div class="vC-num">03</div>
+            <div class="vC-label">Pull supply in</div>
+            <div class="vC-claim">Creators &amp; analysts bring their audiences through coverage — then become the providers behind new requests.</div>
+          </div>
+        </div>
+
+        <div class="p9-loop">
+          <span class="p9-loop-pre">every lever feeds one loop</span>
+          <span class="p9-loop-step">Request</span><span class="p9-loop-arrow">→</span>
+          <span class="p9-loop-step">Deliver</span><span class="p9-loop-arrow">→</span>
+          <span class="p9-loop-step">Pay</span><span class="p9-loop-arrow">→</span>
+          <span class="p9-loop-step">Prove</span><span class="p9-loop-arrow">→</span>
+          <span class="p9-loop-step p9-loop-step-repeat">Repeat</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="variant-note">
+    Body = three real GTM levers (no overlap with P6/P7/P8): <b>land demand-first beside existing PM → de-risk the first purchase with trust → pull supply in via subscription</b>. Dropped the redundant "one paid call" beat and the empty "it generalizes" beat. Loop strip kept only as the through-line all three feed.<br><br>
+    Headline alts: <b>"We enter beside the markets agents already trade — and seed both sides."</b> · <b>"To enter, we land demand-first and make the first purchase safe."</b> · <b>"We seed one prediction-market wedge, both sides at once."</b><br><br>
+    Open Qs for you: (1) keep the bottom loop strip, or drop it as well? (2) is "subscription / creators" the right 3rd lever, or swap for the sports+politics beachhead split?
+  </div>
+</div>
+</body>
+</html>
