@@ -282,7 +282,7 @@ body::after {
 /* ==========================================================
    P2 — SURVIVAL → PM EARNING
    ========================================================== */
-.slide.p2 { justify-content: center; gap: clamp(1rem, 3vh, 2rem); }
+.slide.p2 { justify-content: center; gap: clamp(1.2rem, 3.2vh, 2.2rem); padding-bottom: clamp(2.5rem, 7vh, 5rem); }
 .p2-content {
   display: flex; flex-direction: column;
   gap: clamp(1.4rem, 3.6vh, 2.8rem);
@@ -297,7 +297,7 @@ body::after {
   line-height: 1.08;
   letter-spacing: -0.025em;
   color: var(--text);
-  max-width: 28ch;
+  max-width: min(44ch, 92vw);
 }
 .p2-hero .em {
   color: var(--primary-bright);
@@ -422,14 +422,22 @@ body::after {
   display: flex; flex-direction: column; justify-content: space-between;
   gap: clamp(0.7rem, 1.6vh, 1.05rem);
 }
-.p2-proof-col--viz { align-items: center; text-align: center; }
+.p2-proof-col--viz { text-align: center; }
+.p2-viz-row {
+  display: flex; flex-direction: row; align-items: center;
+  justify-content: flex-start; text-align: left;
+  gap: clamp(1.1rem, 2.2vw, 2rem);
+}
+.p2-viz-row .p2-donut-wrap { flex: 0 0 auto; }
+.p2-viz-row .p2-proof-col-cap { flex: 1; min-width: 0; font-size: clamp(0.92rem, 1.1vw, 1.02rem); }
+.p2-proof-col-cap .hl { color: var(--text); font-weight: 600; }
 .p2-proof-col--text { align-items: center; text-align: center; }
 .p2-proof-col--text .p2-cap-list { text-align: left; }
 .p2-proof-col-label {
   font-family: var(--font-mono);
-  font-size: clamp(0.58rem, 0.7vw, 0.66rem);
+  font-size: clamp(0.9rem, 1.15vw, 1.08rem);
   font-weight: 600;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--primary);
 }
@@ -441,7 +449,7 @@ body::after {
   color: var(--text-variant);
   max-width: 30ch;
 }
-.p2-proof-col--viz .p2-proof-col-cap { max-width: 24ch; }
+.p2-proof-col--viz .p2-proof-col-cap { max-width: 30ch; }
 .p2-proof-col-cap .em { color: var(--primary-bright); font-weight: 600; }
 
 /* Proof 1 — automation-share donut */
@@ -495,8 +503,8 @@ body::after {
 .p2-cap-list li {
   position: relative;
   padding-left: clamp(1.5rem, 2vw, 1.85rem);
-  font-family: var(--font-display);
-  font-size: clamp(1rem, 1.3vw, 1.2rem);
+  font-family: var(--font-mono);
+  font-size: clamp(0.92rem, 1.1vw, 1.02rem);
   line-height: 1.25;
   letter-spacing: -0.005em;
   color: var(--text);
@@ -1059,6 +1067,7 @@ body::after {
   gap: clamp(1.4rem, 3vw, 3rem);
   flex: 1;
   align-content: center;
+  align-items: center;
   padding-top: clamp(0.6rem, 1.2vw, 1.2rem);
   min-height: 0;
 }
@@ -1081,7 +1090,7 @@ body::after {
 }
 .p_market-chart svg {
   width: 100%;
-  height: clamp(120px, 22vh, 200px);
+  height: clamp(130px, 21vh, 190px);
   display: block;
   overflow: visible;
 }
@@ -1095,6 +1104,17 @@ body::after {
   stroke-dasharray: 600;
   stroke-dashoffset: 600;
   animation: p_market-draw 1.6s var(--ease) 0.5s forwards;
+}
+.p_market-chart-line--proj {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 5 4.5;
+  opacity: 0;
+  filter: drop-shadow(0 0 8px var(--primary-glow));
+  animation: p_market-fade 0.6s var(--ease) 2.0s forwards;
 }
 .p_market-chart-fill {
   fill: url(#p_market_grad);
@@ -1112,6 +1132,14 @@ body::after {
 .p_market-chart-dot:nth-of-type(1) { animation-delay: 0.7s; }
 .p_market-chart-dot:nth-of-type(2) { animation-delay: 1.2s; }
 .p_market-chart-dot:nth-of-type(3) { animation-delay: 1.7s; }
+.p_market-chart-dot:nth-of-type(4) { animation-delay: 2.2s; }
+.p_market-chart-dot--proj { fill: var(--primary); }
+.p_market-chart-label--proj .yr { color: var(--primary-bright); opacity: 0.9; }
+.p_market-chart-label--proj .val { color: var(--primary-bright); }
+.p_market-chart-label--proj {
+  transform: translateY(-0.08rem);
+  text-shadow: 0 0 14px var(--primary-glow);
+}
 .p_market-chart-labels {
   display: flex; justify-content: space-between;
   margin-top: 0.55rem;
@@ -1125,7 +1153,7 @@ body::after {
 .p_market-chart-callout {
   position: absolute;
   top: clamp(0.6rem, 1vw, 0.95rem);
-  right: clamp(0.7rem, 1vw, 1rem);
+  left: clamp(0.7rem, 1vw, 1rem);
   font-family: var(--font-mono);
   font-size: clamp(0.7rem, 0.92vw, 0.86rem);
   color: var(--tertiary-bright);
@@ -1159,7 +1187,7 @@ body::after {
 .p_market-tam-num {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(2.8rem, 5.4vw, 4.8rem);
+  font-size: clamp(2.3rem, 4.4vw, 3.8rem);
   letter-spacing: -0.05em;
   line-height: 0.86;
   color: var(--primary-bright);
@@ -1188,6 +1216,126 @@ body::after {
 .p_market-eq .eq-row:last-child { border-bottom: 0; padding-bottom: 0; }
 .p_market-eq .val { color: var(--text-variant); font-weight: 600; white-space: nowrap; }
 .p_market-eq .val.hi { color: var(--primary-bright); font-size: 1.12em; }
+.p_market-eq .eq-row--fee {
+  margin-top: clamp(0.15rem, 0.35vh, 0.25rem);
+  padding-top: clamp(0.5rem, 0.85vh, 0.65rem);
+  border-top: 1px dashed rgba(99,235,251,0.18);
+}
+.p_market-eq .eq-row--fee .val {
+  color: var(--primary-bright);
+  font-size: 1.12em;
+  text-shadow: 0 0 14px var(--primary-glow);
+}
+.p_market-base-card {
+  padding-block: clamp(0.8rem, 1.3vw, 1.05rem);
+  overflow: visible;
+}
+.p_market-base-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 1rem;
+  font-family: var(--font-mono);
+}
+.p_market-base-row .s {
+  color: var(--text-muted);
+  font-size: clamp(0.78rem, 0.98vw, 0.92rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.p_market-base-row .v {
+  color: var(--primary-bright);
+  font-weight: 700;
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+  white-space: nowrap;
+  text-shadow: 0 0 18px var(--primary-glow);
+}
+.p_market-path-num {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.65rem, 2.9vw, 2.45rem);
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+  color: var(--primary-bright);
+  text-shadow: 0 0 22px var(--primary-glow);
+}
+.p_market-path-card {
+  min-height: clamp(9.4rem, 21vh, 10.8rem);
+  justify-content: center;
+  gap: clamp(0.75rem, 1.3vw, 1rem);
+}
+.p_market-path-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.p_market-fee-chip {
+  flex: 0 0 auto;
+  font-family: var(--font-mono);
+  font-size: clamp(0.64rem, 0.74vw, 0.7rem);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--primary-bright);
+  padding: 0.28rem 0.55rem;
+  border: 1px solid rgba(99,235,251,0.25);
+  border-radius: 999px;
+  background: rgba(99,235,251,0.06);
+  box-shadow: 0 0 14px rgba(99,235,251,0.12);
+}
+.p_market-path-equation {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(8.8rem, auto);
+  gap: clamp(0.65rem, 1.1vw, 0.95rem);
+  align-items: baseline;
+  font-family: var(--font-mono);
+}
+.p_market-path-factor {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(0.35rem, 0.7vw, 0.55rem);
+  min-width: 0;
+  color: var(--text-variant);
+  white-space: nowrap;
+}
+.p_market-path-factor .base,
+.p_market-path-factor .share {
+  font-weight: 700;
+  color: var(--text);
+  font-size: clamp(0.86rem, 1.05vw, 1rem);
+}
+.p_market-path-factor .op,
+.p_market-path-equals {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.p_market-path-result {
+  justify-self: end;
+  color: var(--primary-bright);
+  font-family: var(--font-display);
+  font-weight: 650;
+  font-size: clamp(1.65rem, 2.75vw, 2.35rem);
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+  white-space: nowrap;
+  text-shadow: 0 0 22px var(--primary-glow);
+}
+.p_market-path-result .u {
+  color: var(--text-variant);
+  font-size: 0.38em;
+  font-weight: 400;
+  letter-spacing: 0;
+  margin-left: 0.12em;
+}
+.p_market-path-caption {
+  font-family: var(--font-mono);
+  font-size: clamp(0.78rem, 0.94vw, 0.88rem);
+  letter-spacing: 0.02em;
+  color: var(--text-variant);
+  padding-top: clamp(0.5rem, 0.9vh, 0.7rem);
+  border-top: 1px dashed rgba(99,235,251,0.18);
+}
 .p_market-replace {
   font-family: var(--font-mono);
   font-size: clamp(0.62rem, 0.75vw, 0.72rem);
@@ -1271,14 +1419,14 @@ body::after {
   font-size: 1.15em;
 }
 .p_market-fee-deriv .u { color: var(--text-variant); font-size: 0.75em; font-weight: 400; margin-left: 0.1em; }
-/* right column — bottom-up GMV card + take-rate card */
+/* right column — information TAM + execution-linked TAM */
 .p_market-right {
   display: flex; flex-direction: column;
-  justify-content: stretch;
+  justify-content: flex-start;
   gap: clamp(0.8rem, 1.4vw, 1.2rem);
   min-height: 0;
 }
-.p_market-right .p_market-card { flex: 1; justify-content: center; }
+.p_market-right .p_market-card { flex: 0 0 auto; }
 .p_market-card {
   position: relative;
   display: flex; flex-direction: column;
@@ -1324,14 +1472,6 @@ body::after {
 .p_market-bu .v.hi { font-size: 1.32em; }
 .p_market-bu .v .u { color: var(--text-variant); font-size: 0.66em; font-weight: 400; margin-left: 0.1em; }
 .p_market-card--fee .p_market-fee-num { font-size: clamp(2.1rem, 4.2vw, 3.4rem); }
-.p_market-take {
-  margin-top: clamp(0.6rem, 1.4vh, 1.1rem);
-  font-family: var(--font-mono);
-  font-size: clamp(0.72rem, 0.9vw, 0.85rem);
-  letter-spacing: 0.04em;
-  color: var(--text-muted);
-}
-.p_market-take .em { color: var(--primary); font-weight: 600; }
 .p_market-bu-note {
   margin-top: 0.2rem;
   padding-top: clamp(0.55rem, 1vw, 0.85rem);
@@ -1343,14 +1483,14 @@ body::after {
 }
 .p_market-source {
   position: absolute;
-  bottom: clamp(1rem, 2.5vh, 2rem);
-  right: clamp(1.4rem, 4vw, 3.5rem);
+  bottom: clamp(0.75rem, 1.8vh, 1.15rem);
+  right: clamp(3.2rem, 4vw, 3.5rem);
   font-family: var(--font-mono);
-  font-size: clamp(0.5rem, 0.6vw, 0.58rem);
+  font-size: clamp(0.46rem, 0.55vw, 0.52rem);
   color: var(--text-muted);
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  max-width: 56ch;
+  max-width: 72ch;
   text-align: right;
   opacity: 0.6;
   line-height: 1.5;
@@ -1666,7 +1806,12 @@ body::after {
    P9 — GTM (cold-start motion)
    4-step acquisition: seed both sides -> provide liquidity -> earn repeat -> distribute -> open.
    ========================================================== */
-.slide.p9 { gap: clamp(1.1rem, 2.6vh, 2rem); justify-content: center; }
+.slide.p9 { gap: clamp(1.5rem, 3.5vh, 2.6rem); justify-content: flex-start; }
+.p9-lower {
+  flex: 1; min-height: 0; width: 100%;
+  display: flex; flex-direction: column; justify-content: center;
+  gap: clamp(1.8rem, 4vh, 3.2rem);
+}
 .p9-headline { max-width: 40ch; }
 .p9-headline .em { color: var(--primary-bright); }
 
@@ -1675,7 +1820,7 @@ body::after {
   display: flex;
   align-items: stretch;
   justify-content: center;
-  gap: clamp(0.4rem, 0.9vw, 0.9rem);
+  gap: clamp(0.8rem, 1.5vw, 1.5rem);
   width: 100%;
   max-width: min(96vw, 1300px);
   margin: 0 auto;
@@ -1685,9 +1830,9 @@ body::after {
   min-width: 0;
   position: relative;
   display: flex; flex-direction: column; justify-content: center;
-  gap: clamp(0.45rem, 1vh, 0.8rem);
-  padding: clamp(1.4rem, 3.2vh, 2.2rem) clamp(1rem, 1.5vw, 1.4rem);
-  min-height: clamp(7rem, 14vh, 9.5rem);
+  gap: clamp(0.55rem, 1.3vh, 1rem);
+  padding: clamp(1.8rem, 4.2vh, 2.9rem) clamp(1.2rem, 1.8vw, 1.7rem);
+  min-height: clamp(8.5rem, 18vh, 12rem);
   background: var(--bg-elev-high);
   border: 1px solid rgba(99,235,251,0.14);
   border-radius: var(--radius-md);
@@ -1770,18 +1915,27 @@ body::after {
 }
 /* beachhead rationale — quiet footnote, clearly subordinate */
 .p9-why {
-  display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
-  gap: clamp(0.4rem, 0.9vw, 0.7rem);
-  width: 100%; max-width: min(96vw, 1300px); margin: 0 auto;
+  display: flex; align-items: center; justify-content: flex-start; flex-wrap: wrap;
+  gap: clamp(0.7rem, 1.4vw, 1.2rem);
+  width: 100%; margin: clamp(0.9rem, 2.5vh, 1.8rem) 0 0;
   font-family: var(--font-mono);
-  font-size: clamp(0.64rem, 0.8vw, 0.74rem);
-  letter-spacing: 0.04em;
-  color: var(--text-muted);
-  opacity: 0.82;
 }
-.p9-why-key { text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-muted); opacity: 0.75; }
-.p9-why-mkt { color: var(--text-variant); font-weight: 600; }
-.p9-why-sep { opacity: 0.4; }
+.p9-why-key {
+  text-transform: uppercase; letter-spacing: 0.2em;
+  font-size: clamp(0.66rem, 0.82vw, 0.78rem);
+  color: var(--primary); font-weight: 600;
+}
+.p9-why-chip {
+  display: flex; align-items: baseline; gap: 0.55rem;
+  font-size: clamp(0.78rem, 0.95vw, 0.9rem);
+  letter-spacing: 0.01em;
+  color: var(--text-variant);
+  padding: clamp(0.5rem, 1vh, 0.72rem) clamp(0.9rem, 1.5vw, 1.25rem);
+  border: 1px solid rgba(99,235,251,0.2);
+  border-radius: var(--radius-sm);
+  background: rgba(99,235,251,0.035);
+}
+.p9-why-mkt { color: var(--primary-bright); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
 @media (max-width: 880px) {
   .p9-motion { flex-direction: column; align-items: stretch; gap: 0.6rem; }
   .p9-step-arrow { transform: rotate(90deg); }
@@ -1790,37 +1944,48 @@ body::after {
 /* ==========================================================
    P10 — CLOSE
    ========================================================== */
-.slide.p10 { gap: clamp(0.8rem, 1.8vh, 1.4rem); justify-content: center; }
+.slide.p10 {
+  gap: clamp(0.75rem, 1.55vh, 1.25rem);
+  justify-content: center;
+  padding-top: clamp(1.4rem, 3vw, 2.5rem);
+  padding-bottom: clamp(1.4rem, 3vw, 2.5rem);
+}
 .p10-headline {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(2rem, 4.5vw, 3.6rem);
-  line-height: 1.1;
-  letter-spacing: -0.03em;
-  max-width: 22ch;
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  max-width: 34ch;
 }
 .p10-headline .em {
   background: linear-gradient(180deg, var(--text) 0%, var(--primary-bright) 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   background-clip: text;
-  filter: drop-shadow(0 0 24px var(--primary-glow));
+  filter: drop-shadow(0 0 14px var(--primary-glow));
 }
 .p10-cols {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.75rem, 1.45vh, 1.15rem);
+  margin-top: clamp(0.35rem, 0.8vh, 0.65rem);
+}
+.p10-row2 {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: clamp(0.8rem, 1.6vw, 1.4rem);
-  margin-top: clamp(0.5rem, 1vh, 0.8rem);
 }
 .p10-col {
   background: var(--bg-elev-high);
   border-radius: var(--radius-md);
-  padding: clamp(1rem, 1.6vw, 1.4rem);
+  padding: clamp(0.8rem, 1.25vw, 1.08rem);
   position: relative; overflow: hidden;
   display: flex; flex-direction: column;
-  gap: clamp(0.4rem, 0.8vh, 0.65rem);
+  gap: clamp(0.32rem, 0.65vh, 0.52rem);
   box-shadow: 0 0 0 1px rgba(99,235,251,0.04) inset, 0 24px 56px rgba(0,0,0,0.35);
-  min-height: clamp(11rem, 26vh, 16rem);
+  min-height: 0;
 }
+.p10-col--team { padding-block: clamp(0.85rem, 1.35vh, 1.05rem); }
 .p10-col::before {
   content: ''; position: absolute; left: 1.2rem; top: 0;
   height: 2px; width: clamp(36px, 5vw, 60px);
@@ -1836,13 +2001,13 @@ body::after {
 .p10-col-list {
   list-style: none;
   display: flex; flex-direction: column;
-  gap: clamp(0.4rem, 0.7vh, 0.55rem);
+  gap: clamp(0.3rem, 0.58vh, 0.45rem);
 }
 .p10-col-list li {
   font-family: var(--font-display);
-  font-size: clamp(0.85rem, 1.05vw, 0.98rem);
+  font-size: clamp(0.86rem, 1.05vw, 1rem);
   color: var(--text);
-  line-height: 1.4;
+  line-height: 1.34;
   padding-left: 0.9rem; position: relative;
 }
 .p10-col-list li::before {
@@ -1855,16 +2020,87 @@ body::after {
   font-style: italic;
 }
 .p10-col-list li.placeholder::before { background: var(--text-muted); opacity: 0.5; }
+.p10-team-people {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(0.85rem, 1.65vw, 1.4rem);
+  margin-top: clamp(0.35rem, 0.75vh, 0.55rem);
+}
+.p10-person {
+  display: flex; align-items: flex-start;
+  gap: clamp(0.75rem, 1vw, 1rem);
+  min-width: 0;
+}
+.p10-person-avatar {
+  flex: 0 0 auto;
+  width: clamp(7.4rem, 11.5vw, 12rem);
+  height: clamp(7.4rem, 11.5vw, 12rem);
+  border-radius: 0.5rem;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  filter: none;
+  border: 1.5px solid color-mix(in srgb, var(--primary) 55%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 12%, transparent), 0 6px 18px rgba(0,0,0,0.42);
+  background: var(--bg-elev-high);
+}
+.p10-person-avatar.is-empty {
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--primary) 38%, transparent);
+  background: radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--primary) 10%, transparent), transparent 70%), var(--bg-elev-high);
+  box-shadow: none;
+  filter: none;
+}
+.p10-person-info {
+  display: flex; flex-direction: column; gap: 0.16rem; min-width: 0;
+  padding-top: 0.05rem;
+}
+.p10-person-name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.05rem, 1.32vw, 1.25rem);
+  color: var(--text);
+  line-height: 1.25;
+}
+.p10-person-role {
+  font-family: var(--font-mono);
+  font-size: clamp(0.6rem, 0.76vw, 0.7rem);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+.p10-person-proof {
+  font-family: var(--font-display);
+  font-size: clamp(0.78rem, 0.95vw, 0.9rem);
+  color: var(--text-variant);
+  line-height: 1.35;
+}
+.p10-person-points {
+  list-style: none; margin: 0.16rem 0 0; padding: 0;
+  display: flex; flex-direction: column; gap: clamp(0.14rem, 0.3vh, 0.24rem);
+}
+.p10-person-points li {
+  position: relative; padding-left: 0.85rem;
+  font-family: var(--font-display);
+  font-size: clamp(0.76rem, 0.92vw, 0.88rem);
+  color: var(--text-variant); line-height: 1.28;
+}
+.p10-person-points li::before {
+  content: ''; position: absolute; left: 0; top: 0.52em;
+  width: 4px; height: 4px; border-radius: 50%; background: var(--primary);
+}
+.p10-person.placeholder .p10-person-name,
+.p10-person.placeholder .p10-person-proof { color: var(--text-muted); font-style: italic; }
 .p10-vision {
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: clamp(1rem, 1.4vw, 1.22rem);
+  font-size: clamp(1rem, 1.35vw, 1.2rem);
   color: var(--text);
   text-align: center;
-  line-height: 1.4;
+  line-height: 1.32;
   max-width: 60ch;
   margin: 0 auto;
-  padding-top: clamp(0.4rem, 0.8vh, 0.7rem);
+  padding-top: clamp(0.45rem, 0.95vh, 0.75rem);
 }
 .p10-vision .em { color: var(--primary-bright); }
 
@@ -1875,7 +2111,6 @@ body::after {
 <div class="grain"></div>
 <div class="progress-bar" id="progressBar"></div>
 <nav class="nav-dots" id="navDots" aria-label="Slide navigation"></nav>
-<div class="keyboard-hint" id="kbHint">← → · Space</div>
 
 
 <!-- ==================== P1 — COVER ==================== -->
@@ -1899,19 +2134,20 @@ body::after {
     <div class="p2-head">
       <div class="eyebrow with-line reveal">WHY NOW</div>
       <h2 class="p2-hero reveal">
-        Agents will dominate trading. <span class="em">Prediction markets are where they start.</span>
+        Agents will dominate trading.<br><span class="em">Prediction markets are where they start.</span>
       </h2>
     </div>
 
+    <div class="p2-proofs-tag p2-proofs-tag--top">Live proof</div>
     <div class="p2-proofs reveal" aria-label="Live proof">
-      <div class="p2-proofs-tag">Live proof</div>
       <div class="p2-proofs-grid">
 
         <!-- Proof 1 · Volume — demand, shown as a chart -->
         <figure class="p2-proof-col p2-proof-col--viz">
           <div class="p2-proof-col-label">Volume · automation share</div>
+          <div class="p2-viz-row">
           <div class="p2-donut-wrap">
-            <svg class="p2-donut" viewBox="0 0 240 240" role="img" aria-label="Roughly 3 in 5 trades in fast markets are automation-driven">
+            <svg class="p2-donut" viewBox="0 0 240 240" role="img" aria-label="Roughly 3 in 5 of nominal volume in fast markets is automation-driven">
               <defs>
                 <linearGradient id="p2_donut_grad" x1="0" y1="0" x2="1" y2="1">
                   <stop offset="0%" stop-color="#63ebfb"/>
@@ -1923,15 +2159,16 @@ body::after {
             </svg>
             <div class="p2-viz-center">
               <div class="p2-viz-frac">3<span class="p2-viz-frac-sep">/</span>5</div>
-              <div class="p2-viz-frac-cap">trades</div>
+              <div class="p2-viz-frac-cap">volume</div>
             </div>
           </div>
-          <figcaption class="p2-proof-col-cap">fast markets are <span class="em">automation-driven</span></figcaption>
+          <figcaption class="p2-proof-col-cap"><span class="em">~55–62%</span> of <span class="hl">fast-market</span> volume is already automated</figcaption>
+          </div>
         </figure>
 
         <!-- Proof 2 · Capability — supply, shown as a shipped checklist -->
         <div class="p2-proof-col p2-proof-col--text">
-          <div class="p2-proof-col-label">Capability · rails shipped</div>
+          <div class="p2-proof-col-label">Infrastructure · rails shipped</div>
           <ul class="p2-cap-list">
             <li>Agent toolkits</li>
             <li>Market APIs</li>
@@ -2098,7 +2335,7 @@ body::after {
       Accessura turns incoming signals into <span class="em">tradable Packs</span> agents can call, price, and settle.
     </h2>
     <div class="p6-bridge reveal">
-      A <span class="em">Pack</span> bundles all three — the market unit for one signal or stream.
+      A <span class="em">Pack</span> is one live stream of signals.
     </div>
   </div>
 
@@ -2113,7 +2350,7 @@ body::after {
     </div>
     <div class="p6-rail">
       <div class="p6-rail-label">Bid/ask signal market</div>
-      <div class="p6-rail-claim">Each signal clears through visible bids and asks.</div>
+      <div class="p6-rail-claim">Each Pack is priced by a live market — real bids and asks, not a list price.</div>
       <div class="p6-rail-impl">Per-pack orderbook</div>
     </div>
     <div class="p6-rail">
@@ -2135,10 +2372,10 @@ body::after {
       One missing signal, <span class="em">one paid call.</span>
     </h2>
   </div>
-  <iframe src="accessura_p5_transaction_motion_story_v3.html" class="p5-iframe" title="One trade motion story" allow="autoplay" loading="lazy"></iframe>
+  <iframe src="accessura_p5_market_target_preview.html" class="p5-iframe" title="One trade motion story with target market" allow="autoplay" loading="lazy"></iframe>
 </section>
 
-<!-- ==================== P8 — THE MARKET (data layer for PM trading) ==================== -->
+<!-- ==================== P8 — THE MARKET (data layer for prediction-market trading) ==================== -->
 <section class="slide p_pilot" data-slide="8" aria-label="The market — data layer for prediction-market trading">
   <div class="slide-top">
     <div class="eyebrow with-line reveal">MARKET</div>
@@ -2148,64 +2385,74 @@ body::after {
   </div>
 
   <div class="p_market-body reveal">
-    <!-- LEFT: PM volume growth chart -->
+    <!-- LEFT: shared 2030 volume base + prediction-market volume growth chart -->
     <div class="p_market-hero">
-      <div class="p_market-chart-head">
-        <div class="p_market-card-label">Prediction-market volume</div>
-        <div class="p_market-chart-title">A trading market big enough to need its own information layer.</div>
+      <div class="p_market-card p_market-base-card">
+        <div class="p_market-card-label">2030 projection output</div>
+        <div class="p_market-base-row">
+          <span class="s">shared prediction-market volume base</span>
+          <span class="v">$500B–1T<span class="p_market-tam-unit">/yr</span></span>
+        </div>
       </div>
       <div class="p_market-chart">
-        <svg viewBox="0 0 240 100" preserveAspectRatio="none" aria-label="PM volume trajectory">
+        <svg viewBox="0 0 240 100" preserveAspectRatio="none" aria-label="Prediction-market volume trajectory">
           <defs>
             <linearGradient id="p_market_grad" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stop-color="#63ebfb" stop-opacity="0.45"/>
               <stop offset="100%" stop-color="#63ebfb" stop-opacity="0"/>
             </linearGradient>
           </defs>
-          <path class="p_market-chart-fill" d="M 20 82 L 120 35 L 220 12 L 220 95 L 20 95 Z"/>
-          <path class="p_market-chart-line" d="M 20 82 L 120 35 L 220 12"/>
-          <circle class="p_market-chart-dot" cx="20" cy="82" r="3.5"/>
-          <circle class="p_market-chart-dot" cx="120" cy="35" r="3.5"/>
-          <circle class="p_market-chart-dot" cx="220" cy="12" r="3.5"/>
+          <path class="p_market-chart-fill" d="M 20 88 L 87 84 L 154 62 L 221 15 L 221 95 L 20 95 Z"/>
+          <path class="p_market-chart-line" d="M 20 88 L 87 84 L 154 62"/>
+          <path class="p_market-chart-line--proj" d="M 154 62 L 221 15"/>
+          <circle class="p_market-chart-dot" cx="20" cy="88" r="3.5"/>
+          <circle class="p_market-chart-dot" cx="87" cy="84" r="3.5"/>
+          <circle class="p_market-chart-dot" cx="154" cy="62" r="3.5"/>
+          <circle class="p_market-chart-dot p_market-chart-dot--proj" cx="221" cy="15" r="3.5"/>
         </svg>
         <div class="p_market-chart-labels">
           <span class="p_market-chart-label"><span class="yr">2024</span><span class="val">$9B</span></span>
-          <span class="p_market-chart-label"><span class="yr">2025</span><span class="val">$40B+</span></span>
-          <span class="p_market-chart-label"><span class="yr">2026e</span><span class="val">$80–120B</span></span>
+          <span class="p_market-chart-label"><span class="yr">2025</span><span class="val">$40–51B</span></span>
+          <span class="p_market-chart-label"><span class="yr">2026e</span><span class="val">$240–300B</span></span>
+          <span class="p_market-chart-label p_market-chart-label--proj"><span class="yr">2030</span><span class="val">$500B–1T</span></span>
         </div>
-        <div class="p_market-chart-callout">4× in one year</div>
+        <div class="p_market-chart-callout">~110% CAGR</div>
       </div>
 
 
     </div>
 
-    <!-- RIGHT: top-down sizing + bottom-up sanity check -->
+    <!-- RIGHT: two monetizable paths from the shared 2030 volume base -->
     <div class="p_market-right">
-      <div class="p_market-card p_market-card--tam">
-        <div class="p_market-card-label">Information market · top-down</div>
-        <div class="p_market-tam-num">~$1.2B<span class="p_market-tam-unit">/yr</span></div>
-        <div class="p_market-eq">
-          <div class="eq-row"><span>2026e PM volume</span><span class="val">$80–120B</span></div>
-          <div class="eq-row"><span>signal / tool / info spend</span><span class="val">0.5–1%</span></div>
-          <div class="eq-row"><span>information-layer GMV</span><span class="val hi">~$1.2B/yr</span></div>
+      <div class="p_market-card p_market-path-card">
+        <div class="p_market-path-head">
+          <div class="p_market-card-label">Path 1 · information GMV</div>
+          <div class="p_market-fee-chip">scenario · 20 bps fee</div>
         </div>
+        <div class="p_market-path-equation">
+          <div class="p_market-path-factor"><span class="base">$500B–1T</span><span class="op">×</span><span class="share">0.25–1%</span></div>
+          <div class="p_market-path-equals">=</div>
+          <div class="p_market-path-result">$1.25–10B<span class="u">/yr</span></div>
+        </div>
+        <div class="p_market-path-caption">information spend share of prediction-market volume</div>
       </div>
-      <div class="p_market-card">
-        <div class="p_market-card-label">Bottom-up · sanity check</div>
-        <div class="p_market-card-lead"><span class="b">$0.01</span> per paid call</div>
-        <ul class="p_market-bu">
-          <li><span class="s">100k agents × 100 calls/day</span><span class="op">≈</span><span class="v">$36M<span class="u">/yr</span></span></li>
-          <li><span class="s">10M agents × 100 calls/day</span><span class="op">≈</span><span class="v hi">$3.6B<span class="u">/yr</span></span></li>
-        </ul>
-        <div class="p_market-bu-note">Higher-frequency workflows push this further.</div>
+      <div class="p_market-card p_market-path-card">
+        <div class="p_market-path-head">
+          <div class="p_market-card-label">Path 2 · attributed execution volume</div>
+          <div class="p_market-fee-chip">scenario · ~10 bps fee</div>
+        </div>
+        <div class="p_market-path-equation">
+          <div class="p_market-path-factor"><span class="base">$500B–1T</span><span class="op">×</span><span class="share">5–20%</span></div>
+          <div class="p_market-path-equals">=</div>
+          <div class="p_market-path-result">$25–200B<span class="u">/yr</span></div>
+        </div>
+        <div class="p_market-path-caption">prediction-market trades routed after Accessura-sourced signals</div>
       </div>
     </div>
   </div>
 
-  <div class="p_market-take reveal">Accessura takes <span class="em">0.25–1%</span> of cleared value, at settlement.</div>
-
   <div class="p_market-source">
-    Source · Kalshi / Polymarket / Pew / founder est.
+    Source · Kalshi / Polymarket actuals (Pew, KPMG) · Polymarket builder docs · 2030 base case (Bernstein)
   </div>
 
 </section>
@@ -2220,9 +2467,16 @@ body::after {
     </h2>
   </div>
 
+  <div class="p9-why reveal">
+    <span class="p9-why-key">Why here</span>
+    <div class="p9-why-chip"><span class="p9-why-mkt">Sports</span> live, stream-speed signal demand</div>
+    <div class="p9-why-chip"><span class="p9-why-mkt">Politics</span> large, liquid, constant repricing</div>
+  </div>
+
   <!-- V6 P9 body — cold-start acquisition motion (NOT the trade loop, which lives in P6/P7).
        Hero step = we provide the first liquidity (managed demand budget); framed as temporary
        bootstrap that retires once one repeatable buyer-provider loop self-sustains. -->
+  <div class="p9-lower">
   <div class="p9-motion reveal">
     <div class="p9-step">
       <div class="p9-step-num">01</div>
@@ -2248,11 +2502,6 @@ body::after {
     <span class="p9-second-text">Subscriptions — creators bring their existing audiences into the same loop.</span>
   </div>
 
-  <div class="p9-why reveal">
-    <span class="p9-why-key">Why here</span>
-    <span class="p9-why-item"><span class="p9-why-mkt">Sports</span> · live, stream-speed signal demand</span>
-    <span class="p9-why-sep">·</span>
-    <span class="p9-why-item"><span class="p9-why-mkt">Politics</span> · large, liquid, constant repricing</span>
   </div>
 
 </section>
@@ -2262,37 +2511,72 @@ body::after {
 <section class="slide p10" data-slide="10" aria-label="Team, ask, and vision">
   <div class="eyebrow with-line reveal">CLOSE</div>
   <h2 class="p10-headline reveal">
-    Accessura is an open protocol building the <span class="em">missing information market</span><br>
-    — agents buy the signals they need to trade prediction markets.
+    We've built it — <span class="em">now we raise to prove the first loop.</span>
   </h2>
   <div class="p10-cols reveal">
-    <div class="p10-col">
+    <div class="p10-col p10-col--team">
       <div class="p10-col-label">Team</div>
-      <ul class="p10-col-list">
-        <li class="placeholder">[Founder / team proof point]</li>
-        <li class="placeholder">[Market · protocol · AI-agent · or product proof point]</li>
-        <li class="placeholder">[Relevant execution proof point]</li>
-      </ul>
+      <div class="p10-team-people">
+        <div class="p10-person">
+          <img class="p10-person-avatar" src="assets/team-jiaxin.png" alt="" aria-hidden="true">
+          <div class="p10-person-info">
+            <div class="p10-person-name">Jiaxin Cheng</div>
+            <div class="p10-person-role">Founder &amp; CEO</div>
+            <ul class="p10-person-points">
+              <li>80%+ win rate · NBA prediction markets</li>
+              <li>Finance &amp; investment-research background</li>
+              <li>Owns thesis → product → GTM</li>
+            </ul>
+          </div>
+        </div>
+        <div class="p10-person">
+          <img class="p10-person-avatar" src="assets/team-yiyang.png" alt="" aria-hidden="true">
+          <div class="p10-person-info">
+            <div class="p10-person-name">Yiyang Jiang</div>
+            <div class="p10-person-role">Co-founder · Pricing</div>
+            <ul class="p10-person-points">
+              <li>Incoming Math PhD · UC Berkeley</li>
+              <li>Ex-Microsoft SWE</li>
+              <li>Math, stats &amp; optimization</li>
+            </ul>
+          </div>
+        </div>
+        <div class="p10-person">
+          <img class="p10-person-avatar" src="assets/team-peiyu.png" alt="" aria-hidden="true">
+          <div class="p10-person-info">
+            <div class="p10-person-name">Peiyu Zang</div>
+            <div class="p10-person-role">Co-founder · Agents &amp; Protocol</div>
+            <ul class="p10-person-points">
+              <li>Lead architect · KernelGenBench (open source)</li>
+              <li>Beijing Academy of AI (BAAI)</li>
+              <li>LLM &amp; code-agent developer</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="p10-col">
-      <div class="p10-col-label">Current state</div>
-      <ul class="p10-col-list">
-        <li>Built end-to-end</li>
-        <li>Ready for pilot calls</li>
-        <li>No live traction yet</li>
-      </ul>
-    </div>
-    <div class="p10-col">
-      <div class="p10-col-label">Ask</div>
-      <ul class="p10-col-list">
-        <li class="placeholder">Capital — [round size]</li>
-        <li>Pilot buyers — PM trading teams (sports + politics)</li>
-        <li>Pilot producers — independent observers, beat reporters</li>
-      </ul>
+    <div class="p10-row2">
+      <div class="p10-col">
+        <div class="p10-col-label">Now → this raise</div>
+        <ul class="p10-col-list">
+          <li>Built end-to-end · pre-pilot, no live traction</li>
+          <li>Milestone — first self-sustaining loop in one sports community: paid requests repeat, providers fulfill</li>
+          <li>Proof — first real GMV · repeat buyer–provider pairs</li>
+        </ul>
+      </div>
+      <div class="p10-col">
+        <div class="p10-col-label">The ask</div>
+        <ul class="p10-col-list">
+          <li>A spot in EASY Residency S4 ($150K equity + $350K SAFE)</li>
+          <li>Binance’s playbook for building &amp; running a community</li>
+          <li>Intros to both sides of the market</li>
+          <li>x402 / stablecoin payments + BNB ecosystem reach</li>
+        </ul>
+      </div>
     </div>
   </div>
   <p class="p10-vision reveal">
-    In 18 months: <span class="em">the information market behind every prediction market.</span>
+    In 12 months: <span class="em">the information market behind every prediction market.</span>
   </p>
 </section>
 
@@ -2374,6 +2658,7 @@ class SlidePresentation {
     }, { passive: true });
   }
   fadeKbHintOnInteraction() {
+    if (!this.kbHint) return;
     const fade = () => { this.kbHint.classList.add('fade'); };
     window.addEventListener('keydown', fade, { once: true });
     window.addEventListener('wheel', fade, { once: true, passive: true });

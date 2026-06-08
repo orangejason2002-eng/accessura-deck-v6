@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WTP — v7 preview v2 (embedded, trimmed)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0b1220; --bg-elev-high:#19202e;
+  --text:#dce2f6; --text-variant:#bbc9cb; --text-muted:#869395;
+  --primary:#63ebfb; --primary-bright:#8af2ff; --primary-soft:rgba(99,235,251,0.16); --primary-glow:rgba(99,235,251,0.45);
+  --tertiary-bright:#ffab51;
+  --font-display:'Space Grotesk',sans-serif; --font-mono:'IBM Plex Mono',monospace;
+  --radius-md:1.25rem; --radius-sm:0.6rem;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--text); font-family:var(--font-display);
+  letter-spacing:-0.005em; padding:clamp(1.5rem,4vw,3.5rem);
+  background-image:
+    radial-gradient(ellipse 60% 50% at 80% 8%, rgba(99,235,251,0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 10% 92%, rgba(255,208,166,0.04) 0%, transparent 60%);
+  background-attachment:fixed;
+}
+.pv-wrap{ max-width:1180px; margin:0 auto; display:flex; flex-direction:column; gap:clamp(2rem,4.5vh,3.6rem); }
+.em{ color:var(--primary-bright); font-weight:600; }
+
+/* preview chrome */
+.pv-head{ display:flex; flex-direction:column; gap:0.6rem; padding-bottom:clamp(0.6rem,1.6vh,1.1rem); border-bottom:1px solid rgba(99,235,251,0.16); }
+.pv-head h1{ font-weight:600; font-size:clamp(1.4rem,2.6vw,2rem); letter-spacing:-0.02em; }
+.pv-head .sub{ font-family:var(--font-mono); font-size:0.8rem; letter-spacing:0.04em; color:var(--text-muted); line-height:1.7; }
+.pv-head .sub b{ color:var(--tertiary-bright); font-weight:600; }
+.pv-head .sub s{ color:var(--text-muted); opacity:0.7; }
+
+.pv-block{ display:flex; flex-direction:column; gap:clamp(0.9rem,2vh,1.4rem); }
+.pv-block-top{ display:flex; align-items:baseline; gap:0.9rem; flex-wrap:wrap; }
+.pv-num{ font-family:var(--font-mono); font-size:0.78rem; letter-spacing:0.2em; color:var(--primary); }
+.pv-block-top h2{ font-weight:600; font-size:clamp(1.1rem,1.7vw,1.45rem); letter-spacing:-0.015em; }
+.pv-where{ font-family:var(--font-mono); font-size:0.66rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-muted); padding:0.28em 0.7em; border:1px solid rgba(99,235,251,0.22); border-radius:999px; }
+.pv-note{ font-family:var(--font-mono); font-size:0.82rem; line-height:1.65; color:var(--text-muted); letter-spacing:0.01em; max-width:90ch; }
+.pv-note .k{ color:var(--primary); }
+.pv-stage{ background:#070e1c; border:1px solid rgba(99,235,251,0.12); border-radius:var(--radius-md); padding:clamp(1.6rem,3.4vw,3rem); position:relative; }
+.pv-stage::before{ content:'rendered in deck style'; position:absolute; top:0.7rem; right:1rem; font-family:var(--font-mono); font-size:0.56rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--text-muted); opacity:0.5; }
+
+/* the embedded addition — amber, tagged */
+.pv-add{ position:relative; margin:1.4rem auto 0; max-width:62ch; padding:0.85rem 1.1rem 0.85rem 1.3rem; border-left:3px solid var(--tertiary-bright); border-radius:0 var(--radius-sm) var(--radius-sm) 0; background:rgba(255,171,81,0.07); font-family:var(--font-display); font-weight:500; font-size:clamp(1rem,1.35vw,1.25rem); line-height:1.42; letter-spacing:-0.008em; color:var(--text); }
+.pv-add::before{ content:'+ add'; position:absolute; top:-0.7rem; left:1rem; font-family:var(--font-mono); font-size:0.56rem; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; color:var(--tertiary-bright); background:#070e1c; padding:0 0.5rem; }
+.pv-add .em{ color:var(--tertiary-bright); }
+.pv-add--opt{ border-left-style:dashed; }
+.pv-add--opt::before{ content:'optional'; }
+
+/* ---------- P4 mirror (lifted from v7) ---------- */
+.p4-eyebrow{ font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--primary); margin-bottom:0.6rem; }
+.p4-headline{ font-family:var(--font-display); font-weight:600; font-size:clamp(1.5rem,2.7vw,2.3rem); line-height:1.1; letter-spacing:-0.025em; max-width:48ch; margin-bottom:1.6rem; }
+.p4-headline .em{ background:linear-gradient(180deg,var(--text) 0%,var(--primary-bright) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.p4-mirror{ display:flex; align-items:center; justify-content:center; gap:0; width:100%; max-width:1080px; margin:0 auto; }
+.p4-pole{ flex:1 1 0; min-width:0; position:relative; display:flex; flex-direction:column; gap:1rem; padding:1.8rem 1.6rem; min-height:14rem; background:var(--bg-elev-high); border-radius:var(--radius-md); box-shadow:0 0 0 1px rgba(99,235,251,0.10) inset, 0 24px 60px rgba(0,0,0,0.4); overflow:hidden; }
+.p4-pole::before{ content:''; position:absolute; top:0; height:2px; width:72px; }
+.p4-pole--source::before{ left:1.6rem; background:linear-gradient(90deg,var(--text-muted),transparent); }
+.p4-pole--agent{ text-align:right; align-items:flex-end; }
+.p4-pole--agent::before{ right:1.6rem; background:linear-gradient(270deg,var(--primary-bright),transparent); }
+.p4-pole-side{ font-family:var(--font-mono); font-size:0.7rem; letter-spacing:0.26em; text-transform:uppercase; color:var(--text-muted); }
+.p4-pole-word{ font-family:var(--font-display); font-weight:700; font-size:clamp(1.8rem,3vw,2.8rem); line-height:1.02; letter-spacing:-0.015em; white-space:nowrap; color:var(--text-variant); }
+.p4-pole--agent .p4-pole-word{ color:var(--primary-bright); text-shadow:0 0 26px var(--primary-glow); }
+.p4-pole--agent .p4-pole-side{ color:var(--primary); }
+.p4-axes{ list-style:none; margin:auto 0 0; padding:0; display:flex; flex-direction:column; gap:0.85rem; }
+.p4-axes li{ font-family:var(--font-mono); font-size:0.92rem; line-height:1.3; letter-spacing:0.02em; color:var(--text-variant); }
+.p4-pole--agent .p4-axes li{ color:var(--text); }
+.p4-seam{ flex:0 0 auto; align-self:stretch; position:relative; width:clamp(92px,10vw,130px); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.9rem; }
+.p4-seam::before{ content:''; position:absolute; top:50%; left:8%; right:8%; border-top:1px dashed rgba(255,171,81,0.32); }
+.p4-seam-bar{ position:relative; z-index:1; width:18px; height:130px; border:1px solid rgba(255,171,81,0.55); background:repeating-linear-gradient(45deg,var(--tertiary-bright) 0 1.5px,transparent 1.5px 7px); border-radius:2px; }
+.p4-seam-label{ position:relative; z-index:1; font-family:var(--font-mono); font-size:0.66rem; letter-spacing:0.22em; text-transform:uppercase; text-align:center; line-height:1.4; color:var(--tertiary-bright); }
+
+/* ---------- P6 rails (lifted from v7) ---------- */
+.p6-eyebrow{ font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--primary); margin-bottom:0.6rem; }
+.p6-headline{ font-family:var(--font-display); font-weight:600; font-size:clamp(1.4rem,2.5vw,2.1rem); line-height:1.12; letter-spacing:-0.022em; max-width:48ch; }
+.p6-headline .em{ color:var(--primary-bright); }
+.p6-bridge{ text-align:left; font-family:var(--font-display); font-weight:400; font-size:clamp(1rem,1.4vw,1.25rem); color:var(--text-variant); padding:0.9rem 0 1.2rem; }
+.p6-bridge .em{ color:var(--primary-bright); font-weight:500; }
+.p6-rails{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1.1rem; width:100%; margin:0 auto; }
+.p6-rail{ position:relative; background:var(--bg-elev-high); border-radius:var(--radius-md); padding:1.6rem 1.5rem; display:flex; flex-direction:column; gap:1rem; box-shadow:0 0 0 1px rgba(99,235,251,0.12) inset, 0 28px 70px rgba(0,0,0,0.45); overflow:hidden; min-height:13rem; }
+.p6-rail::before{ content:''; position:absolute; top:0; left:1.5rem; height:2px; width:72px; background:linear-gradient(90deg,var(--primary),transparent); }
+.p6-rail-label{ font-family:var(--font-mono); font-size:0.74rem; letter-spacing:0.28em; text-transform:uppercase; color:var(--primary-bright); line-height:1.3; }
+.p6-rail-claim{ font-family:var(--font-display); font-weight:600; font-size:clamp(1.05rem,1.5vw,1.35rem); color:var(--text); letter-spacing:-0.014em; line-height:1.25; flex:1; }
+.p6-rail-impl{ font-family:var(--font-mono); font-size:0.74rem; letter-spacing:0.08em; color:var(--text-variant); line-height:1.4; padding-top:0.7rem; border-top:1px solid rgba(99,235,251,0.18); }
+
+/* ---------- P3 edge line ---------- */
+.p3-eyebrow{ font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--primary); margin-bottom:0.6rem; }
+.p3-headline{ font-family:var(--font-display); font-weight:600; font-size:clamp(1.4rem,2.4vw,2rem); line-height:1.12; letter-spacing:-0.02em; max-width:32ch; margin-bottom:1.4rem; }
+.p3-headline .em{ color:var(--primary-bright); }
+.p3-edge{ display:flex; flex-direction:column; align-items:flex-start; gap:0.6rem; }
+.p3-edge-line{ font-family:var(--font-display); font-weight:500; font-size:clamp(1.1rem,1.45vw,1.35rem); color:var(--text); max-width:52ch; line-height:1.4; }
+
+@media(max-width:860px){
+  .p4-mirror{ flex-direction:column; gap:0.8rem; }
+  .p4-pole{ min-height:0; }
+  .p4-pole--agent{ text-align:left; align-items:flex-start; }
+  .p4-seam{ flex-direction:row; width:auto; align-self:center; }
+  .p4-seam-bar{ width:130px; height:18px; background:repeating-linear-gradient(135deg,var(--tertiary-bright) 0 1.5px,transparent 1.5px 7px); }
+  .p6-rails{ grid-template-columns:1fr; }
+  .p6-rail{ min-height:0; }
+}
+</style>
+</head>
+<body>
+<div class="pv-wrap">
+
+  <div class="pv-head">
+    <h1>WTP — embedded into the spine, not bolted on (v2)</h1>
+    <div class="sub">
+      Changed from v1 per your call: <s>P2 third panel removed</s> (logic jumped the queue + common-sense filler).<br>
+      WTP now <b>grows out of P3→P4→P6</b> — half a line each, no new boxes. Live v7 untouched.<br>
+      <b>Amber</b> = the added line. Cyan = existing deck content, shown so you can judge the fit.
+    </div>
+  </div>
+
+  <!-- ============ BLOCK 1 — P4 (core) ============ -->
+  <section class="pv-block">
+    <div class="pv-block-top">
+      <span class="pv-num">01</span>
+      <h2>P4 — one line turns “not packaged” into “<span class="em">already paid for, wrong form</span>”</h2>
+      <span class="pv-where">slide P4 · core change</span>
+    </div>
+    <div class="pv-note">
+      不新开格子。P4 本来就在讲「形态不对」,补一句让 WTP 自然落地:钱<span class="k">今天已经在流动</span>,只是流向 human 渠道 agent 调不了。一句话同时给 WTP(钱在流)+ 迁移(不是创造需求)+ §9 竞争(human 渠道就是替代对象)。
+    </div>
+    <div class="pv-stage">
+      <div class="p4-eyebrow">— Why it doesn't reach</div>
+      <h2 class="p4-headline">Market-moving signals exist.<br><span class="em">They just aren't packaged for agent calls.</span></h2>
+      <div class="p4-mirror">
+        <div class="p4-pole p4-pole--source">
+          <div class="p4-pole-side">Sell side</div>
+          <div class="p4-pole-word">Source-shaped</div>
+          <ul class="p4-axes"><li>appears where it is created</li><li>carried in source formats</li><li>sold as access</li></ul>
+        </div>
+        <div class="p4-seam" aria-hidden="true">
+          <div class="p4-seam-bar"></div>
+          <div class="p4-seam-label">Wrong<br>packaging</div>
+        </div>
+        <div class="p4-pole p4-pole--agent">
+          <div class="p4-pole-side">Buy side</div>
+          <div class="p4-pole-word">Agent-callable</div>
+          <ul class="p4-axes"><li>requested when needed</li><li>delivered in call format</li><li>priced per use</li></ul>
+        </div>
+      </div>
+      <p class="pv-add">This information is <span class="em">already bought and sold</span> today — only in human-shaped channels no agent can call.</p>
+    </div>
+  </section>
+
+  <!-- ============ BLOCK 2 — P6 anti-resale ============ -->
+  <section class="pv-block">
+    <div class="pv-block-top">
+      <span class="pv-num">02</span>
+      <h2>P6 — one footnote answers “<span class="em">why won't it get resold to zero?</span>”</h2>
+      <span class="pv-where">slide P6 · footnote</span>
+    </div>
+    <div class="pv-note">
+      回应真实反驳(信息复制成本为零、买一次转发给所有人),不是废话。同时撑 P8 bottom-up 的「100 calls/day」——重复付费的前提就是单次时效。
+    </div>
+    <div class="pv-stage">
+      <div class="p6-eyebrow">— The mechanism</div>
+      <h2 class="p6-headline">Accessura turns incoming signals into <span class="em">tradable Packs</span> agents can call, price, and settle.</h2>
+      <div class="p6-bridge">A <span class="em">Pack</span> is one live stream of signals.</div>
+      <div class="p6-rails">
+        <div class="p6-rail"><div class="p6-rail-label">One call path</div><div class="p6-rail-claim">Any agent can request, buy, or sell signals through the same market boundary.</div><div class="p6-rail-impl">Agent Unified Interface</div></div>
+        <div class="p6-rail"><div class="p6-rail-label">Bid/ask signal market</div><div class="p6-rail-claim">Each Pack is priced by a live market — real bids and asks, not a list price.</div><div class="p6-rail-impl">Per-pack orderbook</div></div>
+        <div class="p6-rail"><div class="p6-rail-label">Paid delivery</div><div class="p6-rail-claim">Payment, access, and delivery proof move together in one settled call.</div><div class="p6-rail-impl">x402 + delivery receipt</div></div>
+      </div>
+      <p class="pv-add">Signals expire with their window — buyers pay for <span class="em">first-access, not a file to keep.</span></p>
+    </div>
+  </section>
+
+  <!-- ============ BLOCK 3 — P3 (optional, minimal) ============ -->
+  <section class="pv-block">
+    <div class="pv-block-top">
+      <span class="pv-num">03</span>
+      <h2>P3 — optional half-line: the edge is what an agent <span class="em">pays for</span></h2>
+      <span class="pv-where">slide P3 · optional</span>
+    </div>
+    <div class="pv-note">
+      标 optional,因为 P3 的 timeline 已经把价值讲清了,WTP 是推论。<span class="k">唯一非显然、值得加的</span>是 agent vs human 的差别:人会犹豫/错过,agent 没有摩擦——所以「每次」都调用,这撑起付费频次。若你觉得仍偏解释,直接不加。
+    </div>
+    <div class="pv-stage">
+      <div class="p3-eyebrow">— Why agents win this window</div>
+      <h2 class="p3-headline">Prediction markets reward information edge. <span class="em">Agents are built to take it.</span></h2>
+      <div class="p3-edge">
+        <p class="p3-edge-line">Agents: human judgment at machine speed.</p>
+        <p class="pv-add pv-add--opt" style="margin-top:0.4rem;">No human's hesitation — when a signal is worth more than its price, the call happens <span class="em">every time.</span></p>
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
